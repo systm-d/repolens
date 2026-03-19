@@ -55,7 +55,7 @@ jobs:
             echo "   4. Sélectionner le scope 'repo' (Full control of private repositories)"
             echo "   5. Générer et copier le token"
             echo ""
-            echo "📝 Instructions pour ajouter le secret:"
+            echo "📝 Instructions pour ajouter le Secret WIKI_PAT :"
             echo "   1. Aller dans Settings > Secrets and variables > Actions"
             echo "   2. Cliquer sur 'New repository secret'"
             echo "   3. Nom: WIKI_PAT"
