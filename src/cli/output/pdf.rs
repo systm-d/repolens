@@ -14,6 +14,9 @@ use std::io::{BufWriter, Write};
 use std::path::Path;
 
 use chrono::Utc;
+use printpdf::lopdf::{
+    Dictionary as LoDict, Document as LoDoc, Object as LoObj, ObjectId as LoObjectId,
+};
 use printpdf::{
     BuiltinFont, Color, Image, ImageTransform, ImageXObject, IndirectFontRef, Mm, PdfDocument,
     PdfDocumentReference, PdfLayerIndex, PdfLayerReference, PdfPageIndex, Rect, Rgb,
@@ -148,10 +151,10 @@ impl PdfReport {
         self.draw_toc(&pages.layer(toc_index), &fonts, &palette, &layout, &plan);
 
         // Per-section pages — record actual page indices for the TOC.
-        let mut toc_pages: Vec<(String, usize)> = Vec::new();
+        let mut toc_entries: Vec<TocEntry> = Vec::new();
 
         let summary_idx = pages.add_page("Summary");
-        toc_pages.push(("Summary".to_string(), human_page(summary_idx)));
+        toc_entries.push(TocEntry::new("Summary", summary_idx));
         self.draw_summary(
             &pages.layer(summary_idx),
             &fonts,
@@ -163,14 +166,14 @@ impl PdfReport {
 
         for category in &categories {
             let entry_idx = pages.add_page(&format!("Category: {}", category));
-            toc_pages.push((format!("Category: {category}"), human_page(entry_idx)));
+            toc_entries.push(TocEntry::new(format!("Category: {category}"), entry_idx));
             self.draw_category_section(
                 &mut pages, entry_idx, &fonts, &palette, &layout, results, category, &plan,
             );
         }
 
         let annex_idx = pages.add_page("Annexes");
-        toc_pages.push(("Annexes".to_string(), human_page(annex_idx)));
+        toc_entries.push(TocEntry::new("Annexes", annex_idx));
         self.draw_annexes(
             &mut pages,
             annex_idx,
@@ -182,16 +185,20 @@ impl PdfReport {
             &plan,
         );
 
-        // Re-render the TOC now that we know the real page numbers.
-        self.draw_toc_entries(
+        // Re-render the TOC now that we know the real page numbers, and
+        // collect per-entry rectangles so we can attach internal /GoTo
+        // link annotations after the document is serialised.
+        let link_specs = self.draw_toc_entries(
             &pages.layer(toc_index),
             &fonts,
             &palette,
             &layout,
-            &toc_pages,
+            toc_index,
+            &toc_entries,
         );
 
         let bytes = pages.into_bytes()?;
+        let bytes = add_internal_links(bytes, &link_specs)?;
         Ok(bytes)
     }
 
@@ -318,33 +325,52 @@ impl PdfReport {
         self.draw_header_footer(layer, fonts, palette, layout);
     }
 
+    /// Render TOC entries and return the click-target rectangles needed to
+    /// turn each row into an internal `/GoTo` link annotation.
     fn draw_toc_entries(
         &self,
         layer: &PdfLayerReference,
         fonts: &Fonts,
         palette: &Palette,
         layout: &Layout,
-        entries: &[(String, usize)],
-    ) {
+        toc_page: PageRef,
+        entries: &[TocEntry],
+    ) -> Vec<InternalLinkSpec> {
         layer.set_fill_color(palette.text.clone());
         let start_y = layout.content_top_y - 14.0;
-        for (i, (label, page)) in entries.iter().enumerate() {
+        let mut links: Vec<InternalLinkSpec> = Vec::with_capacity(entries.len());
+        let toc_human = human_page(toc_page) as u32;
+        for (i, entry) in entries.iter().enumerate() {
             let y = start_y - (i as f32) * 7.0;
             layer.use_text(
-                format!("{}. {}", i + 1, label),
+                format!("{}. {}", i + 1, entry.label),
                 11.0,
                 Mm(layout.left_margin),
                 Mm(y),
                 &fonts.regular,
             );
             layer.use_text(
-                page.to_string(),
+                human_page(entry.target_page).to_string(),
                 11.0,
                 Mm(PAGE_WIDTH_MM - layout.right_margin - 10.0),
                 Mm(y),
                 &fonts.regular,
             );
+
+            // Click target spans the row from left margin to right margin.
+            // y in printpdf is the baseline; pad ±1.5mm / +5mm so the rect
+            // covers the cap height of 11pt text comfortably.
+            let x_lo_pt = mm_to_pt(layout.left_margin);
+            let x_hi_pt = mm_to_pt(PAGE_WIDTH_MM - layout.right_margin);
+            let y_lo_pt = mm_to_pt(y - 1.5);
+            let y_hi_pt = mm_to_pt(y + 5.0);
+            links.push(InternalLinkSpec {
+                toc_page_human: toc_human,
+                target_page_human: human_page(entry.target_page) as u32,
+                rect_pt: (x_lo_pt, y_lo_pt, x_hi_pt, y_hi_pt),
+            });
         }
+        links
     }
 
     fn draw_summary(
@@ -1022,4 +1048,126 @@ fn decode_logo(path: &Path) -> Result<Image, String> {
     let raw = std::fs::read(path).map_err(|e| format!("read {}: {e}", path.display()))?;
     let img = image::load_from_memory(&raw).map_err(|e| format!("decode: {e}"))?;
     Ok(Image::from(ImageXObject::from_dynamic_image(&img)))
+}
+
+/// Single row in the table of contents.
+struct TocEntry {
+    label: String,
+    target_page: PageRef,
+}
+
+impl TocEntry {
+    fn new(label: impl Into<String>, target_page: PageRef) -> Self {
+        Self {
+            label: label.into(),
+            target_page,
+        }
+    }
+}
+
+/// Internal `/GoTo` link from a rectangle on the TOC page to a target page.
+///
+/// The rectangle is in PDF user-space units (points) — the same coordinate
+/// system the PDF spec uses for the `Rect` field of an annotation dictionary.
+struct InternalLinkSpec {
+    toc_page_human: u32,
+    target_page_human: u32,
+    /// `(x_lo, y_lo, x_hi, y_hi)` in points.
+    rect_pt: (f32, f32, f32, f32),
+}
+
+/// Inject `/Link` annotations with `/GoTo` actions on the TOC page so each
+/// row navigates to its target section. printpdf 0.7's `LinkAnnotation` only
+/// supports URI actions, so we post-process the serialised PDF with the
+/// `lopdf` re-export to add internal destinations.
+fn add_internal_links(
+    pdf_bytes: Vec<u8>,
+    links: &[InternalLinkSpec],
+) -> Result<Vec<u8>, RepoLensError> {
+    if links.is_empty() {
+        return Ok(pdf_bytes);
+    }
+
+    let mut doc = LoDoc::load_mem(&pdf_bytes).map_err(|e| {
+        RepoLensError::Action(ActionError::ExecutionFailed {
+            message: format!("post-process pdf load: {e}"),
+        })
+    })?;
+
+    let pages = doc.get_pages();
+    let mut by_toc: BTreeMap<u32, Vec<LoObjectId>> = BTreeMap::new();
+
+    for link in links {
+        let Some(target_id) = pages.get(&link.target_page_human).copied() else {
+            continue;
+        };
+        let dest = LoObj::Array(vec![
+            LoObj::Reference(target_id),
+            LoObj::Name(b"Fit".to_vec()),
+        ]);
+        let action = LoObj::Dictionary(LoDict::from_iter(vec![
+            ("S", LoObj::Name(b"GoTo".to_vec())),
+            ("D", dest),
+        ]));
+        let (x_lo, y_lo, x_hi, y_hi) = link.rect_pt;
+        let annot_dict = LoDict::from_iter(vec![
+            ("Type", LoObj::Name(b"Annot".to_vec())),
+            ("Subtype", LoObj::Name(b"Link".to_vec())),
+            (
+                "Rect",
+                LoObj::Array(vec![
+                    LoObj::Real(x_lo),
+                    LoObj::Real(y_lo),
+                    LoObj::Real(x_hi),
+                    LoObj::Real(y_hi),
+                ]),
+            ),
+            (
+                "Border",
+                LoObj::Array(vec![
+                    LoObj::Integer(0),
+                    LoObj::Integer(0),
+                    LoObj::Integer(0),
+                ]),
+            ),
+            ("A", action),
+        ]);
+        let annot_id = doc.add_object(LoObj::Dictionary(annot_dict));
+        by_toc
+            .entry(link.toc_page_human)
+            .or_default()
+            .push(annot_id);
+    }
+
+    for (toc_human, annot_ids) in by_toc {
+        let Some(toc_id) = pages.get(&toc_human).copied() else {
+            continue;
+        };
+        let page_dict = doc
+            .get_object_mut(toc_id)
+            .and_then(|o| o.as_dict_mut())
+            .map_err(|e| {
+                RepoLensError::Action(ActionError::ExecutionFailed {
+                    message: format!("post-process toc page dict: {e}"),
+                })
+            })?;
+        let mut existing: Vec<LoObj> = page_dict
+            .get(b"Annots")
+            .ok()
+            .and_then(|o| o.as_array().ok())
+            .cloned()
+            .unwrap_or_default();
+        for id in annot_ids {
+            existing.push(LoObj::Reference(id));
+        }
+        page_dict.set("Annots", LoObj::Array(existing));
+    }
+
+    let mut buf: Vec<u8> = Vec::new();
+    doc.save_to(&mut buf).map_err(|e| {
+        RepoLensError::Action(ActionError::ExecutionFailed {
+            message: format!("post-process pdf save: {e}"),
+        })
+    })?;
+    Ok(buf)
 }

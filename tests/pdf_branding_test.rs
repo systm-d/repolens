@@ -271,6 +271,56 @@ fn pdftotext_contains_repository_name() {
 }
 
 #[test]
+fn toc_page_has_internal_goto_link_annotations() {
+    let dir = TempDir::new().unwrap();
+    let out = dir.path().join("toc-links.pdf");
+    let results = make_results("toc-link-repo", 6);
+    PdfReport::new(false)
+        .render_to_file(&results, &out)
+        .expect("render");
+
+    let doc = LopdfDocument::load(&out).expect("lopdf load");
+    let pages = doc.get_pages();
+    // TOC is the second page (cover is page 1).
+    let toc_id = pages.get(&2).copied().expect("toc page");
+    let annots = doc.get_page_annotations(toc_id);
+    assert!(
+        !annots.is_empty(),
+        "expected at least one annotation on the TOC page"
+    );
+
+    let mut goto_links = 0usize;
+    for annot in &annots {
+        let subtype_is_link = annot
+            .get(b"Subtype")
+            .ok()
+            .and_then(|o| match o {
+                Object::Name(n) => Some(n.as_slice() == b"Link"),
+                _ => None,
+            })
+            .unwrap_or(false);
+        if !subtype_is_link {
+            continue;
+        }
+        let action = annot.get(b"A").and_then(|o| o.as_dict()).ok();
+        let is_goto = action
+            .and_then(|d| d.get(b"S").ok())
+            .and_then(|o| match o {
+                Object::Name(n) => Some(n.as_slice() == b"GoTo"),
+                _ => None,
+            })
+            .unwrap_or(false);
+        if is_goto {
+            goto_links += 1;
+        }
+    }
+    assert!(
+        goto_links >= 2,
+        "expected at least 2 internal /GoTo link annotations on the TOC page, found {goto_links}"
+    );
+}
+
+#[test]
 fn one_thousand_findings_pass_qpdf_check() {
     if !binary_available("qpdf") {
         eprintln!("qpdf not installed; skipping 1k-finding qpdf check");
