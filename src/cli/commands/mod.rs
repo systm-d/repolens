@@ -141,7 +141,7 @@ pub struct ApplyArgs {
 /// Arguments for the report command
 #[derive(Args, Debug)]
 pub struct ReportArgs {
-    /// Output format (html, markdown, json, csv, tsv, ndjson)
+    /// Output format (html, markdown, json, csv, tsv, ndjson, pdf)
     #[arg(short, long, default_value = "markdown")]
     pub format: ReportFormat,
 
@@ -200,6 +200,11 @@ pub struct ReportArgs {
     /// Keep newlines inside CSV cells (quoted) instead of replacing with spaces
     #[arg(long, default_value_t = false)]
     pub csv_keep_newlines: bool,
+
+    /// Path to a TOML file with branding overrides (PDF format only).
+    /// Ignored when `--format` is not `pdf`.
+    #[arg(long, value_name = "FILE")]
+    pub branding: Option<PathBuf>,
 
     /// Verbosity level (passed from global args)
     #[arg(skip)]
@@ -260,6 +265,7 @@ pub enum ReportFormat {
     Tsv,
     Ndjson,
     Junit,
+    Pdf,
 }
 
 /// Arguments for the compare command
