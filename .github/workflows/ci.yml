@@ -51,6 +51,36 @@ jobs:
       - name: Run tests with output
         run: cargo test --all-features -- --nocapture
 
+  pdf-benchmark:
+    name: PDF Benchmark (1k findings under 30s)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Run PDF benchmark
+        run: cargo bench --bench pdf_benchmark
+      - name: Verify 1000-finding generation under 30s
+        run: |
+          ESTIMATES=target/criterion/pdf_generation/1000/new/estimates.json
+          if [ ! -f "$ESTIMATES" ]; then
+            echo "::error::criterion estimates not found at $ESTIMATES"
+            ls -R target/criterion || true
+            exit 1
+          fi
+          python3 - <<'PY'
+          import json, sys
+          with open("target/criterion/pdf_generation/1000/new/estimates.json") as f:
+              data = json.load(f)
+          mean_ns = float(data["mean"]["point_estimate"])
+          mean_s = mean_ns / 1e9
+          limit_s = 30.0
+          print(f"1000-finding mean: {mean_s:.3f}s (limit {limit_s}s)")
+          if mean_s > limit_s:
+              print(f"::error::1000-finding PDF generation exceeded {limit_s}s limit (got {mean_s:.3f}s)")
+              sys.exit(1)
+          PY
+
   package:
     name: Package Validation
     runs-on: ubuntu-latest
