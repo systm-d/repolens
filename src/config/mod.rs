@@ -90,9 +90,11 @@
 //! }
 //! ```
 
+pub mod branding;
 pub mod loader;
 pub mod presets;
 
+pub use branding::BrandingConfig;
 pub use loader::get_env_verbosity;
 pub use loader::Config;
 pub use presets::Preset;
