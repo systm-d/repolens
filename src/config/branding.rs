@@ -20,7 +20,7 @@ pub const DEFAULT_PRIMARY_COLOR: &str = "#0052CC";
 pub const DEFAULT_SECONDARY_COLOR: &str = "#172B4D";
 /// Default body text color.
 pub const DEFAULT_TEXT_COLOR: &str = "#000000";
-/// Default font family (one of genpdf's built-in Type1 fonts).
+/// Default font family (one of printpdf's built-in Type1 fonts).
 pub const DEFAULT_FONT_FAMILY: &str = "Helvetica";
 
 /// Maximum logo size on disk (5 MB).
