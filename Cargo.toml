@@ -148,6 +148,10 @@ strip = true
 name = "repolens"
 path = "src/main.rs"
 
+[[test]]
+name = "output_junit"
+path = "tests/integration/output_junit.rs"
+
 [[bench]]
 name = "scanner_benchmark"
 harness = false
