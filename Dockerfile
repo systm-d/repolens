@@ -31,7 +31,8 @@ COPY schemas ./schemas
 RUN mkdir -p benches && \
     echo 'fn main() {}' > benches/parse_benchmark.rs && \
     echo 'fn main() {}' > benches/scanner_benchmark.rs && \
-    echo 'fn main() {}' > benches/rules_benchmark.rs
+    echo 'fn main() {}' > benches/rules_benchmark.rs && \
+    echo 'fn main() {}' > benches/pdf_benchmark.rs
 
 # Build the binary
 RUN cargo build --release && \
