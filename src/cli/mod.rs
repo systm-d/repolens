@@ -48,7 +48,7 @@ pub mod commands;
 pub mod exit_codes;
 pub mod output;
 
-use clap::{Parser, Subcommand};
+use clap::{Parser, Subcommand, ValueHint};
 use std::path::PathBuf;
 
 use commands::{
@@ -67,11 +67,11 @@ pub struct Cli {
     pub verbose: u8,
 
     /// Path to configuration file
-    #[arg(short, long, global = true, value_name = "FILE")]
+    #[arg(short, long, global = true, value_name = "FILE", value_hint = ValueHint::FilePath)]
     pub config: Option<PathBuf>,
 
     /// Working directory (defaults to current directory)
-    #[arg(short = 'C', long, global = true, value_name = "DIR")]
+    #[arg(short = 'C', long, global = true, value_name = "DIR", value_hint = ValueHint::DirPath)]
     pub directory: Option<PathBuf>,
 
     #[command(subcommand)]

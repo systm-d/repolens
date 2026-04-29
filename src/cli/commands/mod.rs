@@ -41,11 +41,19 @@ pub struct PlanArgs {
     pub format: OutputFormat,
 
     /// Only check specific rule categories
-    #[arg(long, value_delimiter = ',')]
+    #[arg(
+        long,
+        value_delimiter = ',',
+        value_parser = clap::builder::PossibleValuesParser::new(crate::rules::constants::VALID_CATEGORIES)
+    )]
     pub only: Option<Vec<String>>,
 
     /// Skip specific rule categories
-    #[arg(long, value_delimiter = ',')]
+    #[arg(
+        long,
+        value_delimiter = ',',
+        value_parser = clap::builder::PossibleValuesParser::new(crate::rules::constants::VALID_CATEGORIES)
+    )]
     pub skip: Option<Vec<String>>,
 
     /// Output file (defaults to stdout)
@@ -96,12 +104,20 @@ pub struct ApplyArgs {
     #[arg(long)]
     pub dry_run: bool,
 
-    /// Only apply specific actions
-    #[arg(long, value_delimiter = ',')]
+    /// Only apply actions for specific rule categories
+    #[arg(
+        long,
+        value_delimiter = ',',
+        value_parser = clap::builder::PossibleValuesParser::new(crate::rules::constants::VALID_CATEGORIES)
+    )]
     pub only: Option<Vec<String>>,
 
-    /// Skip specific actions
-    #[arg(long, value_delimiter = ',')]
+    /// Skip actions for specific rule categories
+    #[arg(
+        long,
+        value_delimiter = ',',
+        value_parser = clap::builder::PossibleValuesParser::new(crate::rules::constants::VALID_CATEGORIES)
+    )]
     pub skip: Option<Vec<String>>,
 
     /// Create a pull request with the changes (default: true if in a git repository)
@@ -133,11 +149,19 @@ pub struct ReportArgs {
     pub detailed: bool,
 
     /// Only check specific rule categories
-    #[arg(long, value_delimiter = ',')]
+    #[arg(
+        long,
+        value_delimiter = ',',
+        value_parser = clap::builder::PossibleValuesParser::new(crate::rules::constants::VALID_CATEGORIES)
+    )]
     pub only: Option<Vec<String>>,
 
     /// Skip specific rule categories
-    #[arg(long, value_delimiter = ',')]
+    #[arg(
+        long,
+        value_delimiter = ',',
+        value_parser = clap::builder::PossibleValuesParser::new(crate::rules::constants::VALID_CATEGORIES)
+    )]
     pub skip: Option<Vec<String>>,
 
     /// Include JSON Schema reference ($schema) in JSON output
