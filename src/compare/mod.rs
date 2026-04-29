@@ -345,6 +345,26 @@ pub fn format_ndjson(report: &CompareReport) -> Result<String, crate::error::Rep
     crate::cli::output::ndjson::render_compare_ndjson(rows)
 }
 
+/// Format the compare report as JUnit XML.
+///
+/// Surfaces added findings (regressions) as `<failure>`/`<error>` testcases
+/// so CI dashboards highlight them; removed findings are emitted as
+/// `<system-out>` notes since they are improvements rather than failures.
+pub fn format_junit(report: &CompareReport) -> Result<String, crate::error::RepoLensError> {
+    let mut findings: Vec<Finding> = Vec::with_capacity(
+        report.added_findings.len() + report.removed_findings.len(),
+    );
+    findings.extend(report.added_findings.iter().cloned());
+    for f in &report.removed_findings {
+        // Resolved findings shouldn't fail the build; downgrade to Info so
+        // they appear as `<system-out>` rather than `<error>`/`<failure>`.
+        let mut f = f.clone();
+        f.severity = Severity::Info;
+        findings.push(f);
+    }
+    crate::cli::output::render_junit_findings(&findings)
+}
+
 /// Build the (change_label, finding) row stream consumed by the CSV/NDJSON
 /// compare renderers. Added findings come first (regressions), then resolved.
 fn compare_rows(report: &CompareReport) -> Vec<(String, Finding)> {

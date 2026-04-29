@@ -3,7 +3,7 @@
 pub mod csv;
 mod html;
 pub mod json;
-mod junit;
+pub(crate) mod junit;
 mod markdown;
 pub mod ndjson;
 mod sarif;
