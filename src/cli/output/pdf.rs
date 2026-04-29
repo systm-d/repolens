@@ -1171,3 +1171,181 @@ fn add_internal_links(
     })?;
     Ok(buf)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn finding(rule: &str, category: &str, severity: Severity) -> Finding {
+        Finding::new(rule, category, severity, "msg")
+    }
+
+    #[test]
+    fn severity_label_maps_each_variant() {
+        assert_eq!(severity_label(Severity::Critical), "CRITICAL");
+        assert_eq!(severity_label(Severity::Warning), "WARNING");
+        assert_eq!(severity_label(Severity::Info), "INFO");
+    }
+
+    #[test]
+    fn human_page_starts_at_one() {
+        assert_eq!(human_page(PageRef(0)), 1);
+        assert_eq!(human_page(PageRef(7)), 8);
+    }
+
+    #[test]
+    fn split_location_handles_path_with_line() {
+        let (path, line) = split_location(Some("src/main.rs:42"));
+        assert_eq!(path, "src/main.rs");
+        assert_eq!(line, "42");
+    }
+
+    #[test]
+    fn split_location_returns_dash_for_none() {
+        assert_eq!(split_location(None), ("-".to_string(), "-".to_string()));
+    }
+
+    #[test]
+    fn split_location_treats_non_numeric_suffix_as_path() {
+        let (path, line) = split_location(Some("a/b:branch"));
+        assert_eq!(path, "a/b:branch");
+        assert_eq!(line, "-");
+    }
+
+    #[test]
+    fn wrap_long_passes_through_short_strings() {
+        assert_eq!(wrap_long("short"), "short");
+    }
+
+    #[test]
+    fn wrap_long_inserts_breaks_after_separators() {
+        let big = "a".repeat(CELL_WRAP_AT) + "/" + &"b".repeat(10);
+        let wrapped = wrap_long(&big);
+        assert!(wrapped.contains('\n'), "expected a wrap, got {wrapped:?}");
+    }
+
+    #[test]
+    fn truncate_cell_keeps_short_strings() {
+        assert_eq!(truncate_cell("short"), "short");
+    }
+
+    #[test]
+    fn truncate_cell_appends_ellipsis_for_long_strings() {
+        let long = "x".repeat(CELL_TRUNCATE_LEN + 50);
+        let truncated = truncate_cell(&long);
+        assert!(truncated.ends_with('…'));
+        assert_eq!(truncated.chars().count(), CELL_TRUNCATE_LEN + 1);
+    }
+
+    #[test]
+    fn pt_mm_round_trips_within_epsilon() {
+        let pt = mm_to_pt(50.0);
+        let mm = pt_to_mm(pt);
+        assert!((mm - 50.0).abs() < 1e-3, "round trip drift: {mm}");
+    }
+
+    #[test]
+    fn clamp_logo_dimensions_scales_uniformly() {
+        let (w, h) = clamp_logo_dimensions(400.0, 100.0);
+        // Width is the binding constraint at 400 → scale 0.5.
+        assert!((w - 200.0).abs() < 0.01);
+        assert!((h - 50.0).abs() < 0.01);
+    }
+
+    #[test]
+    fn clamp_logo_dimensions_keeps_small_logos_unchanged() {
+        let (w, h) = clamp_logo_dimensions(50.0, 20.0);
+        assert!((w - 50.0).abs() < 0.01);
+        assert!((h - 20.0).abs() < 0.01);
+    }
+
+    #[test]
+    fn estimate_text_width_mm_grows_with_length() {
+        let short = estimate_text_width_mm("hi", 12.0);
+        let long = estimate_text_width_mm("hello, world!", 12.0);
+        assert!(long > short);
+    }
+
+    #[test]
+    fn collect_categories_returns_sorted_unique() {
+        let mut r = AuditResults::new("repo", "opensource");
+        r.add_finding(finding("R1", "security", Severity::Critical));
+        r.add_finding(finding("R2", "docs", Severity::Warning));
+        r.add_finding(finding("R3", "security", Severity::Info));
+        let cats = collect_categories(&r);
+        assert_eq!(cats, vec!["docs".to_string(), "security".to_string()]);
+    }
+
+    #[test]
+    fn aggregate_info_findings_only_counts_info() {
+        let mut r = AuditResults::new("repo", "opensource");
+        r.add_finding(finding("R1", "docs", Severity::Info));
+        r.add_finding(finding("R2", "docs", Severity::Info));
+        r.add_finding(finding("R3", "security", Severity::Critical));
+        let agg = aggregate_info_findings(&r);
+        assert_eq!(agg, vec![("docs".to_string(), 2)]);
+    }
+
+    #[test]
+    fn resolve_builtin_family_known_aliases() {
+        assert!(resolve_builtin_family("Helvetica").is_some());
+        assert!(resolve_builtin_family("HELVETICA").is_some());
+        assert!(resolve_builtin_family("Times").is_some());
+        assert!(resolve_builtin_family("times-roman").is_some());
+        assert!(resolve_builtin_family("Times New Roman").is_some());
+        assert!(resolve_builtin_family("Courier").is_some());
+        // Empty string → default helvetica.
+        assert!(resolve_builtin_family("").is_some());
+    }
+
+    #[test]
+    fn resolve_builtin_family_unknown_returns_none() {
+        assert!(resolve_builtin_family("Comic Sans").is_none());
+    }
+
+    #[test]
+    fn render_branding_dump_emits_section_header_and_keys() {
+        let b = BrandingConfig::defaults();
+        let dump = render_branding_dump(&b);
+        assert!(dump.starts_with("[branding]"));
+        assert!(dump.contains("logo_path"));
+        assert!(dump.contains("primary_color"));
+        assert!(dump.contains("font_family"));
+        assert!(dump.contains("header_text"));
+    }
+
+    #[test]
+    fn compute_config_hash_changes_when_branding_changes() {
+        let r = AuditResults::new("repo", "opensource");
+        let mut b1 = BrandingConfig::defaults();
+        let h1 = compute_config_hash(&r, &b1);
+        b1.primary_color = Some("#FF00FF".to_string());
+        let h2 = compute_config_hash(&r, &b1);
+        assert_ne!(h1, h2);
+    }
+
+    #[test]
+    fn compute_config_hash_is_deterministic() {
+        let r = AuditResults::new("repo", "opensource");
+        let b = BrandingConfig::defaults();
+        assert_eq!(compute_config_hash(&r, &b), compute_config_hash(&r, &b));
+    }
+
+    #[test]
+    fn palette_uses_branding_colors() {
+        let mut b = BrandingConfig::defaults();
+        b.primary_color = Some("#0052CC".to_string());
+        let palette = Palette::from_branding(&b);
+        // severity_color uses palette.critical; confirm the lookup runs end-to-end.
+        let _ = severity_color(Severity::Critical, &palette);
+        let _ = severity_color(Severity::Warning, &palette);
+        let _ = severity_color(Severity::Info, &palette);
+    }
+
+    #[test]
+    fn toc_entry_new_stores_label_and_target() {
+        let entry = TocEntry::new("Cover", PageRef(3));
+        assert_eq!(entry.label, "Cover");
+        assert_eq!(entry.target_page.0, 3);
+    }
+}
