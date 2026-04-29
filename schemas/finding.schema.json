@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/kdelfour/repolens/schemas/finding.schema.json",
+  "title": "RepoLens Finding (NDJSON line)",
+  "description": "Schema for a single finding emitted by RepoLens NDJSON / CSV / TSV exporters. One JSON object per finding; in NDJSON each line is a complete object terminated by a single LF (\\n).",
+  "type": "object",
+  "required": ["rule_id", "category", "severity", "message", "project"],
+  "properties": {
+    "rule_id": {
+      "type": "string",
+      "description": "Unique rule identifier (e.g. SEC001, DOC001)"
+    },
+    "category": {
+      "type": "string",
+      "description": "Rule category (e.g. secrets, files, docs, security, workflows, quality)"
+    },
+    "severity": {
+      "type": "string",
+      "description": "Finding severity",
+      "enum": ["critical", "warning", "info"]
+    },
+    "file": {
+      "type": ["string", "null"],
+      "description": "File path parsed from the finding location (null if no location was reported)"
+    },
+    "line": {
+      "type": ["integer", "null"],
+      "description": "Line number parsed from the finding location (null if no line was reported or it could not be parsed)",
+      "minimum": 0
+    },
+    "column": {
+      "type": ["integer", "null"],
+      "description": "Column number, currently always null. Reserved for forward compatibility."
+    },
+    "message": {
+      "type": "string",
+      "description": "Short message describing the finding"
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "Detailed description of the issue (null if not provided)"
+    },
+    "remediation": {
+      "type": ["string", "null"],
+      "description": "Suggested remediation steps (null if not provided)"
+    },
+    "project": {
+      "type": "string",
+      "description": "Name (or path) of the scanned project, sourced from AuditResults.repository_name"
+    }
+  },
+  "additionalProperties": false
+}

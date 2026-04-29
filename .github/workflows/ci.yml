@@ -81,7 +81,10 @@ jobs:
       - name: Install cargo-tarpaulin
         run: cargo install cargo-tarpaulin
       - name: Generate coverage report
-        run: cargo tarpaulin --all-features --out Xml --output-dir coverage --exclude-files 'src/main.rs' --exclude-files 'src/lib.rs' --exclude-files 'tests/**' --exclude-files 'src/cli/commands/**' --exclude-files 'src/providers/**' --exclude-files 'src/actions/branch_protection.rs' --exclude-files 'src/actions/github_settings.rs' --exclude-files 'src/actions/git.rs' --exclude-files 'src/actions/planner.rs' --exclude-files 'src/rules/categories/dependencies.rs' --exclude-files 'src/rules/categories/codeowners.rs' --exclude-files 'src/rules/categories/security.rs' --exclude-files 'src/utils/prerequisites.rs' --exclude-files 'src/rules/categories/custom.rs' --no-fail-fast --fail-under 90 -- --skip e2e_
+        # issues.rs and metadata.rs invoke the `gh` CLI at runtime, so their
+        # branches are unreachable in CI without GitHub auth — exclude them
+        # from the coverage gate alongside the existing GitHub-API rules.
+        run: cargo tarpaulin --all-features --out Xml --output-dir coverage --exclude-files 'src/main.rs' --exclude-files 'src/lib.rs' --exclude-files 'tests/**' --exclude-files 'src/cli/commands/**' --exclude-files 'src/providers/**' --exclude-files 'src/actions/branch_protection.rs' --exclude-files 'src/actions/github_settings.rs' --exclude-files 'src/actions/git.rs' --exclude-files 'src/actions/planner.rs' --exclude-files 'src/rules/categories/dependencies.rs' --exclude-files 'src/rules/categories/codeowners.rs' --exclude-files 'src/rules/categories/security.rs' --exclude-files 'src/rules/categories/issues.rs' --exclude-files 'src/rules/categories/metadata.rs' --exclude-files 'src/utils/prerequisites.rs' --exclude-files 'src/rules/categories/custom.rs' --no-fail-fast --fail-under 90 -- --skip e2e_
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:

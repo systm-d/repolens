@@ -31,7 +31,7 @@ async fn e2e_repolens_audit_runs_successfully() {
         .current_dir(&repo_root)
         .args(["plan", "--format", "json"])
         .assert()
-        .code(predicate::in_iter([0, 1])); // 0 = no issues, 1 = issues found (both OK)
+        .code(predicate::in_iter([0, 1, 2])); // 0 = no issues, 1 = critical, 2 = warnings
 }
 
 #[tokio::test]
@@ -58,7 +58,7 @@ async fn e2e_repolens_report_json_valid() {
         .args(["report", "--format", "json", "--output"])
         .arg(&output_path)
         .assert()
-        .code(predicate::in_iter([0, 1]));
+        .code(predicate::in_iter([0, 1, 2]));
 
     // Verify output is valid JSON
     let content = fs::read_to_string(&output_path).unwrap();
@@ -91,7 +91,7 @@ async fn e2e_repolens_report_markdown_valid() {
         .args(["report", "--format", "markdown", "--output"])
         .arg(&output_path)
         .assert()
-        .code(predicate::in_iter([0, 1]));
+        .code(predicate::in_iter([0, 1, 2]));
 
     // Verify output is valid Markdown
     let content = fs::read_to_string(&output_path).unwrap();
