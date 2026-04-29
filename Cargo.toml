@@ -118,6 +118,9 @@ jsonschema = "0.29"
 # CSV / TSV output
 csv = "1"
 
+# XML writer for JUnit output
+quick-xml = "0.37"
+
 [build-dependencies]
 clap_mangen = "0.2"
 clap = { version = "4", features = ["derive"] }
@@ -130,6 +133,7 @@ pretty_assertions = "1"
 criterion = { version = "0.5", features = ["html_reports"] }
 futures = "0.3"
 serial_test = "3.3.1"
+insta = "1"
 
 [[bench]]
 name = "parse_benchmark"
