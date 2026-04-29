@@ -149,6 +149,24 @@ cargo build --release
 # The binary will be at target/release/repolens
 ```
 
+### Shell completions
+
+Generate completions for your shell with `repolens completions <shell>`
+(supports `bash`, `zsh`, `fish`, `powershell`, `elvish`, `nushell`):
+
+```bash
+# Bash (system-wide)
+repolens completions bash | sudo tee /etc/bash_completion.d/repolens > /dev/null
+
+# Zsh (drop into a directory in $fpath)
+repolens completions zsh > "${fpath[1]}/_repolens"
+
+# Fish
+repolens completions fish > ~/.config/fish/completions/repolens.fish
+```
+
+See [docs/installation/completions.md](docs/installation/completions.md) for the full per-shell guide.
+
 ### Nightly Builds
 
 Nightly builds are available for testing. See the [Releases page](https://github.com/delfour-co/cli--repolens/releases) for nightly builds (marked as pre-release).
