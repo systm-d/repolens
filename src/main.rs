@@ -34,8 +34,26 @@ use cli::{Cli, Commands};
 
 #[tokio::main]
 async fn main() -> Result<(), RepoLensError> {
-    // Parse CLI arguments
-    let cli = Cli::parse();
+    // Parse CLI arguments. Map clap's argument-validation errors to our
+    // INVALID_ARGS exit code so CI scripts can distinguish them from
+    // WARNINGS (also exit code 2 in clap's default).
+    let cli = match Cli::try_parse() {
+        Ok(cli) => cli,
+        Err(err) => {
+            let exit_code = match err.kind() {
+                clap::error::ErrorKind::DisplayHelp
+                | clap::error::ErrorKind::DisplayVersion
+                | clap::error::ErrorKind::DisplayHelpOnMissingArgumentOrSubcommand => {
+                    exit_codes::SUCCESS
+                }
+                _ => exit_codes::INVALID_ARGS,
+            };
+            // `print` writes to stdout for help/version, stderr for errors —
+            // matches clap's default behavior.
+            let _ = err.print();
+            std::process::exit(exit_code);
+        }
+    };
 
     // Determine verbosity: CLI flag > env var > default (0)
     let verbosity = if cli.verbose > 0 {
