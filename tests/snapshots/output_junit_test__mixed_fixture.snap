@@ -1,0 +1,8 @@
+---
+source: tests/output_junit_test.rs
+assertion_line: 202
+expression: xml
+---
+<?xml version="1.0" encoding="UTF-8"?><testsuites name="repolens" tests="3" failures="1" errors="1" skipped="0" time="0.000"><testsuite name="secrets" tests="1" failures="0" errors="1" skipped="0" time="0.000" id="0"><testcase name="SEC001 [src/config.rs:42]" classname="secrets" time="0.000"><error type="critical" message="Secret exposed">SEC001: Secret exposed
+Location: src/config.rs:42</error></testcase></testsuite><testsuite name="docs" tests="1" failures="1" errors="0" skipped="0" time="0.000" id="1"><testcase name="DOC001 [README.md]" classname="docs" time="0.000"><failure type="warning" message="README missing">DOC001: README missing
+Location: README.md</failure></testcase></testsuite><testsuite name="quality" tests="1" failures="0" errors="0" skipped="0" time="0.000" id="2"><testcase name="INFO001" classname="quality" time="0.000"><system-out>INFO001: Consider adding tests</system-out></testcase></testsuite></testsuites>
