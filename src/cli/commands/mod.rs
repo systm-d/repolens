@@ -17,7 +17,12 @@ use std::path::PathBuf;
 #[derive(Args, Debug)]
 pub struct InitArgs {
     /// Preset to use (opensource, enterprise, strict)
-    #[arg(short, long, value_name = "PRESET")]
+    #[arg(
+        short,
+        long,
+        value_name = "PRESET",
+        value_parser = clap::builder::PossibleValuesParser::new(["opensource", "enterprise", "strict"])
+    )]
     pub preset: Option<String>,
 
     /// Force overwrite existing configuration
@@ -316,6 +321,7 @@ pub enum ShellChoice {
     Bash,
     Zsh,
     Fish,
+    #[value(name = "powershell")]
     PowerShell,
     Elvish,
     Nushell,
