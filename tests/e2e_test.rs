@@ -986,8 +986,9 @@ async fn e2e_compare_command_detects_changes() {
     // Compare reports
     get_cmd()
         .current_dir(temp_dir.path())
-        .args(["compare"])
+        .args(["compare", "--base-file"])
         .arg(&report1_path)
+        .arg("--head-file")
         .arg(&report2_path)
         .assert()
         .code(predicate::in_iter([0, 1, 2])); // Any valid exit code
@@ -1049,8 +1050,8 @@ async fn e2e_apply_command_creates_readme() {
     // Verify README doesn't exist
     assert!(!temp_dir.path().join("README.md").exists());
 
-    // Run apply with auto-confirm, skip GitHub actions (which require network)
-    // and disable PR/issue creation which need GitHub API access
+    // Run apply with auto-confirm and disable PR/issue creation (need network).
+    // Skip workflows because Actions checks need GitHub API.
     get_cmd()
         .current_dir(temp_dir.path())
         .args([
@@ -1059,7 +1060,7 @@ async fn e2e_apply_command_creates_readme() {
             "--no-issues",
             "--no-pr",
             "--skip",
-            "github",
+            "workflows",
         ])
         .assert()
         .code(predicate::in_iter([0, 1, 2]));
