@@ -79,6 +79,15 @@ async fn main() -> Result<(), RepoLensError> {
         Commands::Compare(args) => cli::commands::compare::execute(args).await,
         Commands::InstallHooks(args) => cli::commands::install_hooks::execute(args).await,
         Commands::GenerateMan(args) => cli::commands::generate_man::execute(args).await,
+        Commands::Completions(args) => {
+            cli::commands::completions::execute(args.shell, std::io::stdout())
+                .map(|_| exit_codes::SUCCESS)
+                .map_err(|e| {
+                    RepoLensError::Config(error::ConfigError::Serialize {
+                        message: format!("Failed to generate shell completions: {}", e),
+                    })
+                })
+        }
     };
 
     // Handle exit codes for CI integration

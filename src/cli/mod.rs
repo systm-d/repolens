@@ -52,8 +52,8 @@ use clap::{Parser, Subcommand};
 use std::path::PathBuf;
 
 use commands::{
-    ApplyArgs, CompareArgs, GenerateManArgs, InitArgs, InstallHooksArgs, PlanArgs, ReportArgs,
-    SchemaArgs,
+    ApplyArgs, CompareArgs, CompletionsArgs, GenerateManArgs, InitArgs, InstallHooksArgs, PlanArgs,
+    ReportArgs, SchemaArgs,
 };
 
 /// RepoLens - Audit and prepare repositories for open source or enterprise standards
@@ -104,4 +104,8 @@ pub enum Commands {
     /// Generate man page (hidden, for packaging)
     #[command(hide = true)]
     GenerateMan(GenerateManArgs),
+
+    /// Generate shell completion scripts (hidden, for packaging)
+    #[command(hide = true)]
+    Completions(CompletionsArgs),
 }

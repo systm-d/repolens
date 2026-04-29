@@ -2,6 +2,7 @@
 
 pub mod apply;
 pub mod compare;
+pub mod completions;
 pub mod generate_man;
 pub mod init;
 pub mod install_hooks;
@@ -283,4 +284,23 @@ pub struct GenerateManArgs {
     /// Output directory for man pages
     #[arg(short, long, default_value = ".")]
     pub output: PathBuf,
+}
+
+/// Supported shells for completion generation
+#[derive(Debug, Clone, Copy, PartialEq, Eq, clap::ValueEnum)]
+pub enum ShellChoice {
+    Bash,
+    Zsh,
+    Fish,
+    PowerShell,
+    Elvish,
+    Nushell,
+}
+
+/// Arguments for the completions command
+#[derive(Args, Debug)]
+pub struct CompletionsArgs {
+    /// Target shell for which to generate the completion script
+    #[arg(value_enum)]
+    pub shell: ShellChoice,
 }
