@@ -115,6 +115,9 @@ rayon = "1.8"
 # JSON Schema validation
 jsonschema = "0.29"
 
+# CSV / TSV output
+csv = "1"
+
 [build-dependencies]
 clap_mangen = "0.2"
 clap = { version = "4", features = ["derive"] }

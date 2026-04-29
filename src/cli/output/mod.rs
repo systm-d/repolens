@@ -1,14 +1,18 @@
 //! Output formatting module for CLI
 
+pub mod csv;
 mod html;
 pub mod json;
 mod markdown;
+pub mod ndjson;
 mod sarif;
 mod terminal;
 
+pub use csv::CsvOutput;
 pub use html::HtmlReport;
 pub use json::JsonOutput;
 pub use markdown::MarkdownReport;
+pub use ndjson::NdjsonOutput;
 pub use sarif::SarifOutput;
 pub use terminal::TerminalOutput;
 

@@ -4,7 +4,9 @@ use colored::Colorize;
 use std::path::PathBuf;
 
 use super::CompareArgs;
-use crate::compare::{compare_results, format_json, format_markdown, format_terminal};
+use crate::compare::{
+    compare_results, format_csv, format_json, format_markdown, format_ndjson, format_terminal,
+};
 use crate::error::RepoLensError;
 use crate::exit_codes;
 use crate::rules::results::AuditResults;
@@ -38,6 +40,16 @@ pub async fn execute(args: CompareArgs) -> Result<i32, RepoLensError> {
 
     let report = compare_results(&base_results, &head_results, &base_label, &head_label);
 
+    // Warn if CSV-only flags are set when format is not CSV/TSV.
+    let format_is_csv_like = matches!(
+        args.format,
+        super::CompareFormat::Csv | super::CompareFormat::Tsv
+    );
+    if !format_is_csv_like && (args.csv_bom || args.csv_keep_newlines || args.csv_delimiter != ',')
+    {
+        eprintln!("[WARN] --csv-* flags are only meaningful with --format csv|tsv; ignoring.");
+    }
+
     // Format output
     let output_str = match args.format {
         super::CompareFormat::Terminal => format_terminal(&report),
@@ -47,6 +59,16 @@ pub async fn execute(args: CompareArgs) -> Result<i32, RepoLensError> {
             })
         })?,
         super::CompareFormat::Markdown => format_markdown(&report),
+        super::CompareFormat::Csv => format_csv(
+            &report,
+            args.csv_delimiter as u8,
+            args.csv_bom,
+            args.csv_keep_newlines,
+        )?,
+        super::CompareFormat::Tsv => {
+            format_csv(&report, b'\t', args.csv_bom, args.csv_keep_newlines)?
+        }
+        super::CompareFormat::Ndjson => format_ndjson(&report)?,
     };
 
     // Write output
@@ -128,6 +150,9 @@ mod tests {
             format: super::super::CompareFormat::Terminal,
             output: None,
             fail_on_regression: true,
+            csv_delimiter: ',',
+            csv_bom: false,
+            csv_keep_newlines: false,
         };
 
         let result = execute(args).await;
@@ -160,6 +185,9 @@ mod tests {
             format: super::super::CompareFormat::Terminal,
             output: None,
             fail_on_regression: true,
+            csv_delimiter: ',',
+            csv_bom: false,
+            csv_keep_newlines: false,
         };
 
         let result = execute(args).await;
@@ -192,6 +220,9 @@ mod tests {
             format: super::super::CompareFormat::Terminal,
             output: None,
             fail_on_regression: false, // Don't fail on regression
+            csv_delimiter: ',',
+            csv_bom: false,
+            csv_keep_newlines: false,
         };
 
         let result = execute(args).await;
@@ -219,6 +250,9 @@ mod tests {
             format: super::super::CompareFormat::Json,
             output: Some(output_path.clone()),
             fail_on_regression: false,
+            csv_delimiter: ',',
+            csv_bom: false,
+            csv_keep_newlines: false,
         };
 
         let result = execute(args).await;
@@ -250,6 +284,9 @@ mod tests {
             format: super::super::CompareFormat::Markdown,
             output: Some(output_path.clone()),
             fail_on_regression: false,
+            csv_delimiter: ',',
+            csv_bom: false,
+            csv_keep_newlines: false,
         };
 
         let result = execute(args).await;
@@ -274,6 +311,9 @@ mod tests {
             format: super::super::CompareFormat::Terminal,
             output: None,
             fail_on_regression: false,
+            csv_delimiter: ',',
+            csv_bom: false,
+            csv_keep_newlines: false,
         };
 
         let result = execute(args).await;

@@ -35,7 +35,7 @@ pub struct InitArgs {
 /// Arguments for the plan command
 #[derive(Args, Debug)]
 pub struct PlanArgs {
-    /// Output format (terminal, json, sarif)
+    /// Output format (terminal, json, sarif, csv, tsv, ndjson)
     #[arg(short, long, default_value = "terminal")]
     pub format: OutputFormat,
 
@@ -62,6 +62,18 @@ pub struct PlanArgs {
     /// Custom cache directory path
     #[arg(long, value_name = "DIR")]
     pub cache_dir: Option<PathBuf>,
+
+    /// CSV column delimiter (only applies to --format csv)
+    #[arg(long, value_name = "CHAR", default_value_t = ',')]
+    pub csv_delimiter: char,
+
+    /// Prepend a UTF-8 BOM to CSV output (helps Excel detect UTF-8)
+    #[arg(long, default_value_t = false)]
+    pub csv_bom: bool,
+
+    /// Keep newlines inside CSV cells (quoted) instead of replacing with spaces
+    #[arg(long, default_value_t = false)]
+    pub csv_keep_newlines: bool,
 
     /// Verbosity level (passed from global args)
     #[arg(skip)]
@@ -107,7 +119,7 @@ pub struct ApplyArgs {
 /// Arguments for the report command
 #[derive(Args, Debug)]
 pub struct ReportArgs {
-    /// Output format (html, markdown, json)
+    /// Output format (html, markdown, json, csv, tsv, ndjson)
     #[arg(short, long, default_value = "markdown")]
     pub format: ReportFormat,
 
@@ -146,6 +158,18 @@ pub struct ReportArgs {
     /// Custom cache directory path
     #[arg(long, value_name = "DIR")]
     pub cache_dir: Option<PathBuf>,
+
+    /// CSV column delimiter (only applies to --format csv)
+    #[arg(long, value_name = "CHAR", default_value_t = ',')]
+    pub csv_delimiter: char,
+
+    /// Prepend a UTF-8 BOM to CSV output (helps Excel detect UTF-8)
+    #[arg(long, default_value_t = false)]
+    pub csv_bom: bool,
+
+    /// Keep newlines inside CSV cells (quoted) instead of replacing with spaces
+    #[arg(long, default_value_t = false)]
+    pub csv_keep_newlines: bool,
 
     /// Verbosity level (passed from global args)
     #[arg(skip)]
@@ -190,6 +214,9 @@ pub enum OutputFormat {
     Terminal,
     Json,
     Sarif,
+    Csv,
+    Tsv,
+    Ndjson,
 }
 
 /// Output format for report command
@@ -198,6 +225,9 @@ pub enum ReportFormat {
     Html,
     Markdown,
     Json,
+    Csv,
+    Tsv,
+    Ndjson,
 }
 
 /// Arguments for the compare command
@@ -211,7 +241,7 @@ pub struct CompareArgs {
     #[arg(long, value_name = "FILE")]
     pub head_file: PathBuf,
 
-    /// Output format (terminal, json, markdown)
+    /// Output format (terminal, json, markdown, csv, tsv, ndjson)
     #[arg(short, long, default_value = "terminal")]
     pub format: CompareFormat,
 
@@ -222,6 +252,18 @@ pub struct CompareArgs {
     /// Exit with code 1 if regressions (new issues) are found
     #[arg(long)]
     pub fail_on_regression: bool,
+
+    /// CSV column delimiter (only applies to --format csv)
+    #[arg(long, value_name = "CHAR", default_value_t = ',')]
+    pub csv_delimiter: char,
+
+    /// Prepend a UTF-8 BOM to CSV output (helps Excel detect UTF-8)
+    #[arg(long, default_value_t = false)]
+    pub csv_bom: bool,
+
+    /// Keep newlines inside CSV cells (quoted) instead of replacing with spaces
+    #[arg(long, default_value_t = false)]
+    pub csv_keep_newlines: bool,
 }
 
 /// Output format for compare command
@@ -230,6 +272,9 @@ pub enum CompareFormat {
     Terminal,
     Json,
     Markdown,
+    Csv,
+    Tsv,
+    Ndjson,
 }
 
 /// Arguments for the generate-man command

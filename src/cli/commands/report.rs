@@ -6,7 +6,9 @@ use std::time::Duration;
 
 use super::{ReportArgs, ReportFormat};
 use crate::cache::{delete_cache_directory, AuditCache};
-use crate::cli::output::{HtmlReport, JsonOutput, MarkdownReport, ReportRenderer};
+use crate::cli::output::{
+    CsvOutput, HtmlReport, JsonOutput, MarkdownReport, NdjsonOutput, ReportRenderer,
+};
 use crate::config::Config;
 use crate::error::RepoLensError;
 use crate::exit_codes;
@@ -136,6 +138,13 @@ pub async fn execute(args: ReportArgs) -> Result<i32, RepoLensError> {
         eprintln!();
     }
 
+    // Warn if CSV-only flags are set when format is not CSV/TSV.
+    let format_is_csv_like = matches!(args.format, ReportFormat::Csv | ReportFormat::Tsv);
+    if !format_is_csv_like && (args.csv_bom || args.csv_keep_newlines || args.csv_delimiter != ',')
+    {
+        eprintln!("[WARN] --csv-* flags are only meaningful with --format csv|tsv; ignoring.");
+    }
+
     // Generate report
     let renderer: Box<dyn ReportRenderer> = match args.format {
         ReportFormat::Html => Box::new(HtmlReport::new(args.detailed)),
@@ -145,6 +154,19 @@ pub async fn execute(args: ReportArgs) -> Result<i32, RepoLensError> {
                 .with_schema(args.schema)
                 .with_validation(args.validate),
         ),
+        ReportFormat::Csv => Box::new(
+            CsvOutput::new()
+                .with_delimiter(args.csv_delimiter as u8)
+                .with_bom(args.csv_bom)
+                .with_keep_newlines(args.csv_keep_newlines),
+        ),
+        ReportFormat::Tsv => Box::new(
+            CsvOutput::new()
+                .with_delimiter(b'\t')
+                .with_bom(args.csv_bom)
+                .with_keep_newlines(args.csv_keep_newlines),
+        ),
+        ReportFormat::Ndjson => Box::new(NdjsonOutput::new()),
     };
 
     let report = renderer.render_report(&audit_results)?;
@@ -155,6 +177,9 @@ pub async fn execute(args: ReportArgs) -> Result<i32, RepoLensError> {
             ReportFormat::Html => "html",
             ReportFormat::Markdown => "md",
             ReportFormat::Json => "json",
+            ReportFormat::Csv => "csv",
+            ReportFormat::Tsv => "tsv",
+            ReportFormat::Ndjson => "ndjson",
         };
         PathBuf::from(format!("repolens-report.{extension}"))
     });
