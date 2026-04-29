@@ -41,6 +41,10 @@ clap = { version = "4", features = ["derive", "env", "color"] }
 # Man page generation
 clap_mangen = "0.2"
 
+# Shell completion generation
+clap_complete = "4"
+clap_complete_nushell = "0.1"
+
 # Async runtime
 tokio = { version = "1", features = ["full"] }
 async-trait = "0.1"
@@ -121,6 +125,8 @@ csv = "1"
 [build-dependencies]
 clap_mangen = "0.2"
 clap = { version = "4", features = ["derive"] }
+clap_complete = "4"
+clap_complete_nushell = "0.1"
 
 [dev-dependencies]
 tempfile = "3"
