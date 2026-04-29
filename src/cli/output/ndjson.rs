@@ -163,6 +163,8 @@ pub fn render_compare_ndjson(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::actions::plan::ActionPlan;
+    use crate::rules::results::AuditResults;
 
     #[test]
     fn split_location_with_line_yields_u64() {
@@ -191,5 +193,81 @@ mod tests {
             split_location(Some("src/config.rs:abc")),
             (Some("src/config.rs"), None)
         );
+    }
+
+    #[test]
+    fn split_location_empty_file_part_is_none() {
+        assert_eq!(split_location(Some(":42")), (None, Some(42)));
+    }
+
+    #[test]
+    fn severity_str_maps_each_variant() {
+        assert_eq!(severity_str(Severity::Critical), "critical");
+        assert_eq!(severity_str(Severity::Warning), "warning");
+        assert_eq!(severity_str(Severity::Info), "info");
+    }
+
+    #[test]
+    fn default_equals_new() {
+        let _ = NdjsonOutput;
+        let _ = NdjsonOutput::new();
+    }
+
+    #[test]
+    fn render_plan_emits_one_line_per_finding() {
+        let mut results = AuditResults::new("repo", "opensource");
+        results.add_finding(Finding::new("R1", "c1", Severity::Critical, "m1"));
+        results.add_finding(Finding::new("R2", "c2", Severity::Warning, "m2"));
+        let plan = ActionPlan::new();
+        let out = NdjsonOutput::new().render_plan(&results, &plan).unwrap();
+        assert_eq!(out.lines().count(), 2);
+        for line in out.lines() {
+            let v: serde_json::Value = serde_json::from_str(line).unwrap();
+            assert_eq!(v["project"], "repo");
+        }
+    }
+
+    #[test]
+    fn render_compare_ndjson_emits_change_field() {
+        let rows = vec![
+            (
+                "added".to_string(),
+                Finding::new("R1", "secrets", Severity::Critical, "m1")
+                    .with_location("a.rs:5")
+                    .with_description("d")
+                    .with_remediation("r"),
+            ),
+            (
+                "resolved".to_string(),
+                Finding::new("R2", "docs", Severity::Warning, "m2"),
+            ),
+        ];
+        let out = render_compare_ndjson(rows).unwrap();
+        let lines: Vec<&str> = out.lines().collect();
+        assert_eq!(lines.len(), 2);
+
+        let first: serde_json::Value = serde_json::from_str(lines[0]).unwrap();
+        assert_eq!(first["change"], "added");
+        assert_eq!(first["rule_id"], "R1");
+        assert_eq!(first["severity"], "critical");
+        assert_eq!(first["file"], "a.rs");
+        assert_eq!(first["line"], 5);
+        assert!(first["column"].is_null());
+        assert_eq!(first["description"], "d");
+        assert_eq!(first["remediation"], "r");
+
+        let second: serde_json::Value = serde_json::from_str(lines[1]).unwrap();
+        assert_eq!(second["change"], "resolved");
+        assert!(second["file"].is_null());
+        assert!(second["line"].is_null());
+        assert!(second["description"].is_null());
+        assert!(second["remediation"].is_null());
+    }
+
+    #[test]
+    fn render_compare_ndjson_empty_rows_is_empty_string() {
+        let rows: Vec<(String, Finding)> = vec![];
+        let out = render_compare_ndjson(rows).unwrap();
+        assert_eq!(out, "");
     }
 }

@@ -267,6 +267,8 @@ pub fn render_compare_csv(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::actions::plan::ActionPlan;
+    use crate::rules::results::AuditResults;
 
     #[test]
     fn parse_location_with_line() {
@@ -309,5 +311,151 @@ mod tests {
             lines[0],
             "rule_id,category,severity,file,line,column,message,description,remediation,project"
         );
+    }
+
+    #[test]
+    fn severity_str_maps_each_variant() {
+        assert_eq!(severity_str(Severity::Critical), "critical");
+        assert_eq!(severity_str(Severity::Warning), "warning");
+        assert_eq!(severity_str(Severity::Info), "info");
+    }
+
+    #[test]
+    fn sanitize_cell_csv_keep_newlines_preserves_content() {
+        let s = sanitize_cell("a\nb\tc", false, true);
+        assert_eq!(s, "a\nb\tc");
+    }
+
+    #[test]
+    fn sanitize_cell_csv_replaces_newlines_when_not_keeping() {
+        let s = sanitize_cell("a\r\nb", false, false);
+        assert_eq!(s, "a  b");
+    }
+
+    #[test]
+    fn sanitize_cell_tsv_replaces_tabs_and_newlines() {
+        let s = sanitize_cell("a\tb\nc\rd", true, false);
+        assert_eq!(s, "a    b c d");
+    }
+
+    #[test]
+    fn default_builds_same_as_new() {
+        let a = CsvOutput::default();
+        let b = CsvOutput::new();
+        assert_eq!(a.delimiter, b.delimiter);
+        assert_eq!(a.bom, b.bom);
+        assert_eq!(a.keep_newlines, b.keep_newlines);
+    }
+
+    #[test]
+    fn builder_methods_apply_options() {
+        let r = CsvOutput::new()
+            .with_delimiter(b';')
+            .with_bom(true)
+            .with_keep_newlines(true);
+        assert_eq!(r.delimiter, b';');
+        assert!(r.bom);
+        assert!(r.keep_newlines);
+    }
+
+    fn sample_findings() -> Vec<Finding> {
+        vec![
+            Finding::new("SEC001", "secrets", Severity::Critical, "Secret leaked")
+                .with_location("src/main.rs:10")
+                .with_description("API key detected")
+                .with_remediation("Rotate the key"),
+            Finding::new("DOC001", "docs", Severity::Warning, "Missing README"),
+            Finding::new("Q001", "quality", Severity::Info, "Hint"),
+        ]
+    }
+
+    #[test]
+    fn render_plan_uses_findings_and_repo_name() {
+        let mut results = AuditResults::new("repo-x", "opensource");
+        for f in sample_findings() {
+            results.add_finding(f);
+        }
+        let plan = ActionPlan::new();
+        let out = CsvOutput::new().render_plan(&results, &plan).unwrap();
+        let lines: Vec<&str> = out.lines().collect();
+        assert_eq!(lines.len(), 4); // header + 3 findings
+        assert!(out.contains("repo-x"));
+        assert!(out.contains("SEC001"));
+    }
+
+    #[test]
+    fn render_report_emits_all_severities() {
+        let mut results = AuditResults::new("repo-y", "opensource");
+        for f in sample_findings() {
+            results.add_finding(f);
+        }
+        let out = CsvOutput::new().render_report(&results).unwrap();
+        assert!(out.contains(",critical,"));
+        assert!(out.contains(",warning,"));
+        assert!(out.contains(",info,"));
+    }
+
+    #[test]
+    fn render_compare_csv_emits_change_column() {
+        let rows = vec![
+            (
+                "added".to_string(),
+                Finding::new("R1", "secrets", Severity::Critical, "msg1").with_location("a.rs:1"),
+            ),
+            (
+                "resolved".to_string(),
+                Finding::new("R2", "docs", Severity::Warning, "msg2"),
+            ),
+        ];
+        let out = render_compare_csv(rows, b',', false, false).unwrap();
+        let lines: Vec<&str> = out.lines().collect();
+        assert_eq!(lines.len(), 3); // header + 2 rows
+        assert!(lines[0].starts_with("change,rule_id,category,severity,"));
+        assert!(lines[1].starts_with("added,R1,secrets,critical,a.rs,1,"));
+        assert!(lines[2].starts_with("resolved,R2,docs,warning,"));
+    }
+
+    #[test]
+    fn render_compare_csv_with_bom_prepends_marker() {
+        let rows: Vec<(String, Finding)> = vec![];
+        let out = render_compare_csv(rows, b',', true, false).unwrap();
+        assert_eq!(&out.as_bytes()[..3], b"\xEF\xBB\xBF");
+    }
+
+    #[test]
+    fn render_compare_csv_tsv_ignores_bom() {
+        let rows: Vec<(String, Finding)> = vec![];
+        let out = render_compare_csv(rows, b'\t', true, false).unwrap();
+        let bytes = out.as_bytes();
+        assert!(bytes.len() < 3 || &bytes[..3] != b"\xEF\xBB\xBF");
+        assert!(out.starts_with("change\trule_id\t"));
+    }
+
+    #[test]
+    fn render_compare_csv_tsv_replaces_special_chars() {
+        let rows = vec![(
+            "added".to_string(),
+            Finding::new("R", "cat", Severity::Info, "a\tb\nc")
+                .with_description("d\te")
+                .with_remediation("f\ng"),
+        )];
+        let out = render_compare_csv(rows, b'\t', false, false).unwrap();
+        let lines: Vec<&str> = out.lines().collect();
+        assert_eq!(lines.len(), 2);
+        // Each line must have exactly 9 separators (10 columns).
+        for line in &lines {
+            assert_eq!(line.matches('\t').count(), 9, "line was: {line}");
+        }
+    }
+
+    #[test]
+    fn render_compare_csv_keeps_newlines_when_requested() {
+        let rows = vec![(
+            "added".to_string(),
+            Finding::new("R", "cat", Severity::Info, "a\nb"),
+        )];
+        let out = render_compare_csv(rows, b',', false, true).unwrap();
+        // Newline preserved inside quoted CSV cell.
+        assert!(out.contains("\"a\nb\""), "output was: {out}");
     }
 }
