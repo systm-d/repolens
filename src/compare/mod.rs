@@ -7,6 +7,8 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 
+use crate::cli::output::render_junit_findings;
+use crate::error::RepoLensError;
 use crate::rules::results::{AuditResults, Finding, Severity};
 
 /// A unique key that identifies a finding for comparison purposes.
@@ -332,7 +334,7 @@ pub fn format_csv(
     delimiter: u8,
     bom: bool,
     keep_newlines: bool,
-) -> Result<String, crate::error::RepoLensError> {
+) -> Result<String, RepoLensError> {
     let rows = compare_rows(report);
     crate::cli::output::csv::render_compare_csv(rows, delimiter, bom, keep_newlines)
 }
@@ -340,9 +342,17 @@ pub fn format_csv(
 /// Format the compare report as NDJSON.
 ///
 /// Each line is one finding with a `change` field (`added` / `resolved`).
-pub fn format_ndjson(report: &CompareReport) -> Result<String, crate::error::RepoLensError> {
+pub fn format_ndjson(report: &CompareReport) -> Result<String, RepoLensError> {
     let rows = compare_rows(report);
     crate::cli::output::ndjson::render_compare_ndjson(rows)
+}
+
+/// Format the compare report as JUnit XML.
+///
+/// Only regressions (`added_findings`) are emitted as `<testcase>` elements.
+/// Resolved findings are silent — they have no failing-test analogue.
+pub fn format_junit(report: &CompareReport) -> Result<String, RepoLensError> {
+    render_junit_findings(&report.added_findings)
 }
 
 /// Build the (change_label, finding) row stream consumed by the CSV/NDJSON

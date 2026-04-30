@@ -247,6 +247,7 @@ pub enum OutputFormat {
     Csv,
     Tsv,
     Ndjson,
+    Junit,
 }
 
 /// Output format for report command
@@ -258,6 +259,7 @@ pub enum ReportFormat {
     Csv,
     Tsv,
     Ndjson,
+    Junit,
 }
 
 /// Arguments for the compare command
@@ -305,6 +307,7 @@ pub enum CompareFormat {
     Csv,
     Tsv,
     Ndjson,
+    Junit,
 }
 
 /// Arguments for the generate-man command

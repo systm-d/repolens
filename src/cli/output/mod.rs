@@ -3,6 +3,7 @@
 pub mod csv;
 mod html;
 pub mod json;
+pub(crate) mod junit;
 mod markdown;
 pub mod ndjson;
 mod sarif;
@@ -11,6 +12,8 @@ mod terminal;
 pub use csv::CsvOutput;
 pub use html::HtmlReport;
 pub use json::JsonOutput;
+pub(crate) use junit::render_findings as render_junit_findings;
+pub use junit::JunitReport;
 pub use markdown::MarkdownReport;
 pub use ndjson::NdjsonOutput;
 pub use sarif::SarifOutput;
