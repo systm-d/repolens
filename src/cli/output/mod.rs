@@ -6,6 +6,7 @@ pub mod json;
 pub(crate) mod junit;
 mod markdown;
 pub mod ndjson;
+mod pdf;
 mod sarif;
 mod terminal;
 
@@ -16,6 +17,7 @@ pub(crate) use junit::render_findings as render_junit_findings;
 pub use junit::JunitReport;
 pub use markdown::MarkdownReport;
 pub use ndjson::NdjsonOutput;
+pub use pdf::PdfReport;
 pub use sarif::SarifOutput;
 pub use terminal::TerminalOutput;
 

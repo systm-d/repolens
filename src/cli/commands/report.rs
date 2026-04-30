@@ -7,9 +7,10 @@ use std::time::Duration;
 use super::{ReportArgs, ReportFormat};
 use crate::cache::{delete_cache_directory, AuditCache};
 use crate::cli::output::{
-    CsvOutput, HtmlReport, JsonOutput, JunitReport, MarkdownReport, NdjsonOutput, ReportRenderer,
+    CsvOutput, HtmlReport, JsonOutput, JunitReport, MarkdownReport, NdjsonOutput, PdfReport,
+    ReportRenderer,
 };
-use crate::config::Config;
+use crate::config::{BrandingConfig, Config};
 use crate::error::RepoLensError;
 use crate::exit_codes;
 use crate::rules::engine::RulesEngine;
@@ -145,35 +146,15 @@ pub async fn execute(args: ReportArgs) -> Result<i32, RepoLensError> {
         eprintln!("[WARN] --csv-* flags are only meaningful with --format csv|tsv; ignoring.");
     }
 
-    // Generate report
-    let renderer: Box<dyn ReportRenderer> = match args.format {
-        ReportFormat::Html => Box::new(HtmlReport::new(args.detailed)),
-        ReportFormat::Markdown => Box::new(MarkdownReport::new(args.detailed)),
-        ReportFormat::Json => Box::new(
-            JsonOutput::new()
-                .with_schema(args.schema)
-                .with_validation(args.validate),
-        ),
-        ReportFormat::Csv => Box::new(
-            CsvOutput::new()
-                .with_delimiter(args.csv_delimiter as u8)
-                .with_bom(args.csv_bom)
-                .with_keep_newlines(args.csv_keep_newlines),
-        ),
-        ReportFormat::Tsv => Box::new(
-            CsvOutput::new()
-                .with_delimiter(b'\t')
-                .with_bom(args.csv_bom)
-                .with_keep_newlines(args.csv_keep_newlines),
-        ),
-        ReportFormat::Ndjson => Box::new(NdjsonOutput::new()),
-        ReportFormat::Junit => Box::new(JunitReport::new()),
-    };
+    // Warn early if --branding was passed for a format other than PDF.
+    if args.branding.is_some() && args.format != ReportFormat::Pdf {
+        tracing::warn!(
+            "--branding is only applied to --format pdf; ignoring for --format {:?}",
+            args.format
+        );
+    }
 
-    let report = renderer.render_report(&audit_results)?;
-
-    // Write output
-    let output_path = args.output.unwrap_or_else(|| {
+    let output_path = args.output.clone().unwrap_or_else(|| {
         let extension = match args.format {
             ReportFormat::Html => "html",
             ReportFormat::Markdown => "md",
@@ -182,16 +163,61 @@ pub async fn execute(args: ReportArgs) -> Result<i32, RepoLensError> {
             ReportFormat::Tsv => "tsv",
             ReportFormat::Ndjson => "ndjson",
             ReportFormat::Junit => "xml",
+            ReportFormat::Pdf => "pdf",
         };
         PathBuf::from(format!("repolens-report.{extension}"))
     });
 
-    std::fs::write(&output_path, &report).map_err(|e| {
-        RepoLensError::Action(crate::error::ActionError::FileWrite {
-            path: output_path.display().to_string(),
-            source: e,
-        })
-    })?;
+    if matches!(args.format, ReportFormat::Pdf) {
+        let mut renderer = PdfReport::new(args.detailed);
+        if let Some(ref branding_path) = args.branding {
+            match BrandingConfig::load_from_file(branding_path) {
+                Ok(cfg) => renderer = renderer.with_branding(cfg),
+                Err(e) => {
+                    eprintln!(
+                        "{} failed to load branding '{}': {} — using defaults",
+                        "Warning:".yellow(),
+                        branding_path.display(),
+                        e
+                    );
+                }
+            }
+        }
+        renderer.render_to_file(&audit_results, &output_path)?;
+    } else {
+        let renderer: Box<dyn ReportRenderer> = match args.format {
+            ReportFormat::Html => Box::new(HtmlReport::new(args.detailed)),
+            ReportFormat::Markdown => Box::new(MarkdownReport::new(args.detailed)),
+            ReportFormat::Json => Box::new(
+                JsonOutput::new()
+                    .with_schema(args.schema)
+                    .with_validation(args.validate),
+            ),
+            ReportFormat::Csv => Box::new(
+                CsvOutput::new()
+                    .with_delimiter(args.csv_delimiter as u8)
+                    .with_bom(args.csv_bom)
+                    .with_keep_newlines(args.csv_keep_newlines),
+            ),
+            ReportFormat::Tsv => Box::new(
+                CsvOutput::new()
+                    .with_delimiter(b'\t')
+                    .with_bom(args.csv_bom)
+                    .with_keep_newlines(args.csv_keep_newlines),
+            ),
+            ReportFormat::Ndjson => Box::new(NdjsonOutput::new()),
+            ReportFormat::Junit => Box::new(JunitReport::new()),
+            ReportFormat::Pdf => unreachable!("handled above"),
+        };
+
+        let report = renderer.render_report(&audit_results)?;
+        std::fs::write(&output_path, &report).map_err(|e| {
+            RepoLensError::Action(crate::error::ActionError::FileWrite {
+                path: output_path.display().to_string(),
+                source: e,
+            })
+        })?;
+    }
 
     println!(
         "{} Report written to: {}",

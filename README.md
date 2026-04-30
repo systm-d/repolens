@@ -11,7 +11,7 @@ A CLI tool to audit GitHub repositories for best practices, security, and compli
 - Verify license compliance across dependencies
 - Generate actionable fix plans
 - Apply fixes automatically or with dry-run mode
-- Multiple output formats: terminal, JSON, SARIF, Markdown, HTML, CSV, TSV, NDJSON, JUnit XML
+- Multiple output formats: terminal, JSON, SARIF, Markdown, HTML, CSV, TSV, NDJSON, JUnit XML, PDF (with branding)
 
 ## Installation
 
@@ -334,6 +334,10 @@ repolens report
 
 # Export report
 repolens report --format html --output report.html
+
+# PDF report (printable, brandable — see docs/output/pdf.md)
+repolens report --format pdf --output audit.pdf
+repolens report --format pdf --output audit.pdf --branding ./branding.toml
 
 # JSON report with JSON Schema reference
 repolens report --format json --schema
