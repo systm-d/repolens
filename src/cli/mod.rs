@@ -48,12 +48,12 @@ pub mod commands;
 pub mod exit_codes;
 pub mod output;
 
-use clap::{Parser, Subcommand};
+use clap::{Parser, Subcommand, ValueHint};
 use std::path::PathBuf;
 
 use commands::{
-    ApplyArgs, CompareArgs, GenerateManArgs, InitArgs, InstallHooksArgs, PlanArgs, ReportArgs,
-    SchemaArgs,
+    ApplyArgs, CompareArgs, CompletionsArgs, GenerateManArgs, InitArgs, InstallHooksArgs, PlanArgs,
+    ReportArgs, SchemaArgs,
 };
 
 /// RepoLens - Audit and prepare repositories for open source or enterprise standards
@@ -67,11 +67,11 @@ pub struct Cli {
     pub verbose: u8,
 
     /// Path to configuration file
-    #[arg(short, long, global = true, value_name = "FILE")]
+    #[arg(short, long, global = true, value_name = "FILE", value_hint = ValueHint::FilePath)]
     pub config: Option<PathBuf>,
 
     /// Working directory (defaults to current directory)
-    #[arg(short = 'C', long, global = true, value_name = "DIR")]
+    #[arg(short = 'C', long, global = true, value_name = "DIR", value_hint = ValueHint::DirPath)]
     pub directory: Option<PathBuf>,
 
     #[command(subcommand)]
@@ -104,4 +104,8 @@ pub enum Commands {
     /// Generate man page (hidden, for packaging)
     #[command(hide = true)]
     GenerateMan(GenerateManArgs),
+
+    /// Generate shell completion scripts (hidden, for packaging)
+    #[command(hide = true)]
+    Completions(CompletionsArgs),
 }

@@ -2,6 +2,7 @@
 
 pub mod apply;
 pub mod compare;
+pub mod completions;
 pub mod generate_man;
 pub mod init;
 pub mod install_hooks;
@@ -16,7 +17,12 @@ use std::path::PathBuf;
 #[derive(Args, Debug)]
 pub struct InitArgs {
     /// Preset to use (opensource, enterprise, strict)
-    #[arg(short, long, value_name = "PRESET")]
+    #[arg(
+        short,
+        long,
+        value_name = "PRESET",
+        value_parser = clap::builder::PossibleValuesParser::new(["opensource", "enterprise", "strict"])
+    )]
     pub preset: Option<String>,
 
     /// Force overwrite existing configuration
@@ -40,11 +46,19 @@ pub struct PlanArgs {
     pub format: OutputFormat,
 
     /// Only check specific rule categories
-    #[arg(long, value_delimiter = ',')]
+    #[arg(
+        long,
+        value_delimiter = ',',
+        value_parser = clap::builder::PossibleValuesParser::new(crate::rules::constants::VALID_CATEGORIES)
+    )]
     pub only: Option<Vec<String>>,
 
     /// Skip specific rule categories
-    #[arg(long, value_delimiter = ',')]
+    #[arg(
+        long,
+        value_delimiter = ',',
+        value_parser = clap::builder::PossibleValuesParser::new(crate::rules::constants::VALID_CATEGORIES)
+    )]
     pub skip: Option<Vec<String>>,
 
     /// Output file (defaults to stdout)
@@ -95,12 +109,20 @@ pub struct ApplyArgs {
     #[arg(long)]
     pub dry_run: bool,
 
-    /// Only apply specific actions
-    #[arg(long, value_delimiter = ',')]
+    /// Only apply actions for specific rule categories
+    #[arg(
+        long,
+        value_delimiter = ',',
+        value_parser = clap::builder::PossibleValuesParser::new(crate::rules::constants::VALID_CATEGORIES)
+    )]
     pub only: Option<Vec<String>>,
 
-    /// Skip specific actions
-    #[arg(long, value_delimiter = ',')]
+    /// Skip actions for specific rule categories
+    #[arg(
+        long,
+        value_delimiter = ',',
+        value_parser = clap::builder::PossibleValuesParser::new(crate::rules::constants::VALID_CATEGORIES)
+    )]
     pub skip: Option<Vec<String>>,
 
     /// Create a pull request with the changes (default: true if in a git repository)
@@ -132,11 +154,19 @@ pub struct ReportArgs {
     pub detailed: bool,
 
     /// Only check specific rule categories
-    #[arg(long, value_delimiter = ',')]
+    #[arg(
+        long,
+        value_delimiter = ',',
+        value_parser = clap::builder::PossibleValuesParser::new(crate::rules::constants::VALID_CATEGORIES)
+    )]
     pub only: Option<Vec<String>>,
 
     /// Skip specific rule categories
-    #[arg(long, value_delimiter = ',')]
+    #[arg(
+        long,
+        value_delimiter = ',',
+        value_parser = clap::builder::PossibleValuesParser::new(crate::rules::constants::VALID_CATEGORIES)
+    )]
     pub skip: Option<Vec<String>>,
 
     /// Include JSON Schema reference ($schema) in JSON output
@@ -283,4 +313,24 @@ pub struct GenerateManArgs {
     /// Output directory for man pages
     #[arg(short, long, default_value = ".")]
     pub output: PathBuf,
+}
+
+/// Supported shells for completion generation
+#[derive(Debug, Clone, Copy, PartialEq, Eq, clap::ValueEnum)]
+pub enum ShellChoice {
+    Bash,
+    Zsh,
+    Fish,
+    #[value(name = "powershell")]
+    PowerShell,
+    Elvish,
+    Nushell,
+}
+
+/// Arguments for the completions command
+#[derive(Args, Debug)]
+pub struct CompletionsArgs {
+    /// Target shell for which to generate the completion script
+    #[arg(value_enum)]
+    pub shell: ShellChoice,
 }
