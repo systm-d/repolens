@@ -317,9 +317,11 @@ mod tests {
         let json: serde_json::Value = serde_json::from_str(&rendered).unwrap();
 
         assert!(json["runs"][0]["results"].as_array().unwrap().is_empty());
-        assert!(json["runs"][0]["tool"]["driver"]["rules"]
-            .as_array()
-            .unwrap()
-            .is_empty());
+        assert!(
+            json["runs"][0]["tool"]["driver"]["rules"]
+                .as_array()
+                .unwrap()
+                .is_empty()
+        );
     }
 }

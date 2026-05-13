@@ -7,7 +7,7 @@ use std::path::PathBuf;
 
 use super::{OutputFormat, PlanArgs};
 use crate::actions::planner::ActionPlanner;
-use crate::cache::{delete_cache_directory, AuditCache};
+use crate::cache::{AuditCache, delete_cache_directory};
 use crate::cli::output::{JsonOutput, OutputRenderer, SarifOutput, TerminalOutput};
 use crate::config::Config;
 use crate::error::RepoLensError;

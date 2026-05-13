@@ -1193,13 +1193,15 @@ mod tests {
     fn test_has_token_without_env() {
         // Clear the env var if set (in test isolation)
         let original = env::var("GITHUB_TOKEN").ok();
-        env::remove_var("GITHUB_TOKEN");
+        // TODO: Audit that the environment access only happens in single-threaded code.
+        unsafe { env::remove_var("GITHUB_TOKEN") };
 
         assert!(!GitHubProvider::has_token());
 
         // Restore original value
         if let Some(val) = original {
-            env::set_var("GITHUB_TOKEN", val);
+            // TODO: Audit that the environment access only happens in single-threaded code.
+            unsafe { env::set_var("GITHUB_TOKEN", val) };
         }
     }
 
@@ -1585,12 +1587,13 @@ mod tests {
         }"#;
 
         let hook: Webhook = serde_json::from_str(json).unwrap();
-        assert!(hook
-            .config
-            .url
-            .as_ref()
-            .map(|u| u.starts_with("http://"))
-            .unwrap_or(false));
+        assert!(
+            hook.config
+                .url
+                .as_ref()
+                .map(|u| u.starts_with("http://"))
+                .unwrap_or(false)
+        );
     }
 
     #[test]

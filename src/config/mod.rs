@@ -93,8 +93,8 @@
 pub mod loader;
 pub mod presets;
 
-pub use loader::get_env_verbosity;
 pub use loader::Config;
+pub use loader::get_env_verbosity;
 pub use presets::Preset;
 
 use serde::{Deserialize, Serialize};

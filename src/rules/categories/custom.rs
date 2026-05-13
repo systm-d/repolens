@@ -18,7 +18,9 @@ static SHELL_WARNING_PRINTED: AtomicBool = AtomicBool::new(false);
 /// Print a security warning about shell command execution (only once per run)
 fn warn_about_shell_commands() {
     if !SHELL_WARNING_PRINTED.swap(true, Ordering::SeqCst) {
-        eprintln!("\n\u{26a0}\u{fe0f}  Warning: Custom rules with shell commands detected. Only use commands from trusted sources.\n");
+        eprintln!(
+            "\n\u{26a0}\u{fe0f}  Warning: Custom rules with shell commands detected. Only use commands from trusted sources.\n"
+        );
     }
 }
 

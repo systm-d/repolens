@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
+use criterion::{BenchmarkId, Criterion, black_box, criterion_group, criterion_main};
 use repolens::rules::categories::dependencies::{
     parse_cargo_lock, parse_package_lock, parse_requirements_txt,
 };

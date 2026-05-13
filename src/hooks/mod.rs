@@ -1061,14 +1061,18 @@ mod tests {
         assert!(messages[1].contains("backed up"));
 
         // Verify both backups exist
-        assert!(temp_dir
-            .path()
-            .join(".git/hooks/pre-commit.repolens-backup")
-            .exists());
-        assert!(temp_dir
-            .path()
-            .join(".git/hooks/pre-push.repolens-backup")
-            .exists());
+        assert!(
+            temp_dir
+                .path()
+                .join(".git/hooks/pre-commit.repolens-backup")
+                .exists()
+        );
+        assert!(
+            temp_dir
+                .path()
+                .join(".git/hooks/pre-push.repolens-backup")
+                .exists()
+        );
 
         // Verify new hooks are installed
         let commit_content = fs::read_to_string(&pre_commit_path).unwrap();

@@ -18,7 +18,7 @@ use crate::config::Config;
 use crate::rules::engine::RuleCategory;
 use crate::rules::results::{Finding, Severity};
 use crate::scanner::Scanner;
-use crate::utils::language_detection::{detect_languages, Language};
+use crate::utils::language_detection::{Language, detect_languages};
 
 /// Rules for checking GitHub Actions workflows
 pub struct WorkflowsRules;

@@ -12,7 +12,7 @@ use crate::error::{ActionError, RepoLensError};
 use crate::exit_codes;
 use crate::utils::permissions::set_secure_permissions;
 use crate::utils::prerequisites::{
-    display_error_summary, display_report, display_warnings, run_all_checks, CheckOptions,
+    CheckOptions, display_error_summary, display_report, display_warnings, run_all_checks,
 };
 
 const CONFIG_FILENAME: &str = ".repolens.toml";

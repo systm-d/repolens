@@ -98,9 +98,11 @@ mod tests {
         let files = scan_directory(root);
 
         assert!(files.iter().any(|f| f.path == "test.txt"));
-        assert!(files
-            .iter()
-            .any(|f| f.path == "subdir/nested.txt" || f.path == "subdir\\nested.txt"));
+        assert!(
+            files
+                .iter()
+                .any(|f| f.path == "subdir/nested.txt" || f.path == "subdir\\nested.txt")
+        );
     }
 
     #[test]
@@ -175,9 +177,11 @@ mod tests {
 
         // Files should be included
         assert!(files.iter().any(|f| f.path == "testfile.txt"));
-        assert!(files
-            .iter()
-            .any(|f| f.path == "testdir/nested.txt" || f.path == "testdir\\nested.txt"));
+        assert!(
+            files
+                .iter()
+                .any(|f| f.path == "testdir/nested.txt" || f.path == "testdir\\nested.txt")
+        );
 
         // All entries should have is_dir = false
         assert!(files.iter().all(|f| !f.is_dir));

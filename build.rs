@@ -11,7 +11,7 @@
 //! commands or flags so the generated completions stay accurate.
 
 use clap::{Args, CommandFactory, Parser, Subcommand, ValueEnum, ValueHint};
-use clap_complete::{generate_to, Shell};
+use clap_complete::{Shell, generate_to};
 use clap_complete_nushell::Nushell;
 use std::env;
 use std::path::{Path, PathBuf};

@@ -82,7 +82,7 @@
 use crate::cache::AuditCache;
 use crate::error::RepoLensError;
 use crate::utils::{AuditTiming, CategoryTiming, Timer};
-use tracing::{debug, info, span, Level};
+use tracing::{Level, debug, info, span};
 
 use super::categories::{
     codeowners::CodeownersRules, custom::CustomRules, dependencies::DependencyRules,
@@ -550,8 +550,8 @@ mod tests {
 
     #[test]
     fn test_set_progress_callback() {
-        use std::sync::atomic::{AtomicUsize, Ordering};
         use std::sync::Arc;
+        use std::sync::atomic::{AtomicUsize, Ordering};
 
         let config = Config::default();
         let mut engine = RulesEngine::new(config);
@@ -592,8 +592,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_rules_engine_with_progress_callback() {
-        use std::sync::atomic::{AtomicUsize, Ordering};
         use std::sync::Arc;
+        use std::sync::atomic::{AtomicUsize, Ordering};
 
         let temp_dir = TempDir::new().unwrap();
         let root = temp_dir.path();

@@ -4,8 +4,8 @@
 //! output that mentions the binary name. Validating the actual shell
 //! syntax is deferred to the upstream `clap_complete` crate.
 
-use repolens::cli::commands::completions::execute;
 use repolens::cli::commands::ShellChoice;
+use repolens::cli::commands::completions::execute;
 
 fn assert_completions_for(shell: ShellChoice) {
     let mut buf: Vec<u8> = Vec::new();

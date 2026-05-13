@@ -1,9 +1,9 @@
 //! Tests for utility modules
 
 use repolens::utils::prerequisites::{
-    check_gh_authenticated, check_gh_installed, check_git_installed, check_is_git_repo,
-    check_remote_is_github, check_remote_origin, run_all_checks, CheckLevel, CheckOptions,
-    CheckStatus, PrerequisitesReport,
+    CheckLevel, CheckOptions, CheckStatus, PrerequisitesReport, check_gh_authenticated,
+    check_gh_installed, check_git_installed, check_is_git_repo, check_remote_is_github,
+    check_remote_origin, run_all_checks,
 };
 use std::fs;
 use tempfile::TempDir;

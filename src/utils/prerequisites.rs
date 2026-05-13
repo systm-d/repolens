@@ -3,7 +3,7 @@
 //! This module verifies that required tools and configurations are available
 //! before running RepoLens commands.
 
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use colored::Colorize;
 use std::env;
 use std::path::Path;
@@ -926,10 +926,12 @@ mod tests {
         assert_eq!(git_repo_check.status, CheckStatus::Ok);
 
         // Should have Remote origin check (optional, likely failed since no remote)
-        assert!(report
-            .checks
-            .iter()
-            .any(|c| c.name == "Remote origin configured"));
+        assert!(
+            report
+                .checks
+                .iter()
+                .any(|c| c.name == "Remote origin configured")
+        );
     }
 
     #[test]

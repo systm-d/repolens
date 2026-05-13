@@ -295,9 +295,11 @@ mod tests {
         let findings = check_large_binaries(&scanner).await.unwrap();
 
         assert!(findings.iter().any(|f| f.rule_id == "GIT001"));
-        assert!(findings
-            .iter()
-            .any(|f| f.message.contains("large_file.zip")));
+        assert!(
+            findings
+                .iter()
+                .any(|f| f.message.contains("large_file.zip"))
+        );
     }
 
     #[tokio::test]

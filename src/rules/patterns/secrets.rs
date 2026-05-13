@@ -202,9 +202,11 @@ mod tests {
     #[test]
     fn test_github_token_detection() {
         let pattern = &SECRET_PATTERNS[0]; // GitHub PAT
-        assert!(pattern
-            .regex
-            .is_match("ghp_abcdefghijklmnopqrstuvwxyz1234567890"));
+        assert!(
+            pattern
+                .regex
+                .is_match("ghp_abcdefghijklmnopqrstuvwxyz1234567890")
+        );
         assert!(!pattern.regex.is_match("ghp_short"));
     }
 

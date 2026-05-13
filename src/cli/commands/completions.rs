@@ -1,7 +1,7 @@
 //! Shell completion generation command
 
 use clap::CommandFactory;
-use clap_complete::{generate, Shell};
+use clap_complete::{Shell, generate};
 use clap_complete_nushell::Nushell;
 
 use super::ShellChoice;

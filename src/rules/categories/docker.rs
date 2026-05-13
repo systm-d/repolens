@@ -604,9 +604,11 @@ mod tests {
         let scanner = Scanner::new(root.to_path_buf());
         let findings = check_pinned_tag(&scanner).await.unwrap();
 
-        assert!(findings
-            .iter()
-            .any(|f| f.rule_id == "DOCKER003" && f.message.contains("latest")));
+        assert!(
+            findings
+                .iter()
+                .any(|f| f.rule_id == "DOCKER003" && f.message.contains("latest"))
+        );
     }
 
     #[tokio::test]

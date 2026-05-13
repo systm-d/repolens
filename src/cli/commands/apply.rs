@@ -795,10 +795,10 @@ async fn handle_git_operations(
 
     let default_branch = git::get_default_branch(repo_root).unwrap_or_else(|| "main".to_string());
 
-    let pr_title = format!("RepoLens: Automatic fixes ({})", {
-        let timestamp = chrono::Local::now().format("%Y-%m-%d %H:%M");
-        timestamp
-    });
+    let pr_title = format!(
+        "RepoLens: Automatic fixes ({})",
+        chrono::Local::now().format("%Y-%m-%d %H:%M")
+    );
 
     let pr_body = format!(
         "# RepoLens Automatic Fixes\n\n\

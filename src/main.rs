@@ -11,7 +11,7 @@
 //! 4. Default values
 
 use clap::Parser;
-use tracing_subscriber::{fmt, prelude::*, EnvFilter};
+use tracing_subscriber::{EnvFilter, fmt, prelude::*};
 
 mod actions;
 mod cache;

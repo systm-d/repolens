@@ -175,7 +175,8 @@ impl Config {
 
         // REPOLENS_GITHUB_TOKEN - forward to GH_TOKEN for gh CLI
         if let Ok(token) = std::env::var(env_vars::REPOLENS_GITHUB_TOKEN) {
-            std::env::set_var("GH_TOKEN", token);
+            // TODO: Audit that the environment access only happens in single-threaded code.
+            unsafe { std::env::set_var("GH_TOKEN", token) };
         }
     }
 

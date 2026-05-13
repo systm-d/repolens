@@ -1465,9 +1465,10 @@ mod tests {
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_cargo_lock(&scanner).unwrap();
         assert_eq!(deps.len(), 1);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "serde" && d.version == "1.0.130"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "serde" && d.version == "1.0.130")
+        );
     }
 
     #[test]
@@ -1681,12 +1682,14 @@ mod tests {
         let deps = parse_pom_xml(&scanner).unwrap();
         // 3rd dep has ${project.version}, should be skipped
         assert_eq!(deps.len(), 2);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "org.springframework:spring-core"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "com.google.guava:guava" && d.version == "31.1-jre"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "org.springframework:spring-core")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "com.google.guava:guava" && d.version == "31.1-jre")
+        );
     }
 
     #[test]
@@ -1747,14 +1750,16 @@ dependencies {
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_gradle_build(&scanner).unwrap();
         assert_eq!(deps.len(), 2);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "org.springframework.boot:spring-boot-starter"
-                && d.version == "2.7.0"
-                && d.ecosystem == Ecosystem::Maven));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "junit:junit" && d.version == "4.13.2"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "org.springframework.boot:spring-boot-starter"
+                    && d.version == "2.7.0"
+                    && d.ecosystem == Ecosystem::Maven)
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "junit:junit" && d.version == "4.13.2")
+        );
     }
 
     #[test]
@@ -1797,12 +1802,14 @@ dependencies {
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_gradle_build(&scanner).unwrap();
         assert_eq!(deps.len(), 2);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "org.jetbrains.kotlin:kotlin-stdlib" && d.version == "1.7.20"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "org.junit.jupiter:junit-jupiter" && d.version == "5.9.0"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "org.jetbrains.kotlin:kotlin-stdlib" && d.version == "1.7.20")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "org.junit.jupiter:junit-jupiter" && d.version == "5.9.0")
+        );
     }
 
     #[test]
@@ -1868,15 +1875,18 @@ dependencies {
         let deps = parse_composer_lock(&scanner).unwrap();
         assert_eq!(deps.len(), 3);
         // v prefix should be stripped
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "monolog/monolog" && d.version == "2.8.0"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "symfony/console" && d.version == "5.4.12"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "phpunit/phpunit" && d.version == "9.5.25"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "monolog/monolog" && d.version == "2.8.0")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "symfony/console" && d.version == "5.4.12")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "phpunit/phpunit" && d.version == "9.5.25")
+        );
     }
 
     #[test]
@@ -1956,16 +1966,19 @@ dependencies {
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_composer_json(&scanner).unwrap();
         assert_eq!(deps.len(), 5);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "pkg/a" && d.version == "1.2.3"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "pkg/a" && d.version == "1.2.3")
+        );
         assert!(deps.iter().any(|d| d.name == "pkg/b" && d.version == "2.0"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "pkg/c" && d.version == "3.1.0"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "pkg/d" && d.version == "4.0.0"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "pkg/c" && d.version == "3.1.0")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "pkg/d" && d.version == "4.0.0")
+        );
         assert!(deps.iter().any(|d| d.name == "pkg/e" && d.version == "5.0"));
     }
 
@@ -2272,12 +2285,14 @@ dependencies {
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_nuget_lock(&scanner).unwrap();
         assert_eq!(deps.len(), 2);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "Newtonsoft.Json" && d.version == "13.0.1"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "Serilog" && d.version == "2.12.0"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "Newtonsoft.Json" && d.version == "13.0.1")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "Serilog" && d.version == "2.12.0")
+        );
         assert!(deps.iter().all(|d| d.ecosystem == Ecosystem::NuGet));
     }
 
@@ -2334,12 +2349,14 @@ dependencies {
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_nuget_lock(&scanner).unwrap();
         assert_eq!(deps.len(), 2);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "Newtonsoft.Json" && d.version == "13.0.1"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "Microsoft.Extensions.Logging" && d.version == "7.0.0"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "Newtonsoft.Json" && d.version == "13.0.1")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "Microsoft.Extensions.Logging" && d.version == "7.0.0")
+        );
     }
 
     // ===== Ruby Gemfile.lock Tests =====
@@ -2366,12 +2383,14 @@ DEPENDENCIES
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_gemfile_lock(&scanner).unwrap();
         assert_eq!(deps.len(), 2);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "rails" && d.version == "7.0.4"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "nokogiri" && d.version == "1.14.0"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "rails" && d.version == "7.0.4")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "nokogiri" && d.version == "1.14.0")
+        );
         assert!(deps.iter().all(|d| d.ecosystem == Ecosystem::RubyGems));
     }
 
@@ -2434,12 +2453,14 @@ SPEC CHECKSUMS:
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_podfile_lock(&scanner).unwrap();
         assert_eq!(deps.len(), 2);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "Alamofire" && d.version == "5.6.4"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "SwiftyJSON" && d.version == "5.0.1"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "Alamofire" && d.version == "5.6.4")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "SwiftyJSON" && d.version == "5.0.1")
+        );
         assert!(deps.iter().all(|d| d.ecosystem == Ecosystem::CocoaPods));
     }
 
@@ -2461,12 +2482,14 @@ DEPENDENCIES:
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_podfile_lock(&scanner).unwrap();
         assert_eq!(deps.len(), 2);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "Firebase/Core" && d.version == "10.3.0"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "FirebaseAnalytics" && d.version == "10.3.0"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "Firebase/Core" && d.version == "10.3.0")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "FirebaseAnalytics" && d.version == "10.3.0")
+        );
     }
 
     #[test]
@@ -2512,12 +2535,14 @@ DEPENDENCIES:
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_package_resolved(&scanner).unwrap();
         assert_eq!(deps.len(), 2);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "swift-argument-parser" && d.version == "1.2.0"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "swift-log" && d.version == "1.5.2"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "swift-argument-parser" && d.version == "1.2.0")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "swift-log" && d.version == "1.5.2")
+        );
         assert!(deps.iter().all(|d| d.ecosystem == Ecosystem::SwiftPM));
     }
 
@@ -2547,9 +2572,10 @@ DEPENDENCIES:
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_package_resolved(&scanner).unwrap();
         assert_eq!(deps.len(), 1);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "Alamofire" && d.version == "5.6.4"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "Alamofire" && d.version == "5.6.4")
+        );
     }
 
     #[test]
@@ -2590,12 +2616,14 @@ sdks:
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_pubspec_lock(&scanner).unwrap();
         assert_eq!(deps.len(), 2);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "http" && d.version == "0.13.5"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "json_annotation" && d.version == "4.8.0"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "http" && d.version == "0.13.5")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "json_annotation" && d.version == "4.8.0")
+        );
         assert!(deps.iter().all(|d| d.ecosystem == Ecosystem::Pub));
     }
 
@@ -2624,9 +2652,10 @@ sdks:
         .unwrap();
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_pubspec_lock(&scanner).unwrap();
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "provider" && d.version == "6.0.5"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "provider" && d.version == "6.0.5")
+        );
     }
 
     #[test]
@@ -2704,12 +2733,14 @@ sdks:
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_package_lock(&scanner).unwrap();
         assert_eq!(deps.len(), 2);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "lodash" && d.version == "4.17.21"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "express" && d.version == "4.18.2"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "lodash" && d.version == "4.17.21")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "express" && d.version == "4.18.2")
+        );
     }
 
     #[test]
@@ -2792,15 +2823,18 @@ sdks:
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let deps = parse_requirements_txt(&scanner).unwrap();
         assert_eq!(deps.len(), 3);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "requests" && d.version == "2.28.0"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "flask" && d.version == "2.0.0"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "django" && d.version == "4.1.0"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "requests" && d.version == "2.28.0")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "flask" && d.version == "2.0.0")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "django" && d.version == "4.1.0")
+        );
     }
 
     #[test]
@@ -2885,12 +2919,14 @@ sdks:
         let deps = parse_go_sum(&scanner).unwrap();
         // Should deduplicate the gin entries
         assert_eq!(deps.len(), 2);
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "github.com/gin-gonic/gin" && d.version == "1.8.2"));
-        assert!(deps
-            .iter()
-            .any(|d| d.name == "golang.org/x/net" && d.version == "0.4.0"));
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "github.com/gin-gonic/gin" && d.version == "1.8.2")
+        );
+        assert!(
+            deps.iter()
+                .any(|d| d.name == "golang.org/x/net" && d.version == "0.4.0")
+        );
     }
 
     #[test]

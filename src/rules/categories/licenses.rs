@@ -1519,16 +1519,22 @@ require github.com/stretchr/testify v1.8.4
         let scanner = Scanner::new(tmp.path().to_path_buf());
         let licenses = parse_go_mod_licenses(&scanner);
         assert_eq!(licenses.len(), 4);
-        assert!(licenses
-            .iter()
-            .any(|l| l.name == "github.com/gin-gonic/gin"));
-        assert!(licenses
-            .iter()
-            .any(|l| l.name == "github.com/go-sql-driver/mysql"));
+        assert!(
+            licenses
+                .iter()
+                .any(|l| l.name == "github.com/gin-gonic/gin")
+        );
+        assert!(
+            licenses
+                .iter()
+                .any(|l| l.name == "github.com/go-sql-driver/mysql")
+        );
         assert!(licenses.iter().any(|l| l.name == "golang.org/x/net"));
-        assert!(licenses
-            .iter()
-            .any(|l| l.name == "github.com/stretchr/testify"));
+        assert!(
+            licenses
+                .iter()
+                .any(|l| l.name == "github.com/stretchr/testify")
+        );
     }
 
     #[test]
@@ -1690,9 +1696,11 @@ require github.com/stretchr/testify v1.8.4
             vec!["MIT".to_string(), "Apache-2.0".to_string()];
         let rules = LicenseRules;
         let findings = rules.run(&scanner, &config).await.unwrap();
-        assert!(findings
-            .iter()
-            .any(|f| f.rule_id == "LIC002" && f.message.contains("not in the allowed list")));
+        assert!(
+            findings
+                .iter()
+                .any(|f| f.rule_id == "LIC002" && f.message.contains("not in the allowed list"))
+        );
     }
 
     #[tokio::test]

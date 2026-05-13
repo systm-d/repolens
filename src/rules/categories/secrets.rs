@@ -369,9 +369,11 @@ mod tests {
 
         assert!(!findings.is_empty());
         assert!(findings.iter().any(|f| f.rule_id == "SEC002"));
-        assert!(findings
-            .iter()
-            .any(|f| f.message.contains("Private key file")));
+        assert!(
+            findings
+                .iter()
+                .any(|f| f.message.contains("Private key file"))
+        );
     }
 
     #[tokio::test]

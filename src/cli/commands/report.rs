@@ -5,7 +5,7 @@ use std::path::PathBuf;
 use std::time::Duration;
 
 use super::{ReportArgs, ReportFormat};
-use crate::cache::{delete_cache_directory, AuditCache};
+use crate::cache::{AuditCache, delete_cache_directory};
 use crate::cli::output::{HtmlReport, JsonOutput, MarkdownReport, ReportRenderer};
 use crate::config::Config;
 use crate::error::RepoLensError;

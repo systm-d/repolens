@@ -641,10 +641,11 @@ mod tests {
 
         let plan = planner.create_plan(&results).await.unwrap();
 
-        assert!(plan
-            .actions()
-            .iter()
-            .any(|a| a.id() == "contributing-create"));
+        assert!(
+            plan.actions()
+                .iter()
+                .any(|a| a.id() == "contributing-create")
+        );
     }
 
     #[tokio::test]
@@ -665,10 +666,12 @@ mod tests {
         let plan = planner.create_plan(&results).await.unwrap();
 
         // Should not include contributing because it's disabled in config
-        assert!(!plan
-            .actions()
-            .iter()
-            .any(|a| a.id() == "contributing-create"));
+        assert!(
+            !plan
+                .actions()
+                .iter()
+                .any(|a| a.id() == "contributing-create")
+        );
     }
 
     #[tokio::test]
@@ -905,10 +908,12 @@ mod tests {
 
         // Only github-settings should be present (always planned)
         assert!(!plan.actions().iter().any(|a| a.id() == "license-create"));
-        assert!(!plan
-            .actions()
-            .iter()
-            .any(|a| a.id() == "contributing-create"));
+        assert!(
+            !plan
+                .actions()
+                .iter()
+                .any(|a| a.id() == "contributing-create")
+        );
         assert!(!plan.actions().iter().any(|a| a.id() == "coc-create"));
         assert!(!plan.actions().iter().any(|a| a.id() == "security-create"));
         assert!(!plan.actions().iter().any(|a| a.id() == "gitignore-update"));

@@ -1,8 +1,8 @@
 [package]
 name = "repolens"
 version = "2.0.0"
-edition = "2021"
-rust-version = "1.74"
+edition = "2024"
+rust-version = "1.85"
 authors = ["Kevin Delfour"]
 description = "A CLI tool to audit and prepare repositories for open source or enterprise standards"
 license = "MIT OR Apache-2.0"
