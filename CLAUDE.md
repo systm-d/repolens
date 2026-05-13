@@ -4,11 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository status
 
-**v2.0.0.** RepoLens is recentered on GitHub repository auditing: single provider (GitHub), 15 rule
+**v2.0.2.** RepoLens is recentered on GitHub repository auditing: single provider (GitHub), 15 rule
 categories, 5 output formats. Rust edition 2024, MSRV 1.85, dual license MIT OR Apache-2.0. Two CI
 workflows: `ci.yml` (test matrix + clippy + fmt + coverage + security audit + packaging dry-run) and
-`release.yml` (multi-platform binary build + crates.io publish + Docker image push to `ghcr.io` +
-packaging artifact uploads). Canonical v2.0.0 recentering decision:
+`release.yml` (multi-platform binary build + crates.io publish + Docker image push to
+`ghcr.io/systm-d/repolens` — `linux/amd64` only since v2.0.2 due to QEMU multi-arch build cost).
+Canonical recentering decision:
 `docs/superpowers/specs/2026-05-13-repolens-recentering-design.md`.
 
 What's in the codebase right now:
