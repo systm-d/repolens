@@ -223,6 +223,8 @@ pub fn detect_project_license(scanner: &Scanner) -> Option<String> {
         "LICENSE.txt",
         "LICENCE",
         "LICENCE.md",
+        "LICENSE-MIT",
+        "LICENSE-APACHE",
     ] {
         if scanner.file_exists(license_file) {
             if let Ok(content) = scanner.read_file(license_file) {

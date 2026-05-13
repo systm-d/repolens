@@ -40,7 +40,11 @@ async fn e2e_repolens_has_required_files() {
 
     // RepoLens should have all these files
     assert!(repo_root.join("README.md").exists());
-    assert!(repo_root.join("LICENSE").exists());
+    assert!(
+        repo_root.join("LICENSE").exists()
+            || repo_root.join("LICENSE-MIT").exists()
+            || repo_root.join("LICENSE-APACHE").exists()
+    );
     assert!(repo_root.join("CHANGELOG.md").exists());
     assert!(repo_root.join("Cargo.toml").exists());
     assert!(repo_root.join("Cargo.lock").exists());

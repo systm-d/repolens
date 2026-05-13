@@ -173,7 +173,15 @@ async fn check_readme(scanner: &Scanner) -> Result<Vec<Finding>, RepoLensError> 
 async fn check_license(scanner: &Scanner, config: &Config) -> Result<Vec<Finding>, RepoLensError> {
     let mut findings = Vec::new();
 
-    let license_files = ["LICENSE", "LICENSE.md", "LICENSE.txt", "COPYING"];
+    let license_files = [
+        "LICENSE",
+        "LICENSE.md",
+        "LICENSE.txt",
+        "COPYING",
+        "LICENSE-MIT",
+        "LICENSE-APACHE",
+        "LICENCE",
+    ];
     let has_license = license_files.iter().any(|f| scanner.file_exists(f));
 
     // For enterprise preset, LICENSE is optional

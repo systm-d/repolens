@@ -2,36 +2,16 @@
 
 **Repository:** systm-d/repolens
 **Preset:** opensource
-**Generated:** 2026-05-13 11:34:38 UTC
+**Generated:** 2026-05-13 11:51:05 UTC
 **RepoLens Version:** 2.0.0
 
 ## Summary
 
 | Severity | Count |
 |----------|-------|
-| Critical | 4 |
-| Warning | 128 |
-| Info | 27 |
-
-## Critical Issues
-
-These issues must be resolved before proceeding.
-
-### DEP002-GHSA-97wc-2hqc-cjgr - Vulnerability GHSA-97wc-2hqc-cjgr (CVSS: 7.3) found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-fpf5-4jw8-67x8 - Vulnerability GHSA-fpf5-4jw8-67x8 (CVSS: 7.5) found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-f89h-2fjh-2r9q - Vulnerability GHSA-f89h-2fjh-2r9q (CVSS: 7.8) found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-89vp-x53w-74fx - Vulnerability GHSA-89vp-x53w-74fx (CVSS: 8.8) found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
+| Critical | 0 |
+| Warning | 71 |
+| Info | 21 |
 
 ## Warnings
 
@@ -43,119 +23,25 @@ These issues should be addressed.
 
 ### DOC007 - SECURITY policy file is missing
 
-### SEC011 - Vulnerability alerts are disabled
-
-### SEC012 - Dependabot security updates are disabled
-
-### SEC015 - GitHub Actions allows all actions
-
 ### WF002 - Workflow missing explicit permissions
 
 **Location:** `.github/workflows/ci.yml`
 
-### WF004 - Job 'check-ci-success' missing timeout-minutes
+### WF004 - Job 'test' missing timeout-minutes
 
-**Location:** `.github/workflows/code-quality.yml`
+**Location:** `.github/workflows/ci.yml`
 
-### WF004 - Job 'dependency-audit' missing timeout-minutes
+### WF004 - Job 'coverage' missing timeout-minutes
 
-**Location:** `.github/workflows/code-quality.yml`
+**Location:** `.github/workflows/ci.yml`
 
-### WF004 - Job 'security-audit' missing timeout-minutes
+### WF004 - Job 'security' missing timeout-minutes
 
-**Location:** `.github/workflows/code-quality.yml`
+**Location:** `.github/workflows/ci.yml`
 
-### WF004 - Job 'outdated-dependencies' missing timeout-minutes
+### WF004 - Job 'package' missing timeout-minutes
 
-**Location:** `.github/workflows/code-quality.yml`
-
-### WF004 - Job 'clippy-analysis' missing timeout-minutes
-
-**Location:** `.github/workflows/code-quality.yml`
-
-### WF004 - Job 'code-metrics' missing timeout-minutes
-
-**Location:** `.github/workflows/code-quality.yml`
-
-### WF004 - Job 'semgrep-analysis' missing timeout-minutes
-
-**Location:** `.github/workflows/code-quality.yml`
-
-### WF004 - Job '# codeql-analysis' missing timeout-minutes
-
-**Location:** `.github/workflows/code-quality.yml`
-
-### WF004 - Job '#   permissions' missing timeout-minutes
-
-**Location:** `.github/workflows/code-quality.yml`
-
-### WF004 - Job '#   steps' missing timeout-minutes
-
-**Location:** `.github/workflows/code-quality.yml`
-
-### WF004 - Job '#       with' missing timeout-minutes
-
-**Location:** `.github/workflows/code-quality.yml`
-
-### WF004 - Job '# sonarcloud' missing timeout-minutes
-
-**Location:** `.github/workflows/code-quality.yml`
-
-### WF004 - Job '#   steps' missing timeout-minutes
-
-**Location:** `.github/workflows/code-quality.yml`
-
-### WF004 - Job '#       with' missing timeout-minutes
-
-**Location:** `.github/workflows/code-quality.yml`
-
-### WF004 - Job '#       env' missing timeout-minutes
-
-**Location:** `.github/workflows/code-quality.yml`
-
-### WF004 - Job 'quality-report' missing timeout-minutes
-
-**Location:** `.github/workflows/code-quality.yml`
-
-### WF004 - Job 'calculate-version' missing timeout-minutes
-
-**Location:** `.github/workflows/create-release.yml`
-
-### WF004 - Job 'check-ci' missing timeout-minutes
-
-**Location:** `.github/workflows/create-release.yml`
-
-### WF004 - Job 'check-code-quality' missing timeout-minutes
-
-**Location:** `.github/workflows/create-release.yml`
-
-### WF004 - Job 'prepare-release' missing timeout-minutes
-
-**Location:** `.github/workflows/create-release.yml`
-
-### WF004 - Job 'check-prerequisites' missing timeout-minutes
-
-**Location:** `.github/workflows/nightly.yml`
-
-### WF004 - Job 'quality-gates' missing timeout-minutes
-
-**Location:** `.github/workflows/nightly.yml`
-
-### WF004 - Job 'build' missing timeout-minutes
-
-**Location:** `.github/workflows/nightly.yml`
-
-### WF004 - Job 'skip-notification' missing timeout-minutes
-
-**Location:** `.github/workflows/nightly.yml`
-
-### WF004 - Job 'build-and-push' missing timeout-minutes
-
-**Location:** `.github/workflows/docker.yml`
-
-### WF004 - Job 'verify' missing timeout-minutes
-
-**Location:** `.github/workflows/docker.yml`
+**Location:** `.github/workflows/ci.yml`
 
 ### WF004 - Job 'build' missing timeout-minutes
 
@@ -173,41 +59,9 @@ These issues should be addressed.
 
 **Location:** `.github/workflows/release.yml`
 
-### WF004 - Job 'announce-discussion' missing timeout-minutes
+### WF004 - Job 'docker' missing timeout-minutes
 
 **Location:** `.github/workflows/release.yml`
-
-### WF004 - Job 'check' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
-
-### WF004 - Job 'fmt' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
-
-### WF004 - Job 'clippy' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
-
-### WF004 - Job 'test' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
-
-### WF004 - Job 'pdf-benchmark' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
-
-### WF004 - Job 'package' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
-
-### WF004 - Job 'coverage' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
-
-### WF004 - Job 'security' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
 
 ### DEP001-GHSA-h395-gr6q-cpjc - Vulnerability GHSA-h395-gr6q-cpjc found in jsonwebtoken 9.3.1
 
@@ -226,102 +80,6 @@ These issues should be addressed.
 **Location:** `Cargo.lock`
 
 ### DEP001-GHSA-xgp8-3hg3-c2mh - Vulnerability GHSA-xgp8-3hg3-c2mh found in rustls-webpki 0.101.7
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-88q9-cmp2-c2vq - Vulnerability GHSA-88q9-cmp2-c2vq (CVSS: 4.3) found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-g588-cjg3-6g78 - Vulnerability GHSA-g588-cjg3-6g78 found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-h9hm-m2xj-4rq9 - Vulnerability GHSA-h9hm-m2xj-4rq9 found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-pvmv-cwg8-v6c8 - Vulnerability GHSA-pvmv-cwg8-v6c8 found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-xv59-967r-8726 - Vulnerability GHSA-xv59-967r-8726 found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-cwfq-rfcr-8hmp - Vulnerability GHSA-cwfq-rfcr-8hmp found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-gq4h-3grw-2rhv - Vulnerability GHSA-gq4h-3grw-2rhv found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-438q-jx8f-cccv - Vulnerability GHSA-438q-jx8f-cccv (CVSS: 5.3) found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-jv4h-j224-23cc - Vulnerability GHSA-jv4h-j224-23cc found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-w5p8-4jcx-2j6r - Vulnerability GHSA-w5p8-4jcx-2j6r found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-qg8r-f7x3-25f7 - Vulnerability GHSA-qg8r-f7x3-25f7 found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-5qv7-j6w5-fr4m - Vulnerability GHSA-5qv7-j6w5-fr4m found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-q2qq-hmj6-3wpp - Vulnerability GHSA-q2qq-hmj6-3wpp found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-3v94-mw7p-v465 - Vulnerability GHSA-3v94-mw7p-v465 found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-p8xm-42r7-89xg - Vulnerability GHSA-p8xm-42r7-89xg found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-ff9q-rm55-q7qr - Vulnerability GHSA-ff9q-rm55-q7qr found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-qxrw-f6fh-34r7 - Vulnerability GHSA-qxrw-f6fh-34r7 found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-qcxq-75wr-5cm8 - Vulnerability GHSA-qcxq-75wr-5cm8 found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-84jc-3hj2-hwc7 - Vulnerability GHSA-84jc-3hj2-hwc7 found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-r5fr-9gmv-jggh - Vulnerability GHSA-r5fr-9gmv-jggh found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-gpxg-fx2g-qxj2 - Vulnerability GHSA-gpxg-fx2g-qxj2 (CVSS: 6.1) found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-22w3-693w-x895 - Vulnerability GHSA-22w3-693w-x895 found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-95q8-x6r6-672m - Vulnerability GHSA-95q8-x6r6-672m (CVSS: 5.3) found in ahash 0.7.8
-
-**Location:** `Cargo.lock`
-
-### DEP002-GHSA-jmxc-hhwx-gvv3 - Vulnerability GHSA-jmxc-hhwx-gvv3 (CVSS: 5.3) found in ahash 0.7.8
 
 **Location:** `Cargo.lock`
 
