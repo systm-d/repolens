@@ -41,7 +41,7 @@ pub struct InitArgs {
 /// Arguments for the plan command
 #[derive(Args, Debug)]
 pub struct PlanArgs {
-    /// Output format (terminal, json, sarif, csv, tsv)
+    /// Output format (terminal, json, sarif, csv)
     #[arg(short, long, default_value = "terminal")]
     pub format: OutputFormat,
 
@@ -141,7 +141,7 @@ pub struct ApplyArgs {
 /// Arguments for the report command
 #[derive(Args, Debug)]
 pub struct ReportArgs {
-    /// Output format (html, markdown, json, csv, tsv, pdf)
+    /// Output format (html, markdown, json, csv, pdf)
     #[arg(short, long, default_value = "markdown")]
     pub format: ReportFormat,
 
@@ -250,7 +250,6 @@ pub enum OutputFormat {
     Json,
     Sarif,
     Csv,
-    Tsv,
 }
 
 /// Output format for report command
@@ -260,7 +259,6 @@ pub enum ReportFormat {
     Markdown,
     Json,
     Csv,
-    Tsv,
     Pdf,
 }
 
@@ -275,7 +273,7 @@ pub struct CompareArgs {
     #[arg(long, value_name = "FILE")]
     pub head_file: PathBuf,
 
-    /// Output format (terminal, json, markdown, csv, tsv)
+    /// Output format (terminal, json, markdown, csv)
     #[arg(short, long, default_value = "terminal")]
     pub format: CompareFormat,
 
@@ -307,7 +305,6 @@ pub enum CompareFormat {
     Json,
     Markdown,
     Csv,
-    Tsv,
 }
 
 /// Arguments for the generate-man command

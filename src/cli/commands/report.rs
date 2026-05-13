@@ -138,11 +138,11 @@ pub async fn execute(args: ReportArgs) -> Result<i32, RepoLensError> {
         eprintln!();
     }
 
-    // Warn if CSV-only flags are set when format is not CSV/TSV.
-    let format_is_csv_like = matches!(args.format, ReportFormat::Csv | ReportFormat::Tsv);
+    // Warn if CSV-only flags are set when format is not CSV.
+    let format_is_csv_like = matches!(args.format, ReportFormat::Csv);
     if !format_is_csv_like && (args.csv_bom || args.csv_keep_newlines || args.csv_delimiter != ',')
     {
-        eprintln!("[WARN] --csv-* flags are only meaningful with --format csv|tsv; ignoring.");
+        eprintln!("[WARN] --csv-* flags are only meaningful with --format csv; ignoring.");
     }
 
     // Warn early if --branding was passed for a format other than PDF.
@@ -159,7 +159,6 @@ pub async fn execute(args: ReportArgs) -> Result<i32, RepoLensError> {
             ReportFormat::Markdown => "md",
             ReportFormat::Json => "json",
             ReportFormat::Csv => "csv",
-            ReportFormat::Tsv => "tsv",
             ReportFormat::Pdf => "pdf",
         };
         PathBuf::from(format!("repolens-report.{extension}"))
@@ -193,12 +192,6 @@ pub async fn execute(args: ReportArgs) -> Result<i32, RepoLensError> {
             ReportFormat::Csv => Box::new(
                 CsvOutput::new()
                     .with_delimiter(args.csv_delimiter as u8)
-                    .with_bom(args.csv_bom)
-                    .with_keep_newlines(args.csv_keep_newlines),
-            ),
-            ReportFormat::Tsv => Box::new(
-                CsvOutput::new()
-                    .with_delimiter(b'\t')
                     .with_bom(args.csv_bom)
                     .with_keep_newlines(args.csv_keep_newlines),
             ),

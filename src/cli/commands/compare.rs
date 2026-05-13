@@ -38,14 +38,11 @@ pub async fn execute(args: CompareArgs) -> Result<i32, RepoLensError> {
 
     let report = compare_results(&base_results, &head_results, &base_label, &head_label);
 
-    // Warn if CSV-only flags are set when format is not CSV/TSV.
-    let format_is_csv_like = matches!(
-        args.format,
-        super::CompareFormat::Csv | super::CompareFormat::Tsv
-    );
+    // Warn if CSV-only flags are set when format is not CSV.
+    let format_is_csv_like = matches!(args.format, super::CompareFormat::Csv);
     if !format_is_csv_like && (args.csv_bom || args.csv_keep_newlines || args.csv_delimiter != ',')
     {
-        eprintln!("[WARN] --csv-* flags are only meaningful with --format csv|tsv; ignoring.");
+        eprintln!("[WARN] --csv-* flags are only meaningful with --format csv; ignoring.");
     }
 
     // Format output
@@ -63,9 +60,6 @@ pub async fn execute(args: CompareArgs) -> Result<i32, RepoLensError> {
             args.csv_bom,
             args.csv_keep_newlines,
         )?,
-        super::CompareFormat::Tsv => {
-            format_csv(&report, b'\t', args.csv_bom, args.csv_keep_newlines)?
-        }
     };
 
     // Write output

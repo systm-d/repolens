@@ -1,13 +1,13 @@
-# CSV / TSV output
+# CSV output
 
-The `csv` and `tsv` formats emit one row per finding, suitable for reporting
+The `csv` format emits one row per finding, suitable for reporting
 pipelines, spreadsheet imports, and quick `cut`/`awk` analysis.
 
 Available on `repolens plan`, `repolens report`, and `repolens compare`.
 
 ## Header
 
-The header is fixed and identical for CSV and TSV:
+The header is fixed:
 
 ```
 rule_id,category,severity,file,line,column,message,description,remediation,project
@@ -32,15 +32,14 @@ For `repolens compare`, the columns instead are
 
 ## CLI flags
 
-| Flag                  | Default | Effect                                                                           |
-| --------------------- | ------- | -------------------------------------------------------------------------------- |
-| `--format csv`        | —       | Comma-separated, RFC 4180 quoting                                                |
-| `--format tsv`        | —       | Tab-separated; tabs in cells → 4 spaces, newlines → 1 space                      |
-| `--csv-delimiter`     | `,`     | Override the CSV delimiter (`,` `;` `|` …). Ignored in TSV mode.                 |
-| `--csv-bom`           | off     | Prepend a UTF-8 BOM (`EF BB BF`) so Excel autodetects UTF-8. Ignored in TSV mode (warns). |
-| `--csv-keep-newlines` | off     | Keep newlines inside CSV cells (the cell will be quoted). Ignored in TSV mode.   |
+| Flag                  | Default | Effect                                                              |
+| --------------------- | ------- | ------------------------------------------------------------------- |
+| `--format csv`        | —       | Comma-separated, RFC 4180 quoting                                   |
+| `--csv-delimiter`     | `,`     | Override the CSV delimiter (`,` `;` `|` …)                          |
+| `--csv-bom`           | off     | Prepend a UTF-8 BOM (`EF BB BF`) so Excel autodetects UTF-8.        |
+| `--csv-keep-newlines` | off     | Keep newlines inside CSV cells (the cell will be quoted).           |
 
-If any `--csv-*` flag is passed with `--format` other than `csv` or `tsv`, a
+If any `--csv-*` flag is passed with `--format` other than `csv`, a
 `[WARN]` is logged to stderr and the flag is ignored.
 
 ## Quoting & escaping
@@ -49,8 +48,6 @@ If any `--csv-*` flag is passed with `--format` other than `csv` or `tsv`, a
   or `\n` are wrapped in double quotes; embedded `"` is escaped as `""`. Default
   behaviour replaces newlines with a single space; use `--csv-keep-newlines` to
   preserve them inside a quoted cell.
-* **TSV**: there is no quoting — instead, embedded tabs are replaced by 4
-  spaces and embedded newlines by 1 space, so each finding stays on one line.
 
 ## Worked examples
 
@@ -61,17 +58,10 @@ repolens report --format csv -o findings.csv
 awk -F',' 'NR==1 || $3 == "critical"' findings.csv
 ```
 
-### Project the rule and message columns with `cut`
-
-```bash
-repolens report --format tsv -o findings.tsv
-cut -f1,7 findings.tsv | head
-```
-
 ### Convert to JSON with `jq` (after a quick `csv2json`)
 
 ```bash
-# Using miller (mlr) — handy for ad-hoc CSV/TSV → JSON conversions.
+# Using miller (mlr) — handy for ad-hoc CSV → JSON conversions.
 mlr --c2j cat findings.csv | jq '.[] | select(.severity=="critical")'
 ```
 
@@ -105,4 +95,4 @@ repolens report --format csv -o findings.csv
 ```
 
 Then **File → Import → Upload** and choose “Replace current sheet”.
-Google Sheets autodetects `,` and `\t` separators, so TSV works equally well.
+Google Sheets autodetects `,` as the separator.

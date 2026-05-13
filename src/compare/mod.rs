@@ -323,7 +323,7 @@ pub fn format_json(report: &CompareReport) -> Result<String, serde_json::Error> 
     serde_json::to_string_pretty(report)
 }
 
-/// Format the compare report as CSV / TSV.
+/// Format the compare report as CSV.
 ///
 /// Adds a `change` column (`added` / `resolved`) and omits `project` (the report
 /// already represents two named refs). Header:
