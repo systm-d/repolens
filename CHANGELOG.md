@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-05-13
+
+### Removed (BREAKING CHANGES)
+
+- **Output formats**: PDF (with branding), CSV, TSV, NDJSON, JUnit XML have been removed.
+  Use JSON, Markdown, HTML, or SARIF instead.
+- **CLI flags**: `--csv-delimiter`, `--csv-bom`, `--csv-keep-newlines`, `--branding` (PDF) have been removed.
+- **`integrations/` directory** — template YAML for Azure DevOps, CircleCI, GitLab CI,
+  Jenkins, and GitHub Actions removed. They were never backed by Rust provider implementations.
+- **`examples/github-action/`** — referenced a nonexistent published GitHub Action.
+- **Dependencies removed**: `printpdf`, `image`, `csv`, `quick-xml`, `lopdf` (dev). Compile
+  times reduced accordingly.
+
+### Changed
+
+- Refocused on the core mission: audit GitHub repositories for best practices,
+  security, and compliance. See `docs/superpowers/specs/2026-05-13-repolens-recentering-design.md`
+  for the full rationale.
+- Remaining output formats: terminal, JSON, Markdown, SARIF, HTML.
+
+### Migration
+
+If you used a removed format, your options are:
+
+- **CSV / TSV / NDJSON** → use `--format json` and post-process with `jq` or your tool of choice.
+- **JUnit XML** → use `--format sarif` (broader CI/CD support and a richer schema).
+- **PDF with branding** → use `--format html` and print to PDF from your browser, or pipe to `wkhtmltopdf` / `weasyprint`.
+
 ## [1.4.0] - 2026-05-13
 
 ### Changed
