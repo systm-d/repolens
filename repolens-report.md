@@ -1,109 +1,37 @@
 # RepoLens Audit Report
 
-**Repository:** delfour-co/repolens
+**Repository:** systm-d/repolens
 **Preset:** opensource
-**Generated:** 2026-02-11 09:48:47 UTC
-**RepoLens Version:** 1.0.0
+**Generated:** 2026-05-13 11:34:38 UTC
+**RepoLens Version:** 2.0.0
 
 ## Summary
 
 | Severity | Count |
 |----------|-------|
-| Critical | 22 |
-| Warning | 90 |
-| Info | 16 |
+| Critical | 4 |
+| Warning | 128 |
+| Info | 27 |
 
 ## Critical Issues
 
 These issues must be resolved before proceeding.
 
-### SEC001 - URL with Embedded Credentials detected
+### DEP002-GHSA-97wc-2hqc-cjgr - Vulnerability GHSA-97wc-2hqc-cjgr (CVSS: 7.3) found in ahash 0.7.8
 
-**Location:** `src/actions/templates.rs:91`
+**Location:** `Cargo.lock`
 
-### SEC001 - URL with Embedded Credentials detected
+### DEP002-GHSA-fpf5-4jw8-67x8 - Vulnerability GHSA-fpf5-4jw8-67x8 (CVSS: 7.5) found in ahash 0.7.8
 
-**Location:** `.github/workflows/sync-wiki.yml:52`
+**Location:** `Cargo.lock`
 
-### SEC001 - URL with Embedded Credentials detected
+### DEP002-GHSA-f89h-2fjh-2r9q - Vulnerability GHSA-f89h-2fjh-2r9q (CVSS: 7.8) found in ahash 0.7.8
 
-**Location:** `.github/workflows/release.yml:251`
+**Location:** `Cargo.lock`
 
-### SEC001 - Private Key detected
+### DEP002-GHSA-89vp-x53w-74fx - Vulnerability GHSA-89vp-x53w-74fx (CVSS: 8.8) found in ahash 0.7.8
 
-**Location:** `src/rules/categories/secrets.rs:445`
-
-### SEC001 - Generic API Key Assignment detected
-
-**Location:** `src/rules/categories/secrets.rs:328`
-
-### SEC001 - URL with Embedded Credentials detected
-
-**Location:** `src/rules/categories/quality.rs:771`
-
-### SEC001 - Generic Password Assignment detected
-
-**Location:** `src/rules/categories/workflows.rs:682`
-
-### SEC001 - Private Key detected
-
-**Location:** `src/rules/categories/git.rs:459`
-
-### SEC001 - GitHub Personal Access Token detected
-
-**Location:** `src/rules/patterns/secrets.rs:207`
-
-### SEC001 - AWS Access Key ID detected
-
-**Location:** `src/rules/patterns/secrets.rs:214`
-
-### SEC001 - Stripe Live Secret Key detected
-
-**Location:** `src/rules/patterns/secrets.rs:221`
-
-### SEC001 - MySQL Connection String detected
-
-**Location:** `src/rules/patterns/secrets.rs:159`
-
-### SEC001 - Redis Connection String detected
-
-**Location:** `src/rules/patterns/secrets.rs:164`
-
-### SEC001 - Generic API Key Assignment detected
-
-**Location:** `src/rules/engine.rs:498`
-
-### SEC001 - URL with Embedded Credentials detected
-
-**Location:** `src/scanner/git.rs:40`
-
-### SEC001 - AWS Access Key ID detected
-
-**Location:** `tests/e2e_test.rs:429`
-
-### SEC001 - URL with Embedded Credentials detected
-
-**Location:** `tests/e2e_test.rs:791`
-
-### SEC001 - URL with Embedded Credentials detected
-
-**Location:** `action.yml:60`
-
-### SEC001 - URL with Embedded Credentials detected
-
-**Location:** `integrations/azure-devops/azure-pipelines.yml:190`
-
-### SEC001 - URL with Embedded Credentials detected
-
-**Location:** `integrations/github-actions/repolens.yml:145`
-
-### WF001 - Potential hardcoded secret in workflow
-
-**Location:** `.github/workflows/sync-wiki.yml:0`
-
-### DOCKER003 - Base image 'alpine:latest' uses the 'latest' tag
-
-**Location:** `Dockerfile:42`
+**Location:** `Cargo.lock`
 
 ## Warnings
 
@@ -114,6 +42,12 @@ These issues should be addressed.
 ### DOC006 - CODE_OF_CONDUCT file is missing
 
 ### DOC007 - SECURITY policy file is missing
+
+### SEC011 - Vulnerability alerts are disabled
+
+### SEC012 - Dependabot security updates are disabled
+
+### SEC015 - GitHub Actions allows all actions
 
 ### WF002 - Workflow missing explicit permissions
 
@@ -215,38 +149,6 @@ These issues should be addressed.
 
 **Location:** `.github/workflows/nightly.yml`
 
-### WF004 - Job 'sync-wiki' missing timeout-minutes
-
-**Location:** `.github/workflows/sync-wiki.yml`
-
-### WF004 - Job 'check' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
-
-### WF004 - Job 'fmt' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
-
-### WF004 - Job 'clippy' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
-
-### WF004 - Job 'test' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
-
-### WF004 - Job 'package' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
-
-### WF004 - Job 'coverage' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
-
-### WF004 - Job 'security' missing timeout-minutes
-
-**Location:** `.github/workflows/ci.yml`
-
 ### WF004 - Job 'build-and-push' missing timeout-minutes
 
 **Location:** `.github/workflows/docker.yml`
@@ -275,6 +177,154 @@ These issues should be addressed.
 
 **Location:** `.github/workflows/release.yml`
 
+### WF004 - Job 'check' missing timeout-minutes
+
+**Location:** `.github/workflows/ci.yml`
+
+### WF004 - Job 'fmt' missing timeout-minutes
+
+**Location:** `.github/workflows/ci.yml`
+
+### WF004 - Job 'clippy' missing timeout-minutes
+
+**Location:** `.github/workflows/ci.yml`
+
+### WF004 - Job 'test' missing timeout-minutes
+
+**Location:** `.github/workflows/ci.yml`
+
+### WF004 - Job 'pdf-benchmark' missing timeout-minutes
+
+**Location:** `.github/workflows/ci.yml`
+
+### WF004 - Job 'package' missing timeout-minutes
+
+**Location:** `.github/workflows/ci.yml`
+
+### WF004 - Job 'coverage' missing timeout-minutes
+
+**Location:** `.github/workflows/ci.yml`
+
+### WF004 - Job 'security' missing timeout-minutes
+
+**Location:** `.github/workflows/ci.yml`
+
+### DEP001-GHSA-h395-gr6q-cpjc - Vulnerability GHSA-h395-gr6q-cpjc found in jsonwebtoken 9.3.1
+
+**Location:** `Cargo.lock`
+
+### DEP001-GHSA-cq8v-f236-94qc - Vulnerability GHSA-cq8v-f236-94qc found in rand 0.8.5
+
+**Location:** `Cargo.lock`
+
+### DEP001-GHSA-82j2-j2ch-gfr8 - Vulnerability GHSA-82j2-j2ch-gfr8 found in rustls-webpki 0.101.7
+
+**Location:** `Cargo.lock`
+
+### DEP001-GHSA-965h-392x-2mh5 - Vulnerability GHSA-965h-392x-2mh5 found in rustls-webpki 0.101.7
+
+**Location:** `Cargo.lock`
+
+### DEP001-GHSA-xgp8-3hg3-c2mh - Vulnerability GHSA-xgp8-3hg3-c2mh found in rustls-webpki 0.101.7
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-88q9-cmp2-c2vq - Vulnerability GHSA-88q9-cmp2-c2vq (CVSS: 4.3) found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-g588-cjg3-6g78 - Vulnerability GHSA-g588-cjg3-6g78 found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-h9hm-m2xj-4rq9 - Vulnerability GHSA-h9hm-m2xj-4rq9 found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-pvmv-cwg8-v6c8 - Vulnerability GHSA-pvmv-cwg8-v6c8 found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-xv59-967r-8726 - Vulnerability GHSA-xv59-967r-8726 found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-cwfq-rfcr-8hmp - Vulnerability GHSA-cwfq-rfcr-8hmp found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-gq4h-3grw-2rhv - Vulnerability GHSA-gq4h-3grw-2rhv found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-438q-jx8f-cccv - Vulnerability GHSA-438q-jx8f-cccv (CVSS: 5.3) found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-jv4h-j224-23cc - Vulnerability GHSA-jv4h-j224-23cc found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-w5p8-4jcx-2j6r - Vulnerability GHSA-w5p8-4jcx-2j6r found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-qg8r-f7x3-25f7 - Vulnerability GHSA-qg8r-f7x3-25f7 found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-5qv7-j6w5-fr4m - Vulnerability GHSA-5qv7-j6w5-fr4m found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-q2qq-hmj6-3wpp - Vulnerability GHSA-q2qq-hmj6-3wpp found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-3v94-mw7p-v465 - Vulnerability GHSA-3v94-mw7p-v465 found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-p8xm-42r7-89xg - Vulnerability GHSA-p8xm-42r7-89xg found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-ff9q-rm55-q7qr - Vulnerability GHSA-ff9q-rm55-q7qr found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-qxrw-f6fh-34r7 - Vulnerability GHSA-qxrw-f6fh-34r7 found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-qcxq-75wr-5cm8 - Vulnerability GHSA-qcxq-75wr-5cm8 found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-84jc-3hj2-hwc7 - Vulnerability GHSA-84jc-3hj2-hwc7 found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-r5fr-9gmv-jggh - Vulnerability GHSA-r5fr-9gmv-jggh found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-gpxg-fx2g-qxj2 - Vulnerability GHSA-gpxg-fx2g-qxj2 (CVSS: 6.1) found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-22w3-693w-x895 - Vulnerability GHSA-22w3-693w-x895 found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-95q8-x6r6-672m - Vulnerability GHSA-95q8-x6r6-672m (CVSS: 5.3) found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
+### DEP002-GHSA-jmxc-hhwx-gvv3 - Vulnerability GHSA-jmxc-hhwx-gvv3 (CVSS: 5.3) found in ahash 0.7.8
+
+**Location:** `Cargo.lock`
+
 ### LIC004 - Dependency 'anyhow' has no license specified
 
 **Location:** `Cargo.toml`
@@ -288,6 +338,14 @@ These issues should be addressed.
 **Location:** `Cargo.toml`
 
 ### LIC004 - Dependency 'clap' has no license specified
+
+**Location:** `Cargo.toml`
+
+### LIC004 - Dependency 'clap_complete' has no license specified
+
+**Location:** `Cargo.toml`
+
+### LIC004 - Dependency 'clap_complete_nushell' has no license specified
 
 **Location:** `Cargo.toml`
 
@@ -343,6 +401,10 @@ These issues should be addressed.
 
 **Location:** `Cargo.toml`
 
+### LIC004 - Dependency 'octocrab' has no license specified
+
+**Location:** `Cargo.toml`
+
 ### LIC004 - Dependency 'rayon' has no license specified
 
 **Location:** `Cargo.toml`
@@ -356,10 +418,6 @@ These issues should be addressed.
 **Location:** `Cargo.toml`
 
 ### LIC004 - Dependency 'serde' has no license specified
-
-**Location:** `Cargo.toml`
-
-### LIC004 - Dependency 'serde-sarif' has no license specified
 
 **Location:** `Cargo.toml`
 
@@ -427,6 +485,10 @@ These issues should be addressed.
 
 **Location:** `Cargo.toml`
 
+### LIC004 - Dependency 'insta' has no license specified
+
+**Location:** `Cargo.toml`
+
 ### LIC004 - Dependency 'predicates' has no license specified
 
 **Location:** `Cargo.toml`
@@ -447,6 +509,14 @@ These issues should be addressed.
 
 **Location:** `Cargo.toml`
 
+### LIC004 - Dependency 'clap_complete' has no license specified
+
+**Location:** `Cargo.toml`
+
+### LIC004 - Dependency 'clap_complete_nushell' has no license specified
+
+**Location:** `Cargo.toml`
+
 ### LIC004 - Dependency 'clap_mangen' has no license specified
 
 **Location:** `Cargo.toml`
@@ -463,6 +533,8 @@ These issues should be addressed.
 
 **Location:** `src/rules/patterns/secrets.rs`
 
+### HIST002 - 1 commit(s) with more than 50 files changed
+
 ---
 
-*Report generated by [RepoLens](https://github.com/kdelfour/repolens)*
+*Report generated by [RepoLens](https://github.com/systm-d/repolens)*
