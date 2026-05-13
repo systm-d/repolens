@@ -2,7 +2,8 @@
 
 use colored::Colorize;
 
-/// Valid category names for --only and --skip options
+/// Valid category names for --only and --skip options.
+/// Must match the categories registered in `src/rules/engine.rs`.
 pub const VALID_CATEGORIES: &[&str] = &[
     "secrets",
     "files",
@@ -15,6 +16,10 @@ pub const VALID_CATEGORIES: &[&str] = &[
     "docker",
     "git",
     "custom",
+    "codeowners",
+    "history",
+    "issues",
+    "metadata",
 ];
 
 /// Check if a category name is valid
@@ -46,33 +51,36 @@ mod tests {
 
     #[test]
     fn test_valid_categories_list() {
-        assert_eq!(VALID_CATEGORIES.len(), 11);
-        assert!(VALID_CATEGORIES.contains(&"secrets"));
-        assert!(VALID_CATEGORIES.contains(&"files"));
-        assert!(VALID_CATEGORIES.contains(&"docs"));
-        assert!(VALID_CATEGORIES.contains(&"security"));
-        assert!(VALID_CATEGORIES.contains(&"workflows"));
-        assert!(VALID_CATEGORIES.contains(&"quality"));
-        assert!(VALID_CATEGORIES.contains(&"dependencies"));
-        assert!(VALID_CATEGORIES.contains(&"licenses"));
-        assert!(VALID_CATEGORIES.contains(&"docker"));
-        assert!(VALID_CATEGORIES.contains(&"git"));
-        assert!(VALID_CATEGORIES.contains(&"custom"));
+        assert_eq!(VALID_CATEGORIES.len(), 15);
+        for expected in [
+            "secrets",
+            "files",
+            "docs",
+            "security",
+            "workflows",
+            "quality",
+            "dependencies",
+            "licenses",
+            "docker",
+            "git",
+            "custom",
+            "codeowners",
+            "history",
+            "issues",
+            "metadata",
+        ] {
+            assert!(
+                VALID_CATEGORIES.contains(&expected),
+                "missing category: {expected}"
+            );
+        }
     }
 
     #[test]
     fn test_is_valid_category_returns_true_for_valid() {
-        assert!(is_valid_category("secrets"));
-        assert!(is_valid_category("files"));
-        assert!(is_valid_category("docs"));
-        assert!(is_valid_category("security"));
-        assert!(is_valid_category("workflows"));
-        assert!(is_valid_category("quality"));
-        assert!(is_valid_category("dependencies"));
-        assert!(is_valid_category("licenses"));
-        assert!(is_valid_category("docker"));
-        assert!(is_valid_category("git"));
-        assert!(is_valid_category("custom"));
+        for valid in VALID_CATEGORIES {
+            assert!(is_valid_category(valid), "expected '{valid}' to be valid");
+        }
     }
 
     #[test]

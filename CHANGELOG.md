@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-05-13
+
+### Fixed
+
+- `VALID_CATEGORIES` in `src/rules/constants.rs` now lists all 15 rule categories
+  (added the missing `codeowners`, `history`, `issues`, `metadata`). Previously
+  `--only` and `--skip` silently ignored these four categories and emitted a
+  "Unknown category" warning. The constants test asserts the count.
+
 ## [2.0.0] - 2026-05-13
 
 ### Removed (BREAKING CHANGES)

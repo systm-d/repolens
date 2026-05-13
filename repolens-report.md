@@ -2,7 +2,7 @@
 
 **Repository:** systm-d/repolens
 **Preset:** opensource
-**Generated:** 2026-05-13 11:51:05 UTC
+**Generated:** 2026-05-13 12:00:20 UTC
 **RepoLens Version:** 2.0.0
 
 ## Summary
@@ -10,7 +10,7 @@
 | Severity | Count |
 |----------|-------|
 | Critical | 0 |
-| Warning | 71 |
+| Warning | 70 |
 | Info | 21 |
 
 ## Warnings
@@ -290,8 +290,6 @@ These issues should be addressed.
 ### GIT003 - Sensitive file 'src/rules/patterns/secrets.rs' may be tracked in repository
 
 **Location:** `src/rules/patterns/secrets.rs`
-
-### HIST002 - 1 commit(s) with more than 50 files changed
 
 ---
 

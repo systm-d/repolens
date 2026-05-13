@@ -98,9 +98,9 @@ These are load-bearing rules — violating them changes what the product is:
   Use `feat: ...` + `BREAKING CHANGE: ...` in the body instead.
 - **GitHub authentication is dual-mode.** `GITHUB_TOKEN` env var is preferred (no `gh` CLI
   required); fallback is `gh auth token`. Both code paths must be tested and exercised in CI.
-- **`VALID_CATEGORIES` in `src/rules/constants.rs` is currently stale (11 entries).** The engine
-  registers 15 categories. When adding tests or CLI validation, use the engine's category list as
-  the source of truth, not the constants array — and fix the array when touching that file.
+- **`VALID_CATEGORIES` in `src/rules/constants.rs` must mirror the categories registered in
+  `src/rules/engine.rs`.** Adding a category requires updating both files; the unit test in
+  `constants.rs` asserts the count. The CLI `--only` / `--skip` flags rely on this constant.
 
 ## Working conventions
 
