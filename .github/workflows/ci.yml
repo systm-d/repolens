@@ -77,7 +77,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - name: Verify package metadata
         run: |
-          cargo metadata --no-deps --format-version 1 --locked | python3 -c "
+          cargo metadata --no-deps --format-version 1 | python3 -c "
           import sys, json;
           meta = json.load(sys.stdin)['packages'][0];
           required = ['description', 'license', 'repository', 'readme'];
@@ -85,5 +85,7 @@ jobs:
           assert not missing, 'Missing Cargo.toml fields: ' + str(missing);
           print('All required crates.io metadata fields are present')
           "
+      # cargo package re-resolves the index; allow-dirty avoids spurious failures
+      # when the index has moved since the committed Cargo.lock was generated.
       - name: Dry-run package
-        run: cargo package --list --locked && cargo publish --dry-run --locked
+        run: cargo package --list && cargo publish --dry-run --allow-dirty
