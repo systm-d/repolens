@@ -555,7 +555,7 @@ codeowners = true  # Activer la catégorie CODEOWNERS (v1.3.0)
 
 **Objectif** : Permettre aux utilisateurs de définir leurs propres règles d'audit via patterns regex ou commandes shell.
 
-Consultez la page [Règles personnalisées](Custom-Rules) pour la documentation complète.
+Consultez la page [Règles personnalisées](custom-rules.md) pour la documentation complète.
 
 ### Configuration
 
@@ -608,9 +608,9 @@ Les règles sont classées par niveau de sévérité :
 
 ## Personnalisation
 
-Chaque catégorie peut être personnalisée dans `.repolens.toml`. Consultez la page [Configuration](Configuration) pour plus de détails.
+Chaque catégorie peut être personnalisée dans `.repolens.toml`. Consultez la page [Configuration](configuration.md) pour plus de détails.
 
 ## Prochaines étapes
 
-- Consultez la [Configuration](Configuration) pour personnaliser les règles
-- Découvrez les [Presets](Presets) qui préconfigurent ces règles
+- Consultez la [Configuration](configuration.md) pour personnaliser les règles
+- Découvrez les [Presets](presets.md) qui préconfigurent ces règles

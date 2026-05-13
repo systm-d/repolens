@@ -12,6 +12,37 @@ If you have Rust installed, the easiest way to install RepoLens is via Cargo:
 cargo install repolens
 ```
 
+### Docker (Recommended for quick use)
+
+The simplest way to use RepoLens without a local installation:
+
+```bash
+# Pull the official image
+docker pull ghcr.io/systm-d/repolens:latest
+
+# Audit the current directory
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens plan
+
+# Generate a report
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens report --format json
+```
+
+For GitHub API access, mount your gh configuration:
+
+```bash
+docker run --rm \
+  -v "$(pwd)":/repo \
+  -v ~/.config/gh:/home/repolens/.config/gh:ro \
+  ghcr.io/systm-d/repolens plan
+```
+
+Available tags:
+- `latest` - Latest stable version
+- `v1.0.0`, `v1.1.0`, etc. - Specific versions
+- `sha-abc1234` - Specific commit
+
+See [docker.md](docker.md) for more details.
+
 ### Pre-built Binaries
 
 Download pre-built binaries from the [GitHub Releases](https://github.com/systm-d/repolens/releases) page.
@@ -146,6 +177,108 @@ scoop update repolens
    ```powershell
    repolens --version
    ```
+
+### Verifying Checksums
+
+Each release includes a `checksums.sha256` file to verify archive integrity:
+
+```bash
+# Download the checksums file
+curl -LO https://github.com/systm-d/repolens/releases/latest/download/checksums.sha256
+
+# Verify (Linux)
+sha256sum -c checksums.sha256 --ignore-missing
+
+# Verify (macOS)
+shasum -a 256 -c checksums.sha256 --ignore-missing
+```
+
+## Using as a GitHub Action
+
+RepoLens is available as an official GitHub Action to integrate auditing directly into your CI/CD workflows.
+
+### Basic Usage
+
+```yaml
+name: RepoLens Audit
+on: [push, pull_request]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: systm-d/repolens-action@v1
+        with:
+          preset: opensource
+```
+
+### Available Inputs
+
+| Input | Description | Default |
+|---|---|---|
+| `preset` | Configuration preset (`opensource`, `enterprise`, `strict`) | `opensource` |
+| `format` | Output format (`terminal`, `json`, `sarif`, `markdown`, `html`) | `terminal` |
+| `output` | Output file path | - |
+| `categories` | Categories to audit (comma-separated) | all |
+| `exclude` | Categories to exclude (comma-separated) | - |
+| `verbose` | Verbosity level (`0`-`3`) | `0` |
+| `fail-on-error` | Fail the workflow if issues are detected | `false` |
+
+### Available Outputs
+
+| Output | Description |
+|---|---|
+| `score` | Overall audit score |
+| `report-path` | Path to the generated report |
+| `issues-count` | Number of issues detected |
+
+### Advanced Example with SARIF Upload
+
+```yaml
+name: RepoLens Security Audit
+on: [push]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: systm-d/repolens-action@v1
+        id: audit
+        with:
+          preset: strict
+          format: sarif
+          output: repolens-results.sarif
+          fail-on-error: true
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: repolens-results.sarif
+```
+
+### Multi-Preset Audit Example
+
+```yaml
+name: RepoLens Multi-Preset Audit
+on: [pull_request]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        preset: [opensource, enterprise, strict]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: systm-d/repolens-action@v1
+        with:
+          preset: ${{ matrix.preset }}
+          format: markdown
+          output: report-${{ matrix.preset }}.md
+```
+
+See [ci-cd-integration.md](ci-cd-integration.md) for more CI/CD integration examples.
 
 ## Building from Source
 
@@ -299,6 +432,24 @@ Ensure the installation directory is in your PATH:
 
 ```bash
 chmod +x /path/to/repolens
+```
+
+### Build errors (from source)
+
+```bash
+# Clean and rebuild
+cargo clean
+cargo build --release
+```
+
+### Dependency issues (from source)
+
+```bash
+# Update dependencies
+cargo update
+
+# Check dependency tree
+cargo tree
 ```
 
 ### OpenSSL errors on Linux

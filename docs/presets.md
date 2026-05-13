@@ -211,5 +211,5 @@ repolens init --preset enterprise
 
 ## Prochaines étapes
 
-- Consultez la [Configuration](Configuration) pour personnaliser votre preset
-- Découvrez les [Catégories de règles](Categories-de-regles) pour comprendre chaque règle
+- Consultez la [Configuration](configuration.md) pour personnaliser votre preset
+- Découvrez les [Catégories de règles](rule-categories.md) pour comprendre chaque règle

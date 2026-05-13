@@ -429,5 +429,5 @@ fi
 
 ## Prochaines étapes
 
-- Consultez les [Presets](Presets) pour des configurations prédéfinies
-- Découvrez les [Catégories de règles](Categories-de-regles) pour comprendre chaque règle
+- Consultez les [Presets](presets.md) pour des configurations prédéfinies
+- Découvrez les [Catégories de règles](rule-categories.md) pour comprendre chaque règle

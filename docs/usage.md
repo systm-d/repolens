@@ -384,7 +384,7 @@ repolens plan --preset strict  # Utilise strict malgré REPOLENS_PRESET=enterpri
 
 ```bash
 # Définir des règles personnalisées dans .repolens.toml
-# Voir la page [Règles personnalisées](Custom-Rules) pour plus de détails
+# Voir la page [Règles personnalisées](custom-rules.md) pour plus de détails
 
 # Lancer l'audit avec les règles personnalisées
 repolens plan --only custom
@@ -395,11 +395,11 @@ repolens plan
 
 ## Configuration avancée
 
-Consultez la page [Configuration](Configuration) pour les options avancées de configuration.
+Consultez la page [Configuration](configuration.md) pour les options avancées de configuration.
 
 ## Bonnes pratiques
 
-Consultez la page [Bonnes pratiques](Bonnes-pratiques) pour des recommandations sur l'utilisation de RepoLens.
+Consultez la page [Bonnes pratiques](best-practices.md) pour des recommandations sur l'utilisation de RepoLens.
 
 ## Dépannage
 
@@ -554,7 +554,7 @@ repolens plan --only dependencies
 
 ### Règles personnalisées
 
-Créez vos propres règles d'audit via des patterns regex ou des commandes shell. Voir la page [Règles personnalisées](Custom-Rules) pour plus de détails.
+Créez vos propres règles d'audit via des patterns regex ou des commandes shell. Voir la page [Règles personnalisées](custom-rules.md) pour plus de détails.
 
 ### Couverture de tests
 
@@ -562,12 +562,12 @@ RepoLens vérifie que la couverture de code atteint au moins 80%. Configurez les
 
 ### Changelog automatique
 
-Le changelog est généré automatiquement lors des releases. Voir la page [Changelog Automatique](Changelog-Automatique) pour plus de détails.
+Le changelog est généré automatiquement lors des releases. Voir la page [Changelog Automatique](automatic-changelog.md) pour plus de détails.
 
 ## Prochaines étapes
 
-- Consultez la [Configuration](Configuration) pour personnaliser RepoLens
-- Découvrez les [Presets](Presets) disponibles
-- Explorez les [Catégories de règles](Categories-de-regles)
-- Apprenez à créer des [Règles personnalisées](Custom-Rules)
-- Découvrez le [Changelog Automatique](Changelog-Automatique)
+- Consultez la [Configuration](configuration.md) pour personnaliser RepoLens
+- Découvrez les [Presets](presets.md) disponibles
+- Explorez les [Catégories de règles](rule-categories.md)
+- Apprenez à créer des [Règles personnalisées](custom-rules.md)
+- Découvrez le [Changelog Automatique](automatic-changelog.md)

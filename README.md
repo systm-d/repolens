@@ -445,7 +445,7 @@ message = "Working directory is not clean"
 
 > **Security Warning**: Custom rules with shell commands execute arbitrary code on your system. Only use commands from trusted sources. Never commit or run `.repolens.toml` files from untrusted repositories without reviewing them first.
 
-See the [Custom Rules documentation](wiki/Custom-Rules.md) for more examples and details.
+See the [Custom Rules documentation](docs/custom-rules.md) for more examples and details.
 
 ### Cache
 

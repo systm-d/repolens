@@ -213,6 +213,6 @@ Si certains commits n'apparaissent pas :
 
 ## Prochaines étapes
 
-- Consultez le [Guide d'utilisation](Guide-d-utilisation) pour utiliser RepoLens
-- Découvrez les [Presets](Presets) disponibles
-- Explorez les [Catégories de règles](Categories-de-regles)
+- Consultez le [Guide d'utilisation](usage.md) pour utiliser RepoLens
+- Découvrez les [Presets](presets.md) disponibles
+- Explorez les [Catégories de règles](rule-categories.md)

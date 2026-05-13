@@ -467,10 +467,10 @@ repolens plan --only secrets,files
 
 ## Ressources
 
-- [Guide d'utilisation](Guide-d-utilisation)
-- [Configuration](Configuration)
-- [Presets](Presets)
-- [Catégories de règles](Categories-de-regles)
+- [Guide d'utilisation](usage.md)
+- [Configuration](configuration.md)
+- [Presets](presets.md)
+- [Catégories de règles](rule-categories.md)
 
 ## Prochaines étapes
 

@@ -688,7 +688,7 @@ git push origin feature/yaml-output-format
 git checkout -b docs/improve-cli-examples
 
 # 2. Modifier la documentation
-# Editer README.md, wiki/, ou les docstrings dans le code
+# Editer README.md, docs/, ou les docstrings dans le code
 
 # 3. Verifier le build de la doc
 cargo doc --no-deps --open
@@ -741,9 +741,9 @@ Ideal pour une premiere contribution :
 
 ### Avant de poser une question
 
-1. Consultez la [documentation](Home)
+1. Consultez la [documentation](README.md)
 2. Cherchez dans les [issues existantes](https://github.com/systm-d/repolens/issues)
-3. Lisez le [guide de developpement](Developpement)
+3. Lisez le [guide de developpement](development.md)
 
 ### Poser une question
 

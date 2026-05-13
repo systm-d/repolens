@@ -384,5 +384,5 @@ tests/
 
 ## Prochaines étapes
 
-- Consultez le [Guide de Développement](Developpement) pour commencer à contribuer
+- Consultez le [Guide de Développement](development.md) pour commencer à contribuer
 - Explorez le code source pour comprendre les détails d'implémentation
