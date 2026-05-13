@@ -129,7 +129,7 @@ pub struct ApplyArgs {
 /// Arguments for the report command
 #[derive(Args, Debug)]
 pub struct ReportArgs {
-    /// Output format (html, markdown, json, pdf)
+    /// Output format (html, markdown, json)
     #[arg(short, long, default_value = "markdown")]
     pub format: ReportFormat,
 
@@ -176,11 +176,6 @@ pub struct ReportArgs {
     /// Custom cache directory path
     #[arg(long, value_name = "DIR")]
     pub cache_dir: Option<PathBuf>,
-
-    /// Path to a TOML file with branding overrides (PDF format only).
-    /// Ignored when `--format` is not `pdf`.
-    #[arg(long, value_name = "FILE")]
-    pub branding: Option<PathBuf>,
 
     /// Verbosity level (passed from global args)
     #[arg(skip)]
@@ -233,7 +228,6 @@ pub enum ReportFormat {
     Html,
     Markdown,
     Json,
-    Pdf,
 }
 
 /// Arguments for the compare command

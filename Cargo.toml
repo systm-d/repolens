@@ -119,10 +119,6 @@ rayon = "1.8"
 # JSON Schema validation
 jsonschema = "0.29"
 
-# PDF report generation (pure Rust, no system dependency)
-printpdf = { version = "0.7", default-features = false, features = ["embedded_images"] }
-image = { version = "0.24", default-features = false, features = ["png", "jpeg"] }
-
 [build-dependencies]
 clap_mangen = "0.2"
 clap = { version = "4", features = ["derive"] }
@@ -138,8 +134,6 @@ criterion = { version = "0.5", features = ["html_reports"] }
 futures = "0.3"
 serial_test = "3.3.1"
 insta = "1"
-# PDF inspection in integration tests
-lopdf = "0.32"
 
 [[bench]]
 name = "parse_benchmark"
@@ -162,6 +156,3 @@ harness = false
 name = "rules_benchmark"
 harness = false
 
-[[bench]]
-name = "pdf_benchmark"
-harness = false

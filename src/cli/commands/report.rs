@@ -6,8 +6,8 @@ use std::time::Duration;
 
 use super::{ReportArgs, ReportFormat};
 use crate::cache::{delete_cache_directory, AuditCache};
-use crate::cli::output::{HtmlReport, JsonOutput, MarkdownReport, PdfReport, ReportRenderer};
-use crate::config::{BrandingConfig, Config};
+use crate::cli::output::{HtmlReport, JsonOutput, MarkdownReport, ReportRenderer};
+use crate::config::Config;
 use crate::error::RepoLensError;
 use crate::exit_codes;
 use crate::rules::engine::RulesEngine;
@@ -136,60 +136,32 @@ pub async fn execute(args: ReportArgs) -> Result<i32, RepoLensError> {
         eprintln!();
     }
 
-    // Warn early if --branding was passed for a format other than PDF.
-    if args.branding.is_some() && args.format != ReportFormat::Pdf {
-        tracing::warn!(
-            "--branding is only applied to --format pdf; ignoring for --format {:?}",
-            args.format
-        );
-    }
-
     let output_path = args.output.clone().unwrap_or_else(|| {
         let extension = match args.format {
             ReportFormat::Html => "html",
             ReportFormat::Markdown => "md",
             ReportFormat::Json => "json",
-            ReportFormat::Pdf => "pdf",
         };
         PathBuf::from(format!("repolens-report.{extension}"))
     });
 
-    if matches!(args.format, ReportFormat::Pdf) {
-        let mut renderer = PdfReport::new(args.detailed);
-        if let Some(ref branding_path) = args.branding {
-            match BrandingConfig::load_from_file(branding_path) {
-                Ok(cfg) => renderer = renderer.with_branding(cfg),
-                Err(e) => {
-                    eprintln!(
-                        "{} failed to load branding '{}': {} — using defaults",
-                        "Warning:".yellow(),
-                        branding_path.display(),
-                        e
-                    );
-                }
-            }
-        }
-        renderer.render_to_file(&audit_results, &output_path)?;
-    } else {
-        let renderer: Box<dyn ReportRenderer> = match args.format {
-            ReportFormat::Html => Box::new(HtmlReport::new(args.detailed)),
-            ReportFormat::Markdown => Box::new(MarkdownReport::new(args.detailed)),
-            ReportFormat::Json => Box::new(
-                JsonOutput::new()
-                    .with_schema(args.schema)
-                    .with_validation(args.validate),
-            ),
-            ReportFormat::Pdf => unreachable!("handled above"),
-        };
+    let renderer: Box<dyn ReportRenderer> = match args.format {
+        ReportFormat::Html => Box::new(HtmlReport::new(args.detailed)),
+        ReportFormat::Markdown => Box::new(MarkdownReport::new(args.detailed)),
+        ReportFormat::Json => Box::new(
+            JsonOutput::new()
+                .with_schema(args.schema)
+                .with_validation(args.validate),
+        ),
+    };
 
-        let report = renderer.render_report(&audit_results)?;
-        std::fs::write(&output_path, &report).map_err(|e| {
-            RepoLensError::Action(crate::error::ActionError::FileWrite {
-                path: output_path.display().to_string(),
-                source: e,
-            })
-        })?;
-    }
+    let report = renderer.render_report(&audit_results)?;
+    std::fs::write(&output_path, &report).map_err(|e| {
+        RepoLensError::Action(crate::error::ActionError::FileWrite {
+            path: output_path.display().to_string(),
+            source: e,
+        })
+    })?;
 
     println!(
         "{} Report written to: {}",

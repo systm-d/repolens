@@ -3,14 +3,12 @@
 mod html;
 pub mod json;
 mod markdown;
-mod pdf;
 mod sarif;
 mod terminal;
 
 pub use html::HtmlReport;
 pub use json::JsonOutput;
 pub use markdown::MarkdownReport;
-pub use pdf::PdfReport;
 pub use sarif::SarifOutput;
 pub use terminal::TerminalOutput;
 
