@@ -79,7 +79,7 @@ repolens schema
 
 ```json
 {
-  "$schema": "https://github.com/kdelfour/repolens/schemas/audit-report.schema.json",
+  "$schema": "https://github.com/systm-d/repolens/schemas/audit-report.schema.json",
   "repository_name": "my-project",
   "preset": "opensource",
   "findings": [

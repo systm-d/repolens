@@ -22,7 +22,7 @@ pipeline {
     agent {
         docker {
             // Use the official RepoLens Docker image
-            image 'ghcr.io/delfour-co/repolens:latest'
+            image 'ghcr.io/systm-d/repolens:latest'
             // Mount workspace for file access
             args '-v ${WORKSPACE}:/workspace -w /workspace'
         }
@@ -258,13 +258,13 @@ pipeline {
 //                     def version = env.REPOLENS_VERSION
 //                     if (version == 'latest') {
 //                         version = sh(
-//                             script: 'curl -s https://api.github.com/repos/delfour-co/cli--repolens/releases/latest | grep tag_name | sed -E "s/.*\\"v([^\\"]+)\\".*/\\1/"',
+//                             script: 'curl -s https://api.github.com/repos/systm-d/repolens/releases/latest | grep tag_name | sed -E "s/.*\\"v([^\\"]+)\\".*/\\1/"',
 //                             returnStdout: true
 //                         ).trim()
 //                     }
 //
 //                     sh """
-//                         curl -LO "https://github.com/delfour-co/cli--repolens/releases/download/v${version}/repolens-linux-x86_64.tar.gz"
+//                         curl -LO "https://github.com/systm-d/repolens/releases/download/v${version}/repolens-linux-x86_64.tar.gz"
 //                         tar xzf repolens-linux-x86_64.tar.gz
 //                         sudo mv repolens /usr/local/bin/
 //                         rm repolens-linux-x86_64.tar.gz
@@ -298,7 +298,7 @@ pipeline {
 //         checkout scm
 //     }
 //
-//     docker.image('ghcr.io/delfour-co/repolens:latest').inside {
+//     docker.image('ghcr.io/systm-d/repolens:latest').inside {
 //         stage('Audit') {
 //             sh 'repolens plan --format json --output audit-report.json'
 //         }

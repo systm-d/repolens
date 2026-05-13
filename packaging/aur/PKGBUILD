@@ -6,14 +6,14 @@ pkgver=__VERSION__
 pkgrel=1
 pkgdesc="CLI tool to audit repositories for best practices, security, and compliance"
 arch=('x86_64' 'aarch64')
-url="https://github.com/kdelfour/repolens"
+url="https://github.com/systm-d/repolens"
 license=('MIT')
 depends=('git' 'openssl' 'gcc-libs')
 makedepends=('rust' 'cargo')
 optdepends=('github-cli: for GitHub API integration')
 provides=('repolens')
 conflicts=('repolens-bin' 'repolens-git')
-source=("${pkgname}-${pkgver}.tar.gz::https://github.com/kdelfour/repolens/archive/refs/tags/v${pkgver}.tar.gz")
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/systm-d/repolens/archive/refs/tags/v${pkgver}.tar.gz")
 sha256sums=('__SHA256__')
 
 # Disable automatic stripping, as cargo handles this with profile.release.strip

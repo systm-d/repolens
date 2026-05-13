@@ -23,7 +23,7 @@ Les nightly builds sont automatiquement créés à chaque push sur la branche pr
 
 ### Utilisation
 
-Les nightly builds sont disponibles dans les [Releases GitHub](https://github.com/delfour-co/cli--repolens/releases) avec le préfixe "Nightly Build".
+Les nightly builds sont disponibles dans les [Releases GitHub](https://github.com/systm-d/repolens/releases) avec le préfixe "Nightly Build".
 
 ⚠️ **Attention** : Les nightly builds peuvent être instables. Utilisez-les à vos risques et périls.
 
@@ -35,7 +35,7 @@ Les releases sont créées automatiquement depuis la CI avec auto-incrémentatio
 
 #### Méthode recommandée : Workflow GitHub Actions
 
-1. Allez sur la page [Actions](https://github.com/delfour-co/cli--repolens/actions) de votre dépôt
+1. Allez sur la page [Actions](https://github.com/systm-d/repolens/actions) de votre dépôt
 2. Sélectionnez le workflow **"Create Release"**
 3. Cliquez sur **"Run workflow"**
 4. Choisissez le type d'incrémentation :
@@ -157,8 +157,8 @@ Chaque release contient :
 
 ```bash
 # Télécharger les fichiers
-wget https://github.com/delfour-co/cli--repolens/releases/download/v1.0.0/repolens
-wget https://github.com/delfour-co/cli--repolens/releases/download/v1.0.0/repolens.sha256
+wget https://github.com/systm-d/repolens/releases/download/v1.0.0/repolens
+wget https://github.com/systm-d/repolens/releases/download/v1.0.0/repolens.sha256
 
 # Vérifier
 sha256sum -c repolens.sha256

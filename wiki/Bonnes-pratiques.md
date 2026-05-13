@@ -75,7 +75,7 @@ jobs:
       
       - name: Build RepoLens
         run: |
-          git clone https://github.com/delfour-co/cli--repolens.git
+          git clone https://github.com/systm-d/repolens.git
           cd cli--repolens
           cargo build --release
           sudo cp target/release/repolens /usr/local/bin/

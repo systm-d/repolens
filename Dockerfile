@@ -46,8 +46,8 @@ FROM alpine:3.22
 
 LABEL org.opencontainers.image.title="RepoLens"
 LABEL org.opencontainers.image.description="A CLI tool to audit GitHub repositories for best practices, security, and compliance"
-LABEL org.opencontainers.image.url="https://github.com/delfour-co/cli--repolens"
-LABEL org.opencontainers.image.source="https://github.com/delfour-co/cli--repolens"
+LABEL org.opencontainers.image.url="https://github.com/systm-d/repolens"
+LABEL org.opencontainers.image.source="https://github.com/systm-d/repolens"
 LABEL org.opencontainers.image.vendor="Delfour.co"
 LABEL org.opencontainers.image.licenses="MIT"
 

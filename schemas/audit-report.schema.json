@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/kdelfour/repolens/schemas/audit-report.schema.json",
+  "$id": "https://github.com/systm-d/repolens/schemas/audit-report.schema.json",
   "title": "RepoLens Audit Report",
   "description": "Schema for RepoLens audit report JSON output",
   "type": "object",

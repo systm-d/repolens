@@ -6,11 +6,11 @@
 
 class Repolens < Formula
   desc "CLI tool to audit repositories for best practices, security, and compliance"
-  homepage "https://github.com/kdelfour/repolens"
-  url "https://github.com/kdelfour/repolens/archive/refs/tags/v__VERSION__.tar.gz"
+  homepage "https://github.com/systm-d/repolens"
+  url "https://github.com/systm-d/repolens/archive/refs/tags/v__VERSION__.tar.gz"
   sha256 "__SHA256__"
   license "MIT"
-  head "https://github.com/kdelfour/repolens.git", branch: "main"
+  head "https://github.com/systm-d/repolens.git", branch: "main"
 
   # Bottles are pre-compiled binaries for faster installation
   # These will be populated by the CI/CD pipeline during release
@@ -53,7 +53,7 @@ class Repolens < Formula
         repolens init
 
       For more information, visit:
-        https://github.com/kdelfour/repolens
+        https://github.com/systm-d/repolens
     EOS
   end
 

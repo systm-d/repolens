@@ -7,7 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.4.0] - 2026-03-19
+## [1.4.0] - 2026-05-13
+
+### Changed
+
+- Migrated repository to `systm-d` GitHub organization (`github.com/systm-d/repolens`)
+- Updated all URLs, Docker image references (`ghcr.io/systm-d/repolens`), packaging metadata (Homebrew, Scoop, AUR, Debian), and CI/CD integration examples
 
 ### Added
 
@@ -209,4 +214,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[1.0.0]: https://github.com/delfour-co/repolens/releases/tag/v1.0.0
+[1.0.0]: https://github.com/systm-d/repolens/releases/tag/v1.0.0

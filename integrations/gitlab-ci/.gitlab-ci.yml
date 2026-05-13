@@ -40,7 +40,7 @@ stages:
 
 repolens-audit:
   stage: audit
-  image: ghcr.io/delfour-co/repolens:${REPOLENS_VERSION}
+  image: ghcr.io/systm-d/repolens:${REPOLENS_VERSION}
 
   # Cache dependencies and RepoLens cache for faster subsequent runs
   cache:
@@ -111,7 +111,7 @@ repolens-audit:
     # Determine the version to install
     - |
       if [ "${REPOLENS_VERSION}" = "latest" ]; then
-        VERSION=$(curl -s https://api.github.com/repos/delfour-co/cli--repolens/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
+        VERSION=$(curl -s https://api.github.com/repos/systm-d/repolens/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
       else
         VERSION="${REPOLENS_VERSION}"
       fi
@@ -120,7 +120,7 @@ repolens-audit:
     # Download and install RepoLens (if not cached)
     - |
       if [ ! -f /usr/local/bin/repolens ]; then
-        curl -LO "https://github.com/delfour-co/cli--repolens/releases/download/v${VERSION}/repolens-linux-x86_64.tar.gz"
+        curl -LO "https://github.com/systm-d/repolens/releases/download/v${VERSION}/repolens-linux-x86_64.tar.gz"
         tar xzf repolens-linux-x86_64.tar.gz
         mv repolens /usr/local/bin/
         rm repolens-linux-x86_64.tar.gz
@@ -156,7 +156,7 @@ repolens-audit:
 
 .repolens-security-scan:
   stage: audit
-  image: ghcr.io/delfour-co/repolens:${REPOLENS_VERSION}
+  image: ghcr.io/systm-d/repolens:${REPOLENS_VERSION}
 
   script:
     - repolens plan --preset ${REPOLENS_PRESET} --format sarif --output gl-sast-report.json
@@ -180,7 +180,7 @@ repolens-audit:
 
 .repolens-nightly:
   stage: audit
-  image: ghcr.io/delfour-co/repolens:${REPOLENS_VERSION}
+  image: ghcr.io/systm-d/repolens:${REPOLENS_VERSION}
 
   variables:
     # Use strict preset for nightly audits

@@ -14,7 +14,7 @@ cargo install repolens
 
 ### Pre-built Binaries
 
-Download pre-built binaries from the [GitHub Releases](https://github.com/kdelfour/repolens/releases) page.
+Download pre-built binaries from the [GitHub Releases](https://github.com/systm-d/repolens/releases) page.
 
 ## Platform-Specific Installation
 
@@ -24,7 +24,7 @@ Download pre-built binaries from the [GitHub Releases](https://github.com/kdelfo
 
 ```bash
 # Add the tap (first time only)
-brew tap kdelfour/repolens
+brew tap systm-d/repolens
 
 # Install RepoLens
 brew install repolens
@@ -38,7 +38,7 @@ brew upgrade repolens
 
 #### Manual Installation (macOS)
 
-1. Download the appropriate binary from [releases](https://github.com/kdelfour/repolens/releases):
+1. Download the appropriate binary from [releases](https://github.com/systm-d/repolens/releases):
    - Apple Silicon (M1/M2/M3): `repolens-aarch64-apple-darwin.tar.gz`
    - Intel: `repolens-x86_64-apple-darwin.tar.gz`
 
@@ -72,11 +72,11 @@ makepkg -si
 
 #### Debian/Ubuntu
 
-Download the `.deb` package from [releases](https://github.com/kdelfour/repolens/releases):
+Download the `.deb` package from [releases](https://github.com/systm-d/repolens/releases):
 
 ```bash
 # Download the package
-wget https://github.com/kdelfour/repolens/releases/download/v1.0.0/repolens_1.0.0-1_amd64.deb
+wget https://github.com/systm-d/repolens/releases/download/v1.0.0/repolens_1.0.0-1_amd64.deb
 
 # Install
 sudo dpkg -i repolens_1.0.0-1_amd64.deb
@@ -87,7 +87,7 @@ sudo apt-get install -f
 
 #### Fedora/RHEL/CentOS
 
-Download the `.rpm` package from [releases](https://github.com/kdelfour/repolens/releases) (when available):
+Download the `.rpm` package from [releases](https://github.com/systm-d/repolens/releases) (when available):
 
 ```bash
 sudo rpm -i repolens-1.0.0-1.x86_64.rpm
@@ -97,7 +97,7 @@ Or build from source (see below).
 
 #### Manual Installation (Linux)
 
-1. Download the appropriate binary from [releases](https://github.com/kdelfour/repolens/releases):
+1. Download the appropriate binary from [releases](https://github.com/systm-d/repolens/releases):
    - x86_64: `repolens-x86_64-unknown-linux-gnu.tar.gz`
    - ARM64: `repolens-aarch64-unknown-linux-gnu.tar.gz`
 
@@ -118,7 +118,7 @@ Or build from source (see below).
 
 ```powershell
 # Add the bucket (first time only)
-scoop bucket add repolens https://github.com/kdelfour/scoop-repolens
+scoop bucket add repolens https://github.com/systm-d/scoop-repolens
 
 # Install RepoLens
 scoop install repolens
@@ -136,7 +136,7 @@ scoop update repolens
 
 #### Manual Installation (Windows)
 
-1. Download `repolens-x86_64-pc-windows-msvc.zip` from [releases](https://github.com/kdelfour/repolens/releases)
+1. Download `repolens-x86_64-pc-windows-msvc.zip` from [releases](https://github.com/systm-d/repolens/releases)
 
 2. Extract the ZIP file
 
@@ -182,7 +182,7 @@ sudo pacman -S openssl
 
 ```bash
 # Clone the repository
-git clone https://github.com/kdelfour/repolens.git
+git clone https://github.com/systm-d/repolens.git
 cd repolens
 
 # Build in release mode
@@ -316,5 +316,5 @@ git --version
 
 ## Getting Help
 
-- [GitHub Issues](https://github.com/kdelfour/repolens/issues)
-- [Documentation](https://github.com/kdelfour/repolens#readme)
+- [GitHub Issues](https://github.com/systm-d/repolens/issues)
+- [Documentation](https://github.com/systm-d/repolens#readme)

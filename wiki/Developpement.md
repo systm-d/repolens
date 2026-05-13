@@ -22,7 +22,7 @@ Ce document explique comment développer, tester et contribuer au projet RepoLen
 
 1. **Cloner le repository**
    ```bash
-   git clone https://github.com/delfour-co/cli--repolens.git
+   git clone https://github.com/systm-d/repolens.git
    cd cli--repolens
    ```
 

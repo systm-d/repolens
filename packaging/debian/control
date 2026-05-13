@@ -9,9 +9,9 @@ Build-Depends: debhelper-compat (= 13),
                pkg-config,
                git
 Standards-Version: 4.6.2
-Homepage: https://github.com/kdelfour/repolens
-Vcs-Browser: https://github.com/kdelfour/repolens
-Vcs-Git: https://github.com/kdelfour/repolens.git
+Homepage: https://github.com/systm-d/repolens
+Vcs-Browser: https://github.com/systm-d/repolens
+Vcs-Git: https://github.com/systm-d/repolens.git
 Rules-Requires-Root: no
 
 Package: repolens

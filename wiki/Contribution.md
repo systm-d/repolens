@@ -53,14 +53,14 @@ git clone https://github.com/VOTRE_USERNAME/cli--repolens.git
 cd cli--repolens
 
 # 3. Ajouter le repository upstream
-git remote add upstream https://github.com/delfour-co/cli--repolens.git
+git remote add upstream https://github.com/systm-d/repolens.git
 
 # 4. Verifier les remotes
 git remote -v
 # origin    https://github.com/VOTRE_USERNAME/cli--repolens.git (fetch)
 # origin    https://github.com/VOTRE_USERNAME/cli--repolens.git (push)
-# upstream  https://github.com/delfour-co/cli--repolens.git (fetch)
-# upstream  https://github.com/delfour-co/cli--repolens.git (push)
+# upstream  https://github.com/systm-d/repolens.git (fetch)
+# upstream  https://github.com/systm-d/repolens.git (push)
 ```
 
 ### Premiere compilation
@@ -742,7 +742,7 @@ Ideal pour une premiere contribution :
 ### Avant de poser une question
 
 1. Consultez la [documentation](Home)
-2. Cherchez dans les [issues existantes](https://github.com/delfour-co/cli--repolens/issues)
+2. Cherchez dans les [issues existantes](https://github.com/systm-d/repolens/issues)
 3. Lisez le [guide de developpement](Developpement)
 
 ### Poser une question

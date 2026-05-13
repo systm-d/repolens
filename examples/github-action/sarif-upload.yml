@@ -33,7 +33,7 @@ jobs:
 
       - name: Run RepoLens audit (SARIF)
         id: audit
-        uses: kdelfour/repolens@main
+        uses: systm-d/repolens@main
         with:
           preset: 'enterprise'
           format: 'sarif'

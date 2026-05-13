@@ -181,7 +181,7 @@ impl OutputRenderer for SarifOutput {
                     driver: SarifDriver {
                         name: "repolens",
                         version: env!("CARGO_PKG_VERSION"),
-                        information_uri: "https://github.com/kdelfour/repolens",
+                        information_uri: "https://github.com/systm-d/repolens",
                         rules,
                     },
                 },

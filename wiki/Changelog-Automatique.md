@@ -99,7 +99,7 @@ Le changelog généré suit le format [Keep a Changelog](https://keepachangelog.
 ### Security
 - Correction de la vulnérabilité XSS (#128)
 
-[1.1.0]: https://github.com/delfour-co/cli--repolens/releases/tag/v1.1.0
+[1.1.0]: https://github.com/systm-d/repolens/releases/tag/v1.1.0
 ```
 
 ## Intégration dans les workflows

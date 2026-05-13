@@ -47,7 +47,7 @@ executors:
   # Docker executor with RepoLens image
   repolens-docker:
     docker:
-      - image: ghcr.io/delfour-co/repolens:<< pipeline.parameters.repolens-version >>
+      - image: ghcr.io/systm-d/repolens:<< pipeline.parameters.repolens-version >>
     working_directory: ~/project
 
   # Generic Linux executor for binary installation
@@ -71,11 +71,11 @@ commands:
           command: |
             VERSION="<< parameters.version >>"
             if [ "${VERSION}" = "latest" ]; then
-              VERSION=$(curl -s https://api.github.com/repos/delfour-co/cli--repolens/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
+              VERSION=$(curl -s https://api.github.com/repos/systm-d/repolens/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
             fi
             echo "Installing RepoLens version: ${VERSION}"
 
-            curl -LO "https://github.com/delfour-co/cli--repolens/releases/download/v${VERSION}/repolens-linux-x86_64.tar.gz"
+            curl -LO "https://github.com/systm-d/repolens/releases/download/v${VERSION}/repolens-linux-x86_64.tar.gz"
             tar xzf repolens-linux-x86_64.tar.gz
             sudo mv repolens /usr/local/bin/
             rm repolens-linux-x86_64.tar.gz

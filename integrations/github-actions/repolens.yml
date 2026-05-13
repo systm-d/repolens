@@ -22,7 +22,7 @@
 #
 # OR USING THE OFFICIAL ACTION:
 # ```yaml
-# - uses: kdelfour/repolens@main
+# - uses: systm-d/repolens@main
 #   with:
 #     preset: 'opensource'
 # ```
@@ -142,7 +142,7 @@ jobs:
         run: |
           VERSION="${{ inputs.version || 'latest' }}"
           if [ "$VERSION" = "latest" ]; then
-            RELEASE_TAG=$(curl -s https://api.github.com/repos/delfour-co/cli--repolens/releases/latest | grep '"tag_name"' | sed -E 's/.*"tag_name": *"([^"]+)".*/\1/')
+            RELEASE_TAG=$(curl -s https://api.github.com/repos/systm-d/repolens/releases/latest | grep '"tag_name"' | sed -E 's/.*"tag_name": *"([^"]+)".*/\1/')
             if [ -z "$RELEASE_TAG" ] || [ "$RELEASE_TAG" = "null" ]; then
               echo "::error::Failed to determine latest RepoLens version"
               exit 1
@@ -163,7 +163,7 @@ jobs:
       - name: Install RepoLens
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          DOWNLOAD_URL="https://github.com/delfour-co/cli--repolens/releases/download/${{ steps.version.outputs.tag }}/repolens-linux-x86_64.tar.gz"
+          DOWNLOAD_URL="https://github.com/systm-d/repolens/releases/download/${{ steps.version.outputs.tag }}/repolens-linux-x86_64.tar.gz"
 
           echo "Downloading RepoLens from ${DOWNLOAD_URL}..."
           curl -sL "${DOWNLOAD_URL}" -o /tmp/repolens.tar.gz
@@ -333,7 +333,7 @@ jobs:
 #     runs-on: ubuntu-latest
 #     steps:
 #       - uses: actions/checkout@v4
-#       - uses: kdelfour/repolens@main
+#       - uses: systm-d/repolens@main
 #         with:
 #           preset: 'opensource'
 #           format: 'sarif'

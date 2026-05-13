@@ -22,7 +22,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ghcr.io/delfour-co/repolens:latest
+    image: ghcr.io/systm-d/repolens:latest
     container_name: repolens
 
     # Mount current directory as the repository to audit

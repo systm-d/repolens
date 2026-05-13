@@ -40,10 +40,10 @@ RepoLens can be installed in your CI/CD environment using two approaches:
 
 ```bash
 # Pull the official image
-docker pull ghcr.io/delfour-co/repolens:latest
+docker pull ghcr.io/systm-d/repolens:latest
 
 # Run with your repository mounted
-docker run -v $(pwd):/workspace -w /workspace ghcr.io/delfour-co/repolens:latest plan
+docker run -v $(pwd):/workspace -w /workspace ghcr.io/systm-d/repolens:latest plan
 ```
 
 Available tags:
@@ -55,10 +55,10 @@ Available tags:
 
 ```bash
 # Determine the latest version
-VERSION=$(curl -s https://api.github.com/repos/delfour-co/cli--repolens/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
+VERSION=$(curl -s https://api.github.com/repos/systm-d/repolens/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
 
 # Download and install
-curl -LO "https://github.com/delfour-co/cli--repolens/releases/download/v${VERSION}/repolens-linux-x86_64.tar.gz"
+curl -LO "https://github.com/systm-d/repolens/releases/download/v${VERSION}/repolens-linux-x86_64.tar.gz"
 tar xzf repolens-linux-x86_64.tar.gz
 sudo mv repolens /usr/local/bin/
 
@@ -82,7 +82,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: kdelfour/repolens@main
+      - uses: systm-d/repolens@main
         with:
           preset: 'opensource'
           format: 'json'
@@ -114,7 +114,7 @@ jobs:
 Upload results to GitHub's Security tab:
 
 ```yaml
-- uses: kdelfour/repolens@main
+- uses: systm-d/repolens@main
   id: audit
   with:
     format: 'sarif'
@@ -149,7 +149,7 @@ Copy the template from `integrations/gitlab-ci/.gitlab-ci.yml` to your repositor
 
 ```yaml
 repolens-audit:
-  image: ghcr.io/delfour-co/repolens:latest
+  image: ghcr.io/systm-d/repolens:latest
   stage: test
   script:
     - repolens plan --preset opensource --format json --output audit-report.json
@@ -180,7 +180,7 @@ For GitLab Ultimate users, use SARIF format for security dashboard integration:
 
 ```yaml
 repolens-security:
-  image: ghcr.io/delfour-co/repolens:latest
+  image: ghcr.io/systm-d/repolens:latest
   stage: test
   script:
     - repolens plan --format sarif --output gl-sast-report.json
@@ -212,7 +212,7 @@ version: 2.1
 executors:
   repolens:
     docker:
-      - image: ghcr.io/delfour-co/repolens:latest
+      - image: ghcr.io/systm-d/repolens:latest
 
 jobs:
   audit:
@@ -277,7 +277,7 @@ Copy the template from `integrations/jenkins/Jenkinsfile` to your repository roo
 pipeline {
     agent {
         docker {
-            image 'ghcr.io/delfour-co/repolens:latest'
+            image 'ghcr.io/systm-d/repolens:latest'
             args '-v ${WORKSPACE}:/workspace -w /workspace'
         }
     }
@@ -348,7 +348,7 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         container:
-          image: ghcr.io/delfour-co/repolens:latest
+          image: ghcr.io/systm-d/repolens:latest
         steps:
           - checkout: self
           - script: repolens plan --format json --output $(Build.ArtifactStagingDirectory)/audit-report.json
@@ -384,7 +384,7 @@ stages:
     jobs:
       - job: Audit
         container:
-          image: ghcr.io/delfour-co/repolens:latest
+          image: ghcr.io/systm-d/repolens:latest
         steps:
           - script: repolens plan --preset ${{ parameters.preset }}
 ```
@@ -536,9 +536,9 @@ Verify cache paths are correct and the CI platform supports caching:
 
 ### Getting Help
 
-- [RepoLens Documentation](https://github.com/delfour-co/cli--repolens)
-- [Issue Tracker](https://github.com/delfour-co/cli--repolens/issues)
-- [Discussions](https://github.com/delfour-co/cli--repolens/discussions)
+- [RepoLens Documentation](https://github.com/systm-d/repolens)
+- [Issue Tracker](https://github.com/systm-d/repolens/issues)
+- [Discussions](https://github.com/systm-d/repolens/discussions)
 
 ## Template Files
 

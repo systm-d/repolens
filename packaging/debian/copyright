@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: repolens
 Upstream-Contact: Kevin Delfour <kevin@delfour.co>
-Source: https://github.com/kdelfour/repolens
+Source: https://github.com/systm-d/repolens
 
 Files: *
 Copyright: 2025 Kevin Delfour

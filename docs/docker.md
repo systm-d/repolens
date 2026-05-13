@@ -8,23 +8,23 @@ RepoLens is available as a Docker image for easy deployment without installing d
 
 ```bash
 # Pull the latest image from GitHub Container Registry
-docker pull ghcr.io/delfour-co/cli--audit-github-project:latest
+docker pull ghcr.io/systm-d/repolens:latest
 
 # Or pull a specific version
-docker pull ghcr.io/delfour-co/cli--audit-github-project:1.0.0
+docker pull ghcr.io/systm-d/repolens:1.0.0
 ```
 
 ### Run RepoLens
 
 ```bash
 # Run repolens on the current directory
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/cli--audit-github-project plan
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens plan
 
 # Generate a report
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/cli--audit-github-project report
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens report
 
 # Export HTML report
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/cli--audit-github-project report --format html --output /repo/report.html
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens report --format html --output /repo/report.html
 ```
 
 ## Using Docker Compose
@@ -49,7 +49,7 @@ RepoLens uses the GitHub CLI (`gh`) for API operations. To use GitHub features, 
 docker run --rm \
   -v "$(pwd)":/repo \
   -v ~/.config/gh:/home/repolens/.config/gh:ro \
-  ghcr.io/delfour-co/cli--audit-github-project plan
+  ghcr.io/systm-d/repolens plan
 ```
 
 Alternatively, pass a GitHub token via environment variable:
@@ -58,7 +58,7 @@ Alternatively, pass a GitHub token via environment variable:
 docker run --rm \
   -v "$(pwd)":/repo \
   -e GITHUB_TOKEN=your_token_here \
-  ghcr.io/delfour-co/cli--audit-github-project plan
+  ghcr.io/systm-d/repolens plan
 ```
 
 ## Building Locally
@@ -67,7 +67,7 @@ To build the Docker image locally:
 
 ```bash
 # Clone the repository
-git clone https://github.com/delfour-co/cli--repolens.git
+git clone https://github.com/systm-d/repolens.git
 cd cli--repolens
 
 # Build the image
@@ -116,40 +116,40 @@ Docker will automatically pull the correct architecture for your platform.
 
 ```bash
 # Initialize configuration
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/cli--audit-github-project init --preset opensource
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens init --preset opensource
 
 # Generate audit plan
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/cli--audit-github-project plan
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens plan
 
 # View detailed report
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/cli--audit-github-project report
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens report
 ```
 
 ### Generate Reports
 
 ```bash
 # JSON report
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/cli--audit-github-project report --format json > report.json
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens report --format json > report.json
 
 # HTML report
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/cli--audit-github-project report --format html --output /repo/report.html
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens report --format html --output /repo/report.html
 
 # SARIF report (for GitHub Security)
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/cli--audit-github-project report --format sarif > report.sarif
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens report --format sarif > report.sarif
 ```
 
 ### Apply Fixes (Dry Run)
 
 ```bash
 # Preview changes without applying
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/cli--audit-github-project apply --dry-run
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens apply --dry-run
 ```
 
 ### Interactive Mode
 
 ```bash
 # Interactive mode requires TTY
-docker run --rm -it -v "$(pwd)":/repo ghcr.io/delfour-co/cli--audit-github-project apply --interactive
+docker run --rm -it -v "$(pwd)":/repo ghcr.io/systm-d/repolens apply --interactive
 ```
 
 ## CI/CD Integration
@@ -167,7 +167,7 @@ jobs:
         run: |
           docker run --rm \
             -v "${{ github.workspace }}":/repo \
-            ghcr.io/delfour-co/cli--audit-github-project:latest \
+            ghcr.io/systm-d/repolens:latest \
             report --format sarif --output /repo/repolens.sarif
 
       - name: Upload SARIF
@@ -180,7 +180,7 @@ jobs:
 
 ```yaml
 audit:
-  image: ghcr.io/delfour-co/cli--audit-github-project:latest
+  image: ghcr.io/systm-d/repolens:latest
   script:
     - repolens report
 ```
@@ -196,7 +196,7 @@ If you encounter permission errors, ensure the mounted directory is readable:
 docker run --rm \
   -v "$(pwd)":/repo \
   -u "$(id -u):$(id -g)" \
-  ghcr.io/delfour-co/cli--audit-github-project plan
+  ghcr.io/systm-d/repolens plan
 ```
 
 ### GitHub CLI Not Authenticated
@@ -207,7 +207,7 @@ Mount your GitHub CLI configuration:
 docker run --rm \
   -v "$(pwd)":/repo \
   -v ~/.config/gh:/home/repolens/.config/gh:ro \
-  ghcr.io/delfour-co/cli--audit-github-project plan
+  ghcr.io/systm-d/repolens plan
 ```
 
 ### Git Operations Fail
@@ -216,5 +216,5 @@ Ensure the `.git` directory is included in the mount:
 
 ```bash
 # Mount the entire repository including .git
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/cli--audit-github-project plan
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens plan
 ```

@@ -18,13 +18,13 @@ La méthode la plus simple pour utiliser RepoLens sans installation locale.
 
 ```bash
 # Tirer l'image officielle
-docker pull ghcr.io/delfour-co/repolens:latest
+docker pull ghcr.io/systm-d/repolens:latest
 
 # Auditer le répertoire courant
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/repolens plan
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens plan
 
 # Générer un rapport
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/repolens report --format json
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens report --format json
 ```
 
 Pour l'accès à l'API GitHub, montez votre configuration gh :
@@ -33,7 +33,7 @@ Pour l'accès à l'API GitHub, montez votre configuration gh :
 docker run --rm \
   -v "$(pwd)":/repo \
   -v ~/.config/gh:/home/repolens/.config/gh:ro \
-  ghcr.io/delfour-co/repolens plan
+  ghcr.io/systm-d/repolens plan
 ```
 
 Tags disponibles :
@@ -48,7 +48,7 @@ Voir [docs/docker.md](../docs/docker.md) pour plus de détails.
 ### Homebrew (macOS/Linux)
 
 ```bash
-brew tap delfour-co/repolens
+brew tap systm-d/repolens
 brew install repolens
 ```
 
@@ -60,7 +60,7 @@ brew upgrade repolens
 ### Scoop (Windows)
 
 ```powershell
-scoop bucket add delfour-co https://github.com/delfour-co/scoop-bucket
+scoop bucket add systm-d https://github.com/systm-d/scoop-bucket
 scoop install repolens
 ```
 
@@ -85,8 +85,8 @@ makepkg -si
 
 ```bash
 # Ajouter le dépôt
-curl -fsSL https://delfour-co.github.io/repolens-apt/KEY.gpg | sudo gpg --dearmor -o /usr/share/keyrings/repolens.gpg
-echo "deb [signed-by=/usr/share/keyrings/repolens.gpg] https://delfour-co.github.io/repolens-apt stable main" | sudo tee /etc/apt/sources.list.d/repolens.list
+curl -fsSL https://systm-d.github.io/repolens-apt/KEY.gpg | sudo gpg --dearmor -o /usr/share/keyrings/repolens.gpg
+echo "deb [signed-by=/usr/share/keyrings/repolens.gpg] https://systm-d.github.io/repolens-apt stable main" | sudo tee /etc/apt/sources.list.d/repolens.list
 
 # Installer
 sudo apt update
@@ -95,7 +95,7 @@ sudo apt install repolens
 
 ## Installation via binaires pré-compilés
 
-Des binaires pré-compilés sont disponibles pour toutes les plateformes majeures. Rendez-vous sur la [page Releases](https://github.com/delfour-co/cli--repolens/releases) pour télécharger la dernière version.
+Des binaires pré-compilés sont disponibles pour toutes les plateformes majeures. Rendez-vous sur la [page Releases](https://github.com/systm-d/repolens/releases) pour télécharger la dernière version.
 
 ### Plateformes supportées
 
@@ -110,7 +110,7 @@ Des binaires pré-compilés sont disponibles pour toutes les plateformes majeure
 ### Linux (x86_64)
 
 ```bash
-curl -LO https://github.com/delfour-co/cli--repolens/releases/latest/download/repolens-linux-x86_64.tar.gz
+curl -LO https://github.com/systm-d/repolens/releases/latest/download/repolens-linux-x86_64.tar.gz
 tar xzf repolens-linux-x86_64.tar.gz
 sudo mv repolens /usr/local/bin/
 ```
@@ -118,7 +118,7 @@ sudo mv repolens /usr/local/bin/
 ### Linux (ARM64)
 
 ```bash
-curl -LO https://github.com/delfour-co/cli--repolens/releases/latest/download/repolens-linux-arm64.tar.gz
+curl -LO https://github.com/systm-d/repolens/releases/latest/download/repolens-linux-arm64.tar.gz
 tar xzf repolens-linux-arm64.tar.gz
 sudo mv repolens /usr/local/bin/
 ```
@@ -126,7 +126,7 @@ sudo mv repolens /usr/local/bin/
 ### macOS (Apple Silicon)
 
 ```bash
-curl -LO https://github.com/delfour-co/cli--repolens/releases/latest/download/repolens-darwin-arm64.tar.gz
+curl -LO https://github.com/systm-d/repolens/releases/latest/download/repolens-darwin-arm64.tar.gz
 tar xzf repolens-darwin-arm64.tar.gz
 sudo mv repolens /usr/local/bin/
 ```
@@ -134,7 +134,7 @@ sudo mv repolens /usr/local/bin/
 ### macOS (Intel)
 
 ```bash
-curl -LO https://github.com/delfour-co/cli--repolens/releases/latest/download/repolens-darwin-x86_64.tar.gz
+curl -LO https://github.com/systm-d/repolens/releases/latest/download/repolens-darwin-x86_64.tar.gz
 tar xzf repolens-darwin-x86_64.tar.gz
 sudo mv repolens /usr/local/bin/
 ```
@@ -143,7 +143,7 @@ sudo mv repolens /usr/local/bin/
 
 ```powershell
 # Telecharger l'archive depuis la page Releases
-Invoke-WebRequest -Uri https://github.com/delfour-co/cli--repolens/releases/latest/download/repolens-windows-x86_64.zip -OutFile repolens-windows-x86_64.zip
+Invoke-WebRequest -Uri https://github.com/systm-d/repolens/releases/latest/download/repolens-windows-x86_64.zip -OutFile repolens-windows-x86_64.zip
 Expand-Archive repolens-windows-x86_64.zip -DestinationPath .
 Move-Item repolens.exe C:\Users\$env:USERNAME\bin\
 ```
@@ -154,7 +154,7 @@ Chaque release inclut un fichier `checksums.sha256` pour verifier l'integrite de
 
 ```bash
 # Telecharger le fichier de checksums
-curl -LO https://github.com/delfour-co/cli--repolens/releases/latest/download/checksums.sha256
+curl -LO https://github.com/systm-d/repolens/releases/latest/download/checksums.sha256
 
 # Verifier (Linux)
 sha256sum -c checksums.sha256 --ignore-missing
@@ -176,7 +176,7 @@ repolens --version
 ### 1. Cloner le repository
 
 ```bash
-git clone https://github.com/delfour-co/cli--repolens.git
+git clone https://github.com/systm-d/repolens.git
 cd cli--repolens
 ```
 
@@ -270,7 +270,7 @@ cargo install repolens --force
 
 ## Installation via binaires pre-compiles
 
-Des binaires pre-compiles sont disponibles pour les plateformes suivantes sur la [page des releases](https://github.com/kdelfour/repolens/releases) :
+Des binaires pre-compiles sont disponibles pour les plateformes suivantes sur la [page des releases](https://github.com/systm-d/repolens/releases) :
 
 | Plateforme | Architecture | Fichier |
 |---|---|---|
@@ -284,7 +284,7 @@ Des binaires pre-compiles sont disponibles pour les plateformes suivantes sur la
 
 ```bash
 # Telecharger et extraire (exemple pour Linux x86_64)
-curl -L https://github.com/kdelfour/repolens/releases/latest/download/repolens-linux-x86_64.tar.gz | tar xz
+curl -L https://github.com/systm-d/repolens/releases/latest/download/repolens-linux-x86_64.tar.gz | tar xz
 
 # Rendre executable et deplacer dans le PATH
 chmod +x repolens
@@ -293,7 +293,7 @@ sudo mv repolens /usr/local/bin/
 
 ### Windows
 
-1. Telecharger `repolens-windows-x86_64.zip` depuis la [page des releases](https://github.com/kdelfour/repolens/releases)
+1. Telecharger `repolens-windows-x86_64.zip` depuis la [page des releases](https://github.com/systm-d/repolens/releases)
 2. Extraire l'archive
 3. Ajouter le dossier contenant `repolens.exe` a votre variable d'environnement `PATH`
 
@@ -312,7 +312,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: kdelfour/repolens-action@v1
+      - uses: systm-d/repolens-action@v1
         with:
           preset: opensource
 ```
@@ -348,7 +348,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: kdelfour/repolens-action@v1
+      - uses: systm-d/repolens-action@v1
         id: audit
         with:
           preset: strict
@@ -375,7 +375,7 @@ jobs:
         preset: [opensource, enterprise, strict]
     steps:
       - uses: actions/checkout@v4
-      - uses: kdelfour/repolens-action@v1
+      - uses: systm-d/repolens-action@v1
         with:
           preset: ${{ matrix.preset }}
           format: markdown

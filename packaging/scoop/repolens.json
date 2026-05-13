@@ -1,31 +1,31 @@
 {
     "version": "__VERSION__",
     "description": "CLI tool to audit repositories for best practices, security, and compliance",
-    "homepage": "https://github.com/kdelfour/repolens",
+    "homepage": "https://github.com/systm-d/repolens",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/kdelfour/repolens/releases/download/v__VERSION__/repolens-x86_64-pc-windows-msvc.zip",
+            "url": "https://github.com/systm-d/repolens/releases/download/v__VERSION__/repolens-x86_64-pc-windows-msvc.zip",
             "hash": "__SHA256_WIN64__",
             "extract_dir": "repolens-x86_64-pc-windows-msvc"
         },
         "arm64": {
-            "url": "https://github.com/kdelfour/repolens/releases/download/v__VERSION__/repolens-aarch64-pc-windows-msvc.zip",
+            "url": "https://github.com/systm-d/repolens/releases/download/v__VERSION__/repolens-aarch64-pc-windows-msvc.zip",
             "hash": "__SHA256_WIN_ARM64__",
             "extract_dir": "repolens-aarch64-pc-windows-msvc"
         }
     },
     "bin": "repolens.exe",
     "checkver": {
-        "github": "https://github.com/kdelfour/repolens"
+        "github": "https://github.com/systm-d/repolens"
     },
     "autoupdate": {
         "architecture": {
             "64bit": {
-                "url": "https://github.com/kdelfour/repolens/releases/download/v$version/repolens-x86_64-pc-windows-msvc.zip"
+                "url": "https://github.com/systm-d/repolens/releases/download/v$version/repolens-x86_64-pc-windows-msvc.zip"
             },
             "arm64": {
-                "url": "https://github.com/kdelfour/repolens/releases/download/v$version/repolens-aarch64-pc-windows-msvc.zip"
+                "url": "https://github.com/systm-d/repolens/releases/download/v$version/repolens-aarch64-pc-windows-msvc.zip"
             }
         }
     },
@@ -37,6 +37,6 @@
         "  cd path\\to\\your\\repo",
         "  repolens init",
         "",
-        "For more information: https://github.com/kdelfour/repolens"
+        "For more information: https://github.com/systm-d/repolens"
     ]
 }

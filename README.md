@@ -21,13 +21,13 @@ The easiest way to use RepoLens without local installation:
 
 ```bash
 # Pull the official image
-docker pull ghcr.io/delfour-co/repolens:latest
+docker pull ghcr.io/systm-d/repolens:latest
 
 # Audit current directory
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/repolens plan
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens plan
 
 # Generate a report
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/repolens report --format json
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens report --format json
 ```
 
 See [docs/docker.md](docs/docker.md) for detailed Docker usage.
@@ -37,14 +37,14 @@ See [docs/docker.md](docs/docker.md) for detailed Docker usage.
 #### Homebrew (macOS/Linux)
 
 ```bash
-brew tap delfour-co/repolens
+brew tap systm-d/repolens
 brew install repolens
 ```
 
 #### Scoop (Windows)
 
 ```powershell
-scoop bucket add delfour-co https://github.com/delfour-co/scoop-bucket
+scoop bucket add systm-d https://github.com/systm-d/scoop-bucket
 scoop install repolens
 ```
 
@@ -62,7 +62,7 @@ cargo install repolens
 
 ### Pre-built Binaries
 
-Pre-built binaries are available for all major platforms. Download the latest release from the [Releases page](https://github.com/delfour-co/cli--repolens/releases).
+Pre-built binaries are available for all major platforms. Download the latest release from the [Releases page](https://github.com/systm-d/repolens/releases).
 
 #### Supported Platforms
 
@@ -77,7 +77,7 @@ Pre-built binaries are available for all major platforms. Download the latest re
 #### Linux (x86_64)
 
 ```bash
-curl -LO https://github.com/delfour-co/cli--repolens/releases/latest/download/repolens-linux-x86_64.tar.gz
+curl -LO https://github.com/systm-d/repolens/releases/latest/download/repolens-linux-x86_64.tar.gz
 tar xzf repolens-linux-x86_64.tar.gz
 sudo mv repolens /usr/local/bin/
 ```
@@ -85,7 +85,7 @@ sudo mv repolens /usr/local/bin/
 #### Linux (ARM64)
 
 ```bash
-curl -LO https://github.com/delfour-co/cli--repolens/releases/latest/download/repolens-linux-arm64.tar.gz
+curl -LO https://github.com/systm-d/repolens/releases/latest/download/repolens-linux-arm64.tar.gz
 tar xzf repolens-linux-arm64.tar.gz
 sudo mv repolens /usr/local/bin/
 ```
@@ -93,7 +93,7 @@ sudo mv repolens /usr/local/bin/
 #### macOS (Apple Silicon)
 
 ```bash
-curl -LO https://github.com/delfour-co/cli--repolens/releases/latest/download/repolens-darwin-arm64.tar.gz
+curl -LO https://github.com/systm-d/repolens/releases/latest/download/repolens-darwin-arm64.tar.gz
 tar xzf repolens-darwin-arm64.tar.gz
 sudo mv repolens /usr/local/bin/
 ```
@@ -101,7 +101,7 @@ sudo mv repolens /usr/local/bin/
 #### macOS (Intel)
 
 ```bash
-curl -LO https://github.com/delfour-co/cli--repolens/releases/latest/download/repolens-darwin-x86_64.tar.gz
+curl -LO https://github.com/systm-d/repolens/releases/latest/download/repolens-darwin-x86_64.tar.gz
 tar xzf repolens-darwin-x86_64.tar.gz
 sudo mv repolens /usr/local/bin/
 ```
@@ -110,7 +110,7 @@ sudo mv repolens /usr/local/bin/
 
 ```powershell
 # Download the zip archive from the Releases page
-Invoke-WebRequest -Uri https://github.com/delfour-co/cli--repolens/releases/latest/download/repolens-windows-x86_64.zip -OutFile repolens-windows-x86_64.zip
+Invoke-WebRequest -Uri https://github.com/systm-d/repolens/releases/latest/download/repolens-windows-x86_64.zip -OutFile repolens-windows-x86_64.zip
 Expand-Archive repolens-windows-x86_64.zip -DestinationPath .
 Move-Item repolens.exe C:\Users\$env:USERNAME\bin\
 ```
@@ -121,7 +121,7 @@ Each release includes a `checksums.sha256` file. After downloading your archive,
 
 ```bash
 # Download the checksums file
-curl -LO https://github.com/delfour-co/cli--repolens/releases/latest/download/checksums.sha256
+curl -LO https://github.com/systm-d/repolens/releases/latest/download/checksums.sha256
 
 # Verify (Linux)
 sha256sum -c checksums.sha256 --ignore-missing
@@ -140,7 +140,7 @@ repolens --version
 
 ```bash
 # Clone repository
-git clone https://github.com/kdelfour/repolens.git
+git clone https://github.com/systm-d/repolens.git
 cd repolens
 
 # Build
@@ -169,7 +169,7 @@ See [docs/installation/completions.md](docs/installation/completions.md) for the
 
 ### Nightly Builds
 
-Nightly builds are available for testing. See the [Releases page](https://github.com/delfour-co/cli--repolens/releases) for nightly builds (marked as pre-release).
+Nightly builds are available for testing. See the [Releases page](https://github.com/systm-d/repolens/releases) for nightly builds (marked as pre-release).
 
 **Warning**: Nightly builds may be unstable. Use at your own risk.
 
@@ -179,13 +179,13 @@ RepoLens is available as a Docker image for easy deployment:
 
 ```bash
 # Pull the latest image
-docker pull ghcr.io/delfour-co/cli--audit-github-project:latest
+docker pull ghcr.io/systm-d/repolens:latest
 
 # Run on current directory
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/cli--audit-github-project plan
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens plan
 
 # Generate a report
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/cli--audit-github-project report
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens report
 ```
 
 For GitHub API access, mount your GitHub CLI config:
@@ -194,7 +194,7 @@ For GitHub API access, mount your GitHub CLI config:
 docker run --rm \
   -v "$(pwd)":/repo \
   -v ~/.config/gh:/home/repolens/.config/gh:ro \
-  ghcr.io/delfour-co/cli--audit-github-project plan
+  ghcr.io/systm-d/repolens plan
 ```
 
 See [docs/docker.md](docs/docker.md) for detailed Docker usage instructions.
@@ -682,7 +682,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: kdelfour/repolens@main
+      - uses: systm-d/repolens@main
         with:
           preset: 'opensource'
           format: 'terminal'
@@ -714,7 +714,7 @@ jobs:
 Upload results to GitHub Advanced Security for visibility in the Security tab:
 
 ```yaml
-- uses: kdelfour/repolens@main
+- uses: systm-d/repolens@main
   id: audit
   with:
     format: 'sarif'

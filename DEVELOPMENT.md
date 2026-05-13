@@ -21,7 +21,7 @@ Ce document explique comment développer, tester et contribuer au projet RepoLen
 
 1. **Cloner le repository**
    ```bash
-   git clone https://github.com/kdelfour/repolens.git
+   git clone https://github.com/systm-d/repolens.git
    cd repolens
    ```
 

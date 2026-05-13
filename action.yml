@@ -57,7 +57,7 @@ runs:
         INPUT_VERSION: ${{ inputs.version }}
       run: |
         if [ "$INPUT_VERSION" = "latest" ]; then
-          RELEASE_TAG=$(curl -s https://api.github.com/repos/kdelfour/repolens/releases/latest | grep '"tag_name"' | sed -E 's/.*"tag_name": *"([^"]+)".*/\1/')
+          RELEASE_TAG=$(curl -s https://api.github.com/repos/systm-d/repolens/releases/latest | grep '"tag_name"' | sed -E 's/.*"tag_name": *"([^"]+)".*/\1/')
           if [ -z "$RELEASE_TAG" ] || [ "$RELEASE_TAG" = "null" ]; then
             echo "::error::Failed to determine latest RepoLens version from GitHub releases"
             exit 1
@@ -84,7 +84,7 @@ runs:
         VERSION: ${{ steps.version.outputs.version }}
         TAG: ${{ steps.version.outputs.tag }}
       run: |
-        DOWNLOAD_URL="https://github.com/kdelfour/repolens/releases/download/${TAG}/repolens-linux-x86_64.tar.gz"
+        DOWNLOAD_URL="https://github.com/systm-d/repolens/releases/download/${TAG}/repolens-linux-x86_64.tar.gz"
 
         echo "Downloading RepoLens ${VERSION} from ${DOWNLOAD_URL}..."
         curl -sL "${DOWNLOAD_URL}" -o /tmp/repolens.tar.gz

@@ -51,10 +51,10 @@ RepoLens est un outil en ligne de commande écrit en Rust qui permet d'auditer a
 
 ```bash
 # Installation via Docker (recommandé)
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/repolens plan
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens plan
 
 # Ou via Homebrew (macOS/Linux)
-brew tap delfour-co/repolens && brew install repolens
+brew tap systm-d/repolens && brew install repolens
 
 # Ou via cargo
 cargo install repolens
@@ -88,7 +88,7 @@ repolens install-hooks
 Pour l'intégration CI/CD, utilisez l'Action GitHub officielle :
 
 ```yaml
-- uses: kdelfour/repolens-action@v1
+- uses: systm-d/repolens-action@v1
   with:
     preset: opensource
 ```
@@ -151,6 +151,6 @@ Pour l'intégration CI/CD, utilisez l'Action GitHub officielle :
 ## Support
 
 - 📖 Consultez la documentation complète ci-dessous
-- 🐛 [Signaler un bug](https://github.com/delfour-co/cli--repolens/issues)
-- 💡 [Proposer une fonctionnalité](https://github.com/delfour-co/cli--repolens/issues)
+- 🐛 [Signaler un bug](https://github.com/systm-d/repolens/issues)
+- 💡 [Proposer une fonctionnalité](https://github.com/systm-d/repolens/issues)
 - 📧 Questions ? Ouvrez une issue sur GitHub

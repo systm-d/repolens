@@ -13,7 +13,7 @@ pub const AUDIT_REPORT_SCHEMA: &str = include_str!("../../../schemas/audit-repor
 
 /// The schema URI used for the `$schema` field in JSON output.
 pub const AUDIT_REPORT_SCHEMA_URI: &str =
-    "https://github.com/kdelfour/repolens/schemas/audit-report.schema.json";
+    "https://github.com/systm-d/repolens/schemas/audit-report.schema.json";
 
 pub struct JsonOutput {
     /// Whether to include the `$schema` reference in the output.

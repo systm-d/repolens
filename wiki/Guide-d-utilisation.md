@@ -354,16 +354,16 @@ repolens plan --only security,dependencies -v
 
 ```bash
 # Audit rapide du répertoire courant
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/repolens plan
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens plan
 
 # Générer un rapport JSON
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/repolens report --format json
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens report --format json
 
 # Avec accès à l'API GitHub
 docker run --rm \
   -v "$(pwd)":/repo \
   -v ~/.config/gh:/home/repolens/.config/gh:ro \
-  ghcr.io/delfour-co/repolens plan
+  ghcr.io/systm-d/repolens plan
 ```
 
 ### Exemple 6 : Configuration via variables d'environnement
@@ -487,7 +487,7 @@ Vérification de la configuration de protection des branches :
 Image Docker officielle multi-architecture :
 
 ```bash
-docker run --rm -v "$(pwd)":/repo ghcr.io/delfour-co/repolens plan
+docker run --rm -v "$(pwd)":/repo ghcr.io/systm-d/repolens plan
 ```
 
 ### Gestionnaires de paquets

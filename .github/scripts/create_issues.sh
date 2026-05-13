@@ -4,7 +4,7 @@
 
 set -e
 
-REPO="${1:-kdelfour/repolens}"
+REPO="${1:-systm-d/repolens}"
 ISSUES_FILE=".github/ISSUES.md"
 
 if [ ! -f "$ISSUES_FILE" ]; then
