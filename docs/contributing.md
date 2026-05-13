@@ -722,7 +722,7 @@ Ideal pour une premiere contribution :
 ### Niveau intermediaire
 
 - **Nouvelles regles d'audit** : Ajouter des regles dans `src/rules/categories/`
-- **Nouveaux formats de sortie** : JSON Schema, YAML, CSV...
+- **Nouveaux formats de sortie** : YAML ou autres (voir spec recentering dans `docs/superpowers/specs/`)
 - **Amelioration UX CLI** : Meilleurs messages, progress bars
 - **Cache** : Ameliorer le systeme de cache (`src/cache/`)
 - **Git hooks** : Nouveaux hooks (`src/hooks/`)
