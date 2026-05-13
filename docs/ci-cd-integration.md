@@ -129,7 +129,7 @@ Upload results to GitHub's Security tab:
 
 ### Reusable Workflow
 
-Use the provided reusable workflow from `integrations/github-actions/repolens.yml`:
+Create a reusable workflow in `.github/workflows/repolens.yml`:
 
 ```yaml
 jobs:
@@ -145,7 +145,7 @@ jobs:
 
 ### Basic Configuration
 
-Copy the template from `integrations/gitlab-ci/.gitlab-ci.yml` to your repository root.
+Add the following to your `.gitlab-ci.yml`:
 
 ```yaml
 repolens-audit:
@@ -204,7 +204,7 @@ cache:
 
 ### Basic Configuration
 
-Copy the template from `integrations/circleci/config.yml` to `.circleci/config.yml`.
+Add the following to your `.circleci/config.yml`:
 
 ```yaml
 version: 2.1
@@ -271,7 +271,7 @@ Cache the RepoLens binary for faster runs:
 
 ### Declarative Pipeline
 
-Copy the template from `integrations/jenkins/Jenkinsfile` to your repository root.
+Use the following pipeline configuration:
 
 ```groovy
 pipeline {
@@ -333,7 +333,7 @@ parameters {
 
 ### Basic Configuration
 
-Copy the template from `integrations/azure-devops/azure-pipelines.yml` to your repository root.
+Add the following to your `azure-pipelines.yml`:
 
 ```yaml
 trigger:
@@ -539,28 +539,3 @@ Verify cache paths are correct and the CI platform supports caching:
 - [RepoLens Documentation](https://github.com/systm-d/repolens)
 - [Issue Tracker](https://github.com/systm-d/repolens/issues)
 - [Discussions](https://github.com/systm-d/repolens/discussions)
-
-## Template Files
-
-All integration templates are available in the `integrations/` directory:
-
-```
-integrations/
-+-- github-actions/
-|   +-- repolens.yml          # Reusable GitHub Actions workflow
-+-- gitlab-ci/
-|   +-- .gitlab-ci.yml        # GitLab CI/CD configuration
-+-- circleci/
-|   +-- config.yml            # CircleCI configuration
-+-- jenkins/
-|   +-- Jenkinsfile           # Jenkins declarative pipeline
-+-- azure-devops/
-    +-- azure-pipelines.yml   # Azure Pipelines configuration
-```
-
-Each template is copy-paste ready and includes:
-- Docker-based and binary installation options
-- Caching for performance
-- Artifact storage
-- Customizable parameters
-- Detailed comments explaining each section

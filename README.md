@@ -719,29 +719,9 @@ Upload results to GitHub Advanced Security for visibility in the Security tab:
     category: 'repolens'
 ```
 
-### PR Comment
-
-Post audit results as a comment on pull requests. See the full example in [`examples/github-action/pr-comment.yml`](examples/github-action/pr-comment.yml).
-
-### More Examples
-
-See the [`examples/github-action/`](examples/github-action/) directory for complete workflow examples:
-
-- [`basic.yml`](examples/github-action/basic.yml) -- Basic usage on push and pull requests
-- [`sarif-upload.yml`](examples/github-action/sarif-upload.yml) -- SARIF upload for GitHub Security
-- [`pr-comment.yml`](examples/github-action/pr-comment.yml) -- Post results as a PR comment
-
 ## CI/CD Integration
 
-RepoLens integrates with all major CI/CD platforms. See [docs/ci-cd-integration.md](docs/ci-cd-integration.md) for detailed guides.
-
-| Platform | Template |
-|----------|----------|
-| GitHub Actions | [integrations/github-actions/repolens.yml](integrations/github-actions/repolens.yml) |
-| GitLab CI | [integrations/gitlab-ci/.gitlab-ci.yml](integrations/gitlab-ci/.gitlab-ci.yml) |
-| CircleCI | [integrations/circleci/config.yml](integrations/circleci/config.yml) |
-| Jenkins | [integrations/jenkins/Jenkinsfile](integrations/jenkins/Jenkinsfile) |
-| Azure DevOps | [integrations/azure-devops/azure-pipelines.yml](integrations/azure-devops/azure-pipelines.yml) |
+RepoLens integrates with all major CI/CD platforms. See [docs/ci-cd-integration.md](docs/ci-cd-integration.md) for detailed integration guides and examples.
 
 ## Contributing
 
