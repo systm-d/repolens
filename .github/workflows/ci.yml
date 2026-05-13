@@ -85,7 +85,8 @@ jobs:
           assert not missing, 'Missing Cargo.toml fields: ' + str(missing);
           print('All required crates.io metadata fields are present')
           "
-      # cargo package re-resolves the index; allow-dirty avoids spurious failures
-      # when the index has moved since the committed Cargo.lock was generated.
-      - name: Dry-run package
-        run: cargo package --list && cargo publish --dry-run --allow-dirty
+      # cargo publish --dry-run validates the package end-to-end (list + build
+      # in a temp dir). --allow-dirty bypasses the clean-working-dir check that
+      # cargo applies after re-resolving the registry index against Cargo.lock.
+      - name: Dry-run publish
+        run: cargo publish --dry-run --allow-dirty
