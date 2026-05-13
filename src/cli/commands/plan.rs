@@ -9,7 +9,7 @@ use super::{OutputFormat, PlanArgs};
 use crate::actions::planner::ActionPlanner;
 use crate::cache::{delete_cache_directory, AuditCache};
 use crate::cli::output::{
-    CsvOutput, JsonOutput, JunitReport, NdjsonOutput, OutputRenderer, SarifOutput, TerminalOutput,
+    CsvOutput, JsonOutput, NdjsonOutput, OutputRenderer, SarifOutput, TerminalOutput,
 };
 use crate::config::Config;
 use crate::error::RepoLensError;
@@ -207,7 +207,6 @@ pub async fn execute(args: PlanArgs) -> Result<i32, RepoLensError> {
                 .with_keep_newlines(args.csv_keep_newlines),
         ),
         OutputFormat::Ndjson => Box::new(NdjsonOutput::new()),
-        OutputFormat::Junit => Box::new(JunitReport::new()),
     };
 
     let rendered = output.render_plan(&audit_results, &action_plan)?;

@@ -7,8 +7,7 @@ use std::time::Duration;
 use super::{ReportArgs, ReportFormat};
 use crate::cache::{delete_cache_directory, AuditCache};
 use crate::cli::output::{
-    CsvOutput, HtmlReport, JsonOutput, JunitReport, MarkdownReport, NdjsonOutput, PdfReport,
-    ReportRenderer,
+    CsvOutput, HtmlReport, JsonOutput, MarkdownReport, NdjsonOutput, PdfReport, ReportRenderer,
 };
 use crate::config::{BrandingConfig, Config};
 use crate::error::RepoLensError;
@@ -162,7 +161,6 @@ pub async fn execute(args: ReportArgs) -> Result<i32, RepoLensError> {
             ReportFormat::Csv => "csv",
             ReportFormat::Tsv => "tsv",
             ReportFormat::Ndjson => "ndjson",
-            ReportFormat::Junit => "xml",
             ReportFormat::Pdf => "pdf",
         };
         PathBuf::from(format!("repolens-report.{extension}"))
@@ -206,7 +204,6 @@ pub async fn execute(args: ReportArgs) -> Result<i32, RepoLensError> {
                     .with_keep_newlines(args.csv_keep_newlines),
             ),
             ReportFormat::Ndjson => Box::new(NdjsonOutput::new()),
-            ReportFormat::Junit => Box::new(JunitReport::new()),
             ReportFormat::Pdf => unreachable!("handled above"),
         };
 

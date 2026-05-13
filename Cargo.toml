@@ -122,9 +122,6 @@ jsonschema = "0.29"
 # CSV / TSV output
 csv = "1"
 
-# XML writer for JUnit output
-quick-xml = "0.37"
-
 # PDF report generation (pure Rust, no system dependency)
 printpdf = { version = "0.7", default-features = false, features = ["embedded_images"] }
 image = { version = "0.24", default-features = false, features = ["png", "jpeg"] }
@@ -159,10 +156,6 @@ strip = true
 [[bin]]
 name = "repolens"
 path = "src/main.rs"
-
-[[test]]
-name = "output_junit"
-path = "tests/integration/output_junit.rs"
 
 [[bench]]
 name = "scanner_benchmark"
