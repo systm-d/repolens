@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.2] - 2026-05-13
+
+### Security
+
+- Bumped `reqwest` from 0.11 to 0.12 to drop the vulnerable `rustls 0.21` /
+  `rustls-webpki 0.101` transitive chain (RUSTSEC-2026-0098, 2026-0099, 2026-0104:
+  certificate validation issues and panic in CRL parsing). All `cargo audit`
+  vulnerabilities are now resolved.
+
+### Fixed
+
+- Rewrote `deny.toml` to match the cargo-deny 0.19+ schema (the previous file
+  used deprecated keys and prevented the CI security job from running). Added
+  `MIT-0`, `BlueOak-1.0.0`, and `CDLA-Permissive-2.0` to the allowed-license list
+  (transitive deps that adopted these permissive licenses).
+
 ## [2.0.1] - 2026-05-13
 
 ### Fixed

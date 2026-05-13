@@ -1,73 +1,47 @@
-# Configuration pour cargo-deny
-# Documentation: https://embarkstudios.github.io/cargo-deny/
+# cargo-deny configuration
+# Schema: https://embarkstudios.github.io/cargo-deny/checks/cfg.html
 
-# Vérification des licences
 [licenses]
-# Licences autorisées (ajustez selon vos besoins)
+# Licences explicitly accepted for direct and transitive deps
 allow = [
     "MIT",
+    "MIT-0",
     "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
     "BSD-2-Clause",
     "BSD-3-Clause",
     "ISC",
     "MPL-2.0",
-    "Zlib",
+    "Unicode-3.0",
+    "CC0-1.0",
     "Unlicense",
+    "OpenSSL",
+    # Transitive deps:
+    "BlueOak-1.0.0",        # metrics-prometheus
+    "CDLA-Permissive-2.0",  # webpki-roots
 ]
-# Licences interdites
-deny = [
-    "AGPL-1.0",
-    "AGPL-3.0",
-    "GPL-1.0",
-    "GPL-2.0",
-    "GPL-3.0",
-    "LGPL-2.0",
-    "LGPL-2.1",
-]
-# Copier les licences dans le répertoire de sortie
-copy-left = []
-# Licences non classifiées (avertissement seulement)
-unlicensed = "warn"
-# Licences non reconnues (avertissement seulement)
-unknown = "warn"
-# Licences manquantes (avertissement seulement)
-missing = "warn"
+# Confidence threshold for license detection
+confidence-threshold = 0.8
 
-# Vérification des dépendances bannies/autorisées
 [bans]
-# Niveau de vérification
-level = "deny"
-# Autoriser plusieurs versions de la même dépendance
+# Fail on multiple versions of the same crate (warn-only — common in the ecosystem)
 multiple-versions = "warn"
-# Autoriser les dépendances dupliquées
-duplicate = "warn"
-# Liste des crates interdits (exemple)
-deny = []
-# Liste des crates autorisés (exemple)
-allow = []
-# Exceptions pour certaines dépendances
-skip = []
+# Disallow wildcard version requirements (e.g. version = "*")
+wildcards = "deny"
+allow-wildcard-paths = true
 
-# Vérification des sources des dépendances
 [sources]
-# Autoriser uniquement les sources de registre officielles
+# Block unknown registries (anything other than crates.io)
 unknown-registry = "deny"
-# Autoriser les dépendances depuis git
-git = "allow"
-# Autoriser les dépendances depuis le système de fichiers
-path = "allow"
-# Autoriser les dépendances depuis le registre crates.io
-registry = ["crates-io"]
+# Allow git deps (none currently used)
+unknown-git = "warn"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
 
-# Vérification des vulnérabilités
 [advisories]
-# Base de données des vulnérabilités
-db-path = "~/.cargo/advisory-db"
-# Vérifier les vulnérabilités
-vulnerability = "deny"
-# Vérifier les crates non maintenus
-unmaintained = "warn"
-# Vérifier les crates non sécurisés
-unsound = "deny"
-# Ignorer les vulnérabilités spécifiques (ID de la base de données)
-ignore = []
+# Default mode is to deny all advisories; we explicitly ignore individual ones below.
+ignore = [
+    # number_prefix is unmaintained, transitive via indicatif. Indicatif itself is
+    # actively maintained but pins to an unmaintained dep. No security impact —
+    # it's a Display/Debug helper for byte counts.
+    "RUSTSEC-2025-0119",
+]
