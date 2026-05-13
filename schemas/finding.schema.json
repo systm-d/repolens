@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://github.com/systm-d/repolens/schemas/finding.schema.json",
   "title": "RepoLens Finding",
-  "description": "Schema for a single finding emitted by RepoLens CSV / TSV exporters.",
+  "description": "Schema for a single finding emitted by RepoLens.",
   "type": "object",
   "required": ["rule_id", "category", "severity", "message", "project"],
   "properties": {

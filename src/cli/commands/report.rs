@@ -6,9 +6,7 @@ use std::time::Duration;
 
 use super::{ReportArgs, ReportFormat};
 use crate::cache::{delete_cache_directory, AuditCache};
-use crate::cli::output::{
-    CsvOutput, HtmlReport, JsonOutput, MarkdownReport, PdfReport, ReportRenderer,
-};
+use crate::cli::output::{HtmlReport, JsonOutput, MarkdownReport, PdfReport, ReportRenderer};
 use crate::config::{BrandingConfig, Config};
 use crate::error::RepoLensError;
 use crate::exit_codes;
@@ -138,13 +136,6 @@ pub async fn execute(args: ReportArgs) -> Result<i32, RepoLensError> {
         eprintln!();
     }
 
-    // Warn if CSV-only flags are set when format is not CSV.
-    let format_is_csv_like = matches!(args.format, ReportFormat::Csv);
-    if !format_is_csv_like && (args.csv_bom || args.csv_keep_newlines || args.csv_delimiter != ',')
-    {
-        eprintln!("[WARN] --csv-* flags are only meaningful with --format csv; ignoring.");
-    }
-
     // Warn early if --branding was passed for a format other than PDF.
     if args.branding.is_some() && args.format != ReportFormat::Pdf {
         tracing::warn!(
@@ -158,7 +149,6 @@ pub async fn execute(args: ReportArgs) -> Result<i32, RepoLensError> {
             ReportFormat::Html => "html",
             ReportFormat::Markdown => "md",
             ReportFormat::Json => "json",
-            ReportFormat::Csv => "csv",
             ReportFormat::Pdf => "pdf",
         };
         PathBuf::from(format!("repolens-report.{extension}"))
@@ -188,12 +178,6 @@ pub async fn execute(args: ReportArgs) -> Result<i32, RepoLensError> {
                 JsonOutput::new()
                     .with_schema(args.schema)
                     .with_validation(args.validate),
-            ),
-            ReportFormat::Csv => Box::new(
-                CsvOutput::new()
-                    .with_delimiter(args.csv_delimiter as u8)
-                    .with_bom(args.csv_bom)
-                    .with_keep_newlines(args.csv_keep_newlines),
             ),
             ReportFormat::Pdf => unreachable!("handled above"),
         };

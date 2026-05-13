@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use super::{OutputFormat, PlanArgs};
 use crate::actions::planner::ActionPlanner;
 use crate::cache::{delete_cache_directory, AuditCache};
-use crate::cli::output::{CsvOutput, JsonOutput, OutputRenderer, SarifOutput, TerminalOutput};
+use crate::cli::output::{JsonOutput, OutputRenderer, SarifOutput, TerminalOutput};
 use crate::config::Config;
 use crate::error::RepoLensError;
 use crate::exit_codes;
@@ -180,24 +180,11 @@ pub async fn execute(args: PlanArgs) -> Result<i32, RepoLensError> {
 
     eprintln!("{}", "Génération du rapport...".dimmed());
 
-    // Warn if CSV-only flags are set when format is not CSV.
-    let format_is_csv_like = matches!(args.format, OutputFormat::Csv);
-    if !format_is_csv_like && (args.csv_bom || args.csv_keep_newlines || args.csv_delimiter != ',')
-    {
-        eprintln!("[WARN] --csv-* flags are only meaningful with --format csv; ignoring.");
-    }
-
     // Render output
     let output: Box<dyn OutputRenderer> = match args.format {
         OutputFormat::Terminal => Box::new(TerminalOutput::new()),
         OutputFormat::Json => Box::new(JsonOutput::new()),
         OutputFormat::Sarif => Box::new(SarifOutput::new()),
-        OutputFormat::Csv => Box::new(
-            CsvOutput::new()
-                .with_delimiter(args.csv_delimiter as u8)
-                .with_bom(args.csv_bom)
-                .with_keep_newlines(args.csv_keep_newlines),
-        ),
     };
 
     let rendered = output.render_plan(&audit_results, &action_plan)?;

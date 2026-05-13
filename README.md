@@ -11,7 +11,7 @@ A CLI tool to audit GitHub repositories for best practices, security, and compli
 - Verify license compliance across dependencies
 - Generate actionable fix plans
 - Apply fixes automatically or with dry-run mode
-- Multiple output formats: terminal, JSON, SARIF, Markdown, HTML, CSV, PDF (with branding)
+- Multiple output formats: terminal, JSON, SARIF, Markdown, HTML, PDF (with branding)
 
 ## Installation
 
@@ -261,7 +261,6 @@ repolens -C /path/to/project plan
 repolens plan --format json
 repolens plan --format sarif
 repolens plan --format markdown
-repolens plan --format csv -o findings.csv      # see docs/output/csv.md
 
 # Verbose mode with timing information
 repolens plan -v      # Basic timing

@@ -119,9 +119,6 @@ rayon = "1.8"
 # JSON Schema validation
 jsonschema = "0.29"
 
-# CSV / TSV output
-csv = "1"
-
 # PDF report generation (pure Rust, no system dependency)
 printpdf = { version = "0.7", default-features = false, features = ["embedded_images"] }
 image = { version = "0.24", default-features = false, features = ["png", "jpeg"] }

@@ -7,7 +7,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
 
-use crate::error::RepoLensError;
 use crate::rules::results::{AuditResults, Finding, Severity};
 
 /// A unique key that identifies a finding for comparison purposes.
@@ -321,34 +320,6 @@ pub fn format_terminal(report: &CompareReport) -> String {
 /// Format the compare report as JSON
 pub fn format_json(report: &CompareReport) -> Result<String, serde_json::Error> {
     serde_json::to_string_pretty(report)
-}
-
-/// Format the compare report as CSV.
-///
-/// Adds a `change` column (`added` / `resolved`) and omits `project` (the report
-/// already represents two named refs). Header:
-/// `change,rule_id,category,severity,file,line,column,message,description,remediation`.
-pub fn format_csv(
-    report: &CompareReport,
-    delimiter: u8,
-    bom: bool,
-    keep_newlines: bool,
-) -> Result<String, RepoLensError> {
-    let rows = compare_rows(report);
-    crate::cli::output::csv::render_compare_csv(rows, delimiter, bom, keep_newlines)
-}
-
-/// Build the (change_label, finding) row stream consumed by the CSV
-/// compare renderers. Added findings come first (regressions), then resolved.
-fn compare_rows(report: &CompareReport) -> Vec<(String, Finding)> {
-    let mut rows = Vec::with_capacity(report.added_findings.len() + report.removed_findings.len());
-    for f in &report.added_findings {
-        rows.push(("added".to_string(), f.clone()));
-    }
-    for f in &report.removed_findings {
-        rows.push(("resolved".to_string(), f.clone()));
-    }
-    rows
 }
 
 /// Format the compare report as Markdown
