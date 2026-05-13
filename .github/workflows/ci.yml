@@ -2,59 +2,74 @@ name: CI
 
 on:
   push:
-    branches: [main, master]
+    branches: [main]
   pull_request:
-    branches: [main, master]
+    branches: [main]
 
 env:
   CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
 
 jobs:
-  check:
-    name: Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - run: cargo check
-
-  fmt:
-    name: Format
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt
-      - run: cargo fmt --all -- --check
-
-  clippy:
-    name: Clippy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: clippy
-      - uses: Swatinem/rust-cache@v2
-      - run: cargo clippy -- -D warnings
-
   test:
-    name: Test
+    name: test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: cargo fmt --check
+        run: cargo fmt --all -- --check
+      - name: cargo clippy
+        run: cargo clippy --all-targets -- -D warnings
+      - name: cargo test
+        run: cargo test --all
+
+  coverage:
+    name: coverage
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - name: Install PDF validation tools
-        run: sudo apt-get update && sudo apt-get install -y qpdf poppler-utils
-      - run: cargo test --all-features
-      - name: Run tests with output
-        run: cargo test --all-features -- --nocapture
+      - name: Install cargo-tarpaulin
+        run: cargo install cargo-tarpaulin --locked
+      - name: Generate coverage report
+        # issues.rs and metadata.rs invoke the `gh` CLI at runtime, so their
+        # branches are unreachable in CI without GitHub auth — exclude them
+        # from the coverage gate alongside the existing GitHub-API rules.
+        run: cargo tarpaulin --all-features --out Xml --output-dir coverage --exclude-files 'src/main.rs' --exclude-files 'src/lib.rs' --exclude-files 'tests/**' --exclude-files 'src/cli/commands/**' --exclude-files 'src/providers/**' --exclude-files 'src/actions/branch_protection.rs' --exclude-files 'src/actions/github_settings.rs' --exclude-files 'src/actions/git.rs' --exclude-files 'src/actions/planner.rs' --exclude-files 'src/rules/categories/dependencies.rs' --exclude-files 'src/rules/categories/codeowners.rs' --exclude-files 'src/rules/categories/security.rs' --exclude-files 'src/rules/categories/issues.rs' --exclude-files 'src/rules/categories/metadata.rs' --exclude-files 'src/utils/prerequisites.rs' --exclude-files 'src/rules/categories/custom.rs' --no-fail-fast --fail-under 90 -- --skip e2e_
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/cobertura.xml
+          fail_ci_if_error: false
+
+  security:
+    name: security
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Install security tools
+        run: |
+          cargo install cargo-audit --locked
+          cargo install cargo-deny --locked
+      - name: Run cargo audit
+        run: cargo audit
+      - name: Run cargo deny
+        run: cargo deny check advisories licenses
 
   package:
-    name: Package Validation
+    name: package
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -71,60 +86,4 @@ jobs:
           print('All required crates.io metadata fields are present')
           "
       - name: Dry-run package
-        run: cargo package --list && cargo package
-
-  coverage:
-    name: Test Coverage
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - name: Install cargo-tarpaulin
-        run: cargo install cargo-tarpaulin
-      - name: Generate coverage report
-        # issues.rs and metadata.rs invoke the `gh` CLI at runtime, so their
-        # branches are unreachable in CI without GitHub auth — exclude them
-        # from the coverage gate alongside the existing GitHub-API rules.
-        run: cargo tarpaulin --all-features --out Xml --output-dir coverage --exclude-files 'src/main.rs' --exclude-files 'src/lib.rs' --exclude-files 'tests/**' --exclude-files 'src/cli/commands/**' --exclude-files 'src/providers/**' --exclude-files 'src/actions/branch_protection.rs' --exclude-files 'src/actions/github_settings.rs' --exclude-files 'src/actions/git.rs' --exclude-files 'src/actions/planner.rs' --exclude-files 'src/rules/categories/dependencies.rs' --exclude-files 'src/rules/categories/codeowners.rs' --exclude-files 'src/rules/categories/security.rs' --exclude-files 'src/rules/categories/issues.rs' --exclude-files 'src/rules/categories/metadata.rs' --exclude-files 'src/utils/prerequisites.rs' --exclude-files 'src/rules/categories/custom.rs' --no-fail-fast --fail-under 90 -- --skip e2e_
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          files: ./coverage/cobertura.xml
-          fail_ci_if_error: false
-
-  security:
-    name: Security Audit
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - name: Install security tools
-        run: |
-          cargo install cargo-audit --locked
-          cargo install cargo-deny --locked || echo "cargo-deny installation failed, continuing..."
-      - name: Run cargo audit
-        run: cargo audit
-        continue-on-error: true
-      - name: Run cargo deny (if available)
-        run: |
-          if command -v cargo-deny &> /dev/null; then
-            cargo deny check advisories || echo "cargo-deny advisories check failed"
-            cargo deny check licenses || echo "cargo-deny licenses check failed"
-          else
-            echo "cargo-deny not available, skipping"
-          fi
-        continue-on-error: true
-      - name: Check for unsafe code
-        run: |
-          UNSAFE_COUNT=$(grep -r "unsafe" src/ --include="*.rs" | grep -v "//" | grep -v "test" | wc -l || echo "0")
-          if [ "$UNSAFE_COUNT" -gt 0 ]; then
-            echo "Found $UNSAFE_COUNT unsafe blocks in production code"
-            grep -r "unsafe" src/ --include="*.rs" | grep -v "//" | grep -v "test" || true
-            exit 1
-          else
-            echo "No unsafe code found in production code"
-          fi
-      - name: Run security tests
-        run: cargo test --test security_test
+        run: cargo package --list && cargo publish --dry-run

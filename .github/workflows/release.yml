@@ -374,14 +374,6 @@ jobs:
 
             ### Download
 
-            - **Binary:** `repolens`
-            - **Archive (tar.gz):** `repolens-linux-x86_64.tar.gz`
-            - **Archive (zip):** `repolens-linux-x86_64.zip`
-            
-            ### Verify
-            
-            ### Download
-
             | Platform | Architecture | Archive |
             |----------|-------------|---------|
             | Linux | x86_64 | `repolens-linux-x86_64.tar.gz` |
@@ -472,18 +464,19 @@ jobs:
         run: |
           cargo publish --allow-dirty
 
-  announce-discussion:
-    name: Announce in Discussions
-    needs: [release, changelog]
+  docker:
+    name: Build and Push Docker Image
+    needs: [build, release]
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      discussions: write
+      packages: write
+      attestations: write
+      id-token: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Get version from tag
         id: version
@@ -492,209 +485,57 @@ jobs:
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "tag=v${VERSION}" >> $GITHUB_OUTPUT
 
-      - name: Get previous tag
-        id: previous_tag
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/systm-d/repolens
+          tags: |
+            type=raw,value=latest
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ghcr.io/systm-d/repolens
+          subject-digest: ${{ steps.build-and-push.outputs.digest }}
+          push-to-registry: true
+
+      - name: Image details
         run: |
-          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
-          if [ -z "$PREVIOUS_TAG" ]; then
-            PREVIOUS_TAG=$(git rev-list --max-parents=0 HEAD)
-          fi
-          echo "tag=${PREVIOUS_TAG}" >> $GITHUB_OUTPUT
-          echo "Previous tag: ${PREVIOUS_TAG}"
-
-      - name: Download changelog
-        uses: actions/download-artifact@v4
-        with:
-          name: changelog
-          path: ./changelog
-
-      - name: Read changelog
-        id: changelog_content
-        run: |
-          if [ -f "changelog/CHANGELOG.md" ]; then
-            CHANGELOG=$(awk '/^## \[/{if(found) exit; found=1} found{print}' changelog/CHANGELOG.md)
-          else
-            CHANGELOG="No changelog available for this release."
-          fi
-
-          {
-            echo "content<<EOF"
-            echo "$CHANGELOG"
-            echo "EOF"
-          } >> $GITHUB_OUTPUT
-
-      - name: Collect issues and PRs between tags
-        id: collect_refs
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const currentTag = '${{ steps.version.outputs.tag }}';
-            const previousTag = '${{ steps.previous_tag.outputs.tag }}';
-            let refsMarkdown = '';
-
-            try {
-              const comparison = await github.rest.repos.compareCommitsWithBasehead({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                basehead: `${previousTag}...${currentTag}`
-              });
-
-              // Extract #NNN references from commit messages
-              const refNumbers = new Set();
-              for (const commit of comparison.data.commits) {
-                const matches = commit.commit.message.match(/#(\d+)/g);
-                if (matches) {
-                  for (const match of matches) {
-                    refNumbers.add(parseInt(match.substring(1)));
-                  }
-                }
-              }
-
-              if (refNumbers.size === 0) {
-                core.info('No issue/PR references found in commits');
-                core.setOutput('markdown', '');
-                return;
-              }
-
-              const pullRequests = [];
-              const issues = [];
-
-              for (const num of refNumbers) {
-                try {
-                  // Try as PR first
-                  try {
-                    const pr = await github.rest.pulls.get({
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      pull_number: num
-                    });
-                    pullRequests.push({ number: num, title: pr.data.title });
-                    continue;
-                  } catch (e) {
-                    // Not a PR, try as issue
-                  }
-
-                  const issue = await github.rest.issues.get({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: num
-                  });
-                  // issues.get also returns PRs, so check
-                  if (issue.data.pull_request) {
-                    pullRequests.push({ number: num, title: issue.data.title });
-                  } else {
-                    issues.push({ number: num, title: issue.data.title });
-                  }
-                } catch (e) {
-                  core.warning(`Could not fetch #${num}: ${e.message}`);
-                }
-              }
-
-              let md = '';
-              if (pullRequests.length > 0) {
-                md += '### Pull Requests\n\n';
-                for (const pr of pullRequests.sort((a, b) => a.number - b.number)) {
-                  md += `- #${pr.number} — ${pr.title}\n`;
-                }
-                md += '\n';
-              }
-              if (issues.length > 0) {
-                md += '### Issues Resolved\n\n';
-                for (const issue of issues.sort((a, b) => a.number - b.number)) {
-                  md += `- #${issue.number} — ${issue.title}\n`;
-                }
-                md += '\n';
-              }
-
-              refsMarkdown = md;
-            } catch (error) {
-              core.warning(`Failed to compare tags: ${error.message}`);
-            }
-
-            core.setOutput('markdown', refsMarkdown);
-
-      - name: Create Discussion
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const version = '${{ steps.version.outputs.version }}';
-            const tag = '${{ steps.version.outputs.tag }}';
-            const changelogContent = process.env.CHANGELOG_CONTENT;
-            const refsMarkdown = process.env.REFS_MARKDOWN;
-
-            // Get repository ID and Announcements category ID via GraphQL
-            const repoQuery = await github.graphql(`
-              query($owner: String!, $name: String!) {
-                repository(owner: $owner, name: $name) {
-                  id
-                  discussionCategories(first: 25) {
-                    nodes {
-                      id
-                      name
-                    }
-                  }
-                }
-              }
-            `, {
-              owner: context.repo.owner,
-              name: context.repo.repo
-            });
-
-            const repositoryId = repoQuery.repository.id;
-            const categories = repoQuery.repository.discussionCategories.nodes;
-            const announcementCategory = categories.find(c => c.name === 'Announcements');
-
-            if (!announcementCategory) {
-              core.warning('No "Announcements" discussion category found. Skipping discussion creation.');
-              core.warning('To enable release announcements, activate GitHub Discussions and ensure an "Announcements" category exists.');
-              return;
-            }
-
-            // Build discussion body
-            let body = `# RepoLens ${tag}\n\n`;
-
-            if (changelogContent && changelogContent.trim() !== '') {
-              body += `## What's Changed\n\n${changelogContent}\n\n`;
-            }
-
-            if (refsMarkdown && refsMarkdown.trim() !== '') {
-              body += `## Related Issues & Pull Requests\n\n${refsMarkdown}\n`;
-            }
-
-            body += `## Links\n\n`;
-            body += `- **Release**: https://github.com/${context.repo.owner}/${context.repo.repo}/releases/tag/${tag}\n`;
-            body += `- **Changelog**: https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/CHANGELOG.md\n`;
-            body += `- **Crates.io**: https://crates.io/crates/repolens\n\n`;
-
-            body += `## Installation\n\n`;
-            body += '```bash\n';
-            body += `# Install from crates.io\ncargo install repolens\n\n`;
-            body += `# Or download from the release page\n`;
-            body += `# https://github.com/${context.repo.owner}/${context.repo.repo}/releases/tag/${tag}\n`;
-            body += '```\n';
-
-            // Create the discussion
-            const mutation = await github.graphql(`
-              mutation($repositoryId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
-                createDiscussion(input: {
-                  repositoryId: $repositoryId,
-                  categoryId: $categoryId,
-                  title: $title,
-                  body: $body
-                }) {
-                  discussion {
-                    url
-                  }
-                }
-              }
-            `, {
-              repositoryId: repositoryId,
-              categoryId: announcementCategory.id,
-              title: `Release ${tag}`,
-              body: body
-            });
-
-            core.info(`Discussion created: ${mutation.createDiscussion.discussion.url}`);
-        env:
-          CHANGELOG_CONTENT: ${{ steps.changelog_content.outputs.content }}
-          REFS_MARKDOWN: ${{ steps.collect_refs.outputs.markdown }}
+          echo "## Docker Image Published" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** ghcr.io/systm-d/repolens" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Digest:** ${{ steps.build-and-push.outputs.digest }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Tags" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
