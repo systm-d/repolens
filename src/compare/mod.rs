@@ -338,15 +338,7 @@ pub fn format_csv(
     crate::cli::output::csv::render_compare_csv(rows, delimiter, bom, keep_newlines)
 }
 
-/// Format the compare report as NDJSON.
-///
-/// Each line is one finding with a `change` field (`added` / `resolved`).
-pub fn format_ndjson(report: &CompareReport) -> Result<String, RepoLensError> {
-    let rows = compare_rows(report);
-    crate::cli::output::ndjson::render_compare_ndjson(rows)
-}
-
-/// Build the (change_label, finding) row stream consumed by the CSV/NDJSON
+/// Build the (change_label, finding) row stream consumed by the CSV
 /// compare renderers. Added findings come first (regressions), then resolved.
 fn compare_rows(report: &CompareReport) -> Vec<(String, Finding)> {
     let mut rows = Vec::with_capacity(report.added_findings.len() + report.removed_findings.len());

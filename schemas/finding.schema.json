@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://github.com/systm-d/repolens/schemas/finding.schema.json",
-  "title": "RepoLens Finding (NDJSON line)",
-  "description": "Schema for a single finding emitted by RepoLens NDJSON / CSV / TSV exporters. One JSON object per finding; in NDJSON each line is a complete object terminated by a single LF (\\n).",
+  "title": "RepoLens Finding",
+  "description": "Schema for a single finding emitted by RepoLens CSV / TSV exporters.",
   "type": "object",
   "required": ["rule_id", "category", "severity", "message", "project"],
   "properties": {
