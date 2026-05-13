@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Tag or ref to release from (e.g. v2.0.2)'
+        required: true
+        default: 'v2.0.2'
 
 env:
   CARGO_TERM_COLOR: always
@@ -485,9 +491,6 @@ jobs:
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "tag=v${VERSION}" >> $GITHUB_OUTPUT
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -508,12 +511,16 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
 
+      # ARM64 dropped: building Rust under QEMU emulation took 2h+ for ~400
+      # dependencies. Users who need ARM64 can `cargo install repolens` or
+      # build the image themselves. Revisit when GitHub's free ARM64 runners
+      # become viable for matrix builds.
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
